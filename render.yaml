@@ -9,3 +9,5 @@ services:
         value: kernel.settings
       - key: PYTHON_VERSION
         value: 3.11
+      - key: DEBUG
+        value: 'false'
