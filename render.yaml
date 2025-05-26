@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: Smart & Co
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn Smarthub_django.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: kernel.settings
+      - key: PYTHON_VERSION
+        value: 3.11
