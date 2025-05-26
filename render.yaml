@@ -3,7 +3,7 @@ services:
     name: Smart & Co
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn Smarthub_django.wsgi:application
+    startCommand: gunicorn kernel.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: kernel.settings
