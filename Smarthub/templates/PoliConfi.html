@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de confidentialité</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/PoliConfi.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Playwrite+NZ:wght@100..400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+
+<body>
+    <section id="header">
+        <a id="logo" href="{% url 'index' %}"><span>S.M.A.R.T.  & Co</span> </a>
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="{% url 'index' %}">Home</a></li>
+                <li class="dropdown">
+                    <a href="{% url 'SHOP' %}" class="dropdown-toggle">Boutique
+                        <i class="fa-solid fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'ShopPortables' %}">Smartphones</a></li>
+                        <li><a href="{% url 'ShopPC' %}">PCs</a></li>
+                        <li><a href="{% url 'ShopCasques' %}">Ecouteurs</a></li>
+                        <li><a href="{% url 'ShopCasques' %}">Casques</a></li>
+                        <li><a href="{% url 'ShopMontres' %}">Montres</a></li>
+                    </ul>
+                </li>
+                <li><a href="{% url 'About' %}">A propos</a></li>
+                <li><a href="{% url 'Contact' %}">Contact</a></li>
+
+                {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Mon Compte
+                            <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'profile' %}">Profil</a></li>  
+                            <li><a href="{% url 'logout' %}">Déconnexion</a></li>  
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login_signup' %}">Authentification</a></li>
+                {% endif %}
+                
+                <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <button id="mobile-search-toggle" aria-label="Rechercher">
+                <i class="fas fa-search"></i>
+            </button>
+            <a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+            <i id="bar" class="fa-solid fa-bars"></i> 
+        </div>
+    </section>
+
+    <div class ="container">
+        <h1 >Politique de confidentialité de S.M.A.R.T.  & Co</h1>
+        <p>Dernière mise à jour : <span class="highlight">21 mars 2025</span><br>
+            <br>
+            Bienvenue sur S.M.A.R.T.  & Co. La protection de vos données personnelles est une priorité pour nous. Cette politique de 
+            confidentialité explique comment nous collectons, utilisons et protégeons vos informations personnelles lorsque 
+            vous utilisez notre site web.
+        </p>
+
+        <h2>1. Collecte des Données Personnelles</h2>
+        <p>Nous collectons différentes catégories de données personnelles, notamment : </p>
+        <ul>
+            <li> Informations d'identification : Nom, prénom, adersse e-mail, numéro de téléphone, adresse postale.</li>
+            <li>Informations de paiement : Données de facturation et informations bancaires (traitées via des services tiers sécurisés).</li>
+            <li>Informations de navigation : Adresse IP, type de navigateur, pages visitées et durée de la visite.</li>
+        </ul>
+        
+        <h2>2. Utilisation des Données</h2>
+        <p>Nous utilisons vos données pour : </p>
+        <ul>
+            <li>Traiter et livrer vos commandes.</li>
+            <li>Gérer votre compte utilisateur.</li>
+            <li>Améliorer nos services et personnaliser votre expérience sur le site.</li>
+            <li>Assurer la sécurité de notre site et prévenir la fraude.</li>
+            <li>Vous envoyer des offres promotionnelles et des actualités (avec votre consentement).</li>
+        </ul>
+        
+        <h2>3. Partage des Données</h2>
+        <p>Nous ne vendons ni ne louons vos données personnelles, mais nous pouvons les partager avec : </p>
+        <ul>
+            <li>Nos prestataires de service (paiement, logistique, livraisons, hébergement).</li>
+            <li>Les autorités compétentes en cas d'obligation légale.</li>
+        </ul>
+        
+        <h2>4. Sécurité des données</h2>
+        <p >Nous mettons en œuvre des mesures de sécurité strictes pour protéger vos informations contre l’accès non autorisé, la perte ou la divulgation.</p>
+        
+        <h2 >5. Vos droits</h2>
+        <p>Conformément aux lois en vigueur en République du Bénin, vous disposez de droits sur vos données personnelles :</p>
+        <ul>
+            <li>Accès et rectification : Vous pouvez demander l'accès à vos données et leur modification si elles sont inexactes.</li>
+            <li>Suppression : Vous pouvez demander la suppression de vos données sous certaines conditions.</li>
+            <li>Opposition : Vous pouvez vous opposer à l'utilisation de vos données à des fins de marketing</li>
+        </ul>
+
+        <h2>6. Cookies</h2>
+        <p>Nous utilisons des cookies pour améliorer votre navigation et analyser le trafic du site. 
+            Vous pouvez gérer vos préférences en matière de cookies via les paramètres de votre navigateur.
+        </p>
+
+        <h2>7. Contact</h2>
+        <p>Pour toute question relative à cette politique de confidentialité ou à l’exercice de vos droits, vous pouvez nous contacter à :
+            Email : [Votre email]
+            Adresse : [Votre adresse]
+        </p>
+
+        <p class="last">Nous nous réservons le droit de modifier cette politique à tout moment. Les modifications prendront effet dès leur publication sur notre site.</p>
+
+    </div>
+
+    <!--Section pied de page-->
+    <hr>
+    <footer class="section-p1">
+        <div class="col">
+            <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/logo3.png' %}" alt=""></a>
+            <h4>Contact</h4>
+            <p><strong>Adresse:</strong> Godomey Togoudo, Rue de la Pharmacie Le Jourdain</p>
+            <p><strong>Numéro:</strong> +229 90835005/ +229 40543686</p>
+            <p><strong>Horaire:</strong> Du lundi au Samedi de 10h à 19h</p>
+            <div class="follow">
+                <h4>Suivez-nous</h4>
+                <div class="icon">
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-pinterest-p"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <h4>A propos</h4>
+            <a href="{% url 'About' %}">A propos de nous</a>
+            <a href="{% url 'Livraisons' %}">Informations sur la livraison</a>
+            <a href="{% url 'PoliConfi' %}">Politique de confidentialité</a>
+            <a href="{% url 'Termes' %}">Termes et conditions</a>
+            <a href="{% url 'Contact' %}">Nous contacter</a>
+        </div>
+        <div class="col">
+            <h4>Mon compte</h4>
+            {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->    
+                <a href="{% url 'profile' %}" class="dropdown-toggle">Mon profil</a>
+            {% else %}
+                <a href="{% url 'login_signup' %}">S'authentifier</a>
+            {% endif %}
+            <a href="#">Voir le panier</a>
+            <a href="#">Mes favoris</a>
+            <a href="#">Suivre ma commande</a>
+            <a href="#">F.A.Q</a>
+        </div>
+        <div class="col install">
+            <h4>Installer l'application</h4>
+            <p>Depuis l'App Store ou Play Store</p>
+            <div class="row">
+                <img src="{% static 'images/app.jpg' %}" alt="">
+                <img src="{% static 'images/play.jpg' %}" alt="">
+            </div>
+            <p>Méthodes de paiements sécurisés</p>
+            <img src="{% static 'images/pay.png' %}" alt="">
+        </div>
+        <div class="copyright">
+            <p>Copyright © 2010-2024 S.M.A.R.T. & Co: Boutique en ligne de gadgets électroniques. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>

@@ -1,0 +1,389 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>A propos de nous</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>  <!--Intégration de animejs-->
+    </head>
+
+    <body>
+        <section id="header">
+            <a id="logo" href="{% url 'index' %}"><span>S.M.A.R.T.  & Co</span> </a>
+    
+            <!--Barre de recherche-->
+            <div id="search-container">
+                <div id="search-bar">
+                    <input type="text" placeholder="Recherchez un produit">
+                    <button><i class="fas fa-search"></i></button>
+                </div>   
+            </div>
+            <div>
+                <ul id="navbar">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li class="dropdown">
+                        <a href="{% url 'SHOP' %}" class="dropdown-toggle">Boutique
+                            <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'ShopPortables' %}">Smartphones</a></li>
+                            <li><a href="{% url 'ShopPC' %}">PCs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Ecouteurs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Casques</a></li>
+                            <li><a href="{% url 'ShopMontres' %}">Montres</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="active" href="{% url 'About' %}">A propos</a></li>
+                    <li><a href="{% url 'Contact' %}">Contact</a></li>
+
+                    {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Mon Compte
+                            <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'profile' %}">Profil</a></li>  
+                            <li><a href="{% url 'logout' %}">Déconnexion</a></li>  
+                        </ul>
+                    </li>
+                    {% else %}
+                        <li><a href="{% url 'login_signup' %}">Authentification</a></li>
+                    {% endif %}
+                    
+                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
+                </ul>
+            </div>
+            <div id="mobile">
+                <button id="mobile-search-toggle" aria-label="Rechercher">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                <i id="bar" class="fa-solid fa-bars"></i> 
+            </div>
+        </section>
+         
+        <main>
+            <!-- Hero Section -->
+            <section class="hero2">
+                <div class="hero2-content">
+                    <h1 class="animate-on-scroll">We're <span>ElectroTech</span></h1>
+                    <p class="animate-on-scroll">Bringing innovation to your everyday life since 2010</p>
+                    <div class="divider animate-on-scroll"></div>
+                    <p class="hero2-description animate-on-scroll">
+                        We're more than just an electronics store. We're a team of passionate tech enthusiasts dedicated to bringing the latest technology to our community.
+                    </p>
+                    <button class="scroll-indicator" aria-label="Scroll to learn more">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Story Section -->
+            <section id="story" class="story">
+                <div class="container">
+                    <h2 class="section-title animate-on-scroll">Our Story</h2>
+                    <p class="section-description animate-on-scroll">
+                        From humble beginnings to becoming a leading electronics retailer. Here's how our journey unfolded over the years.
+                    </p>
+                    <div class="timeline">
+                        <div class="timeline-item animate-on-scroll">
+                            <div class="timeline-content">
+                                <span class="year">2010</span>
+                                <h3>The Beginning</h3>
+                                <p>ElectroTech started as a small repair shop in a garage. The founder, David Chen, had a vision to create a space where technology could be made accessible to everyone.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item animate-on-scroll">
+                            <div class="timeline-content">
+                                <span class="year">2013</span>
+                                <h3>First Retail Store</h3>
+                                <p>After three successful years of repairs and growing customer demand, we opened our first retail store in downtown.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item animate-on-scroll">
+                            <div class="timeline-content">
+                                <span class="year">2016</span>
+                                <h3>Online Presence</h3>
+                                <p>We launched our e-commerce platform, allowing customers nationwide to shop our curated selection of electronics.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item animate-on-scroll">
+                            <div class="timeline-content">
+                                <span class="year">Today</span>
+                                <h3>Leading the Way</h3>
+                                <p>Today, ElectroTech continues to lead the way in providing cutting-edge technology with personalized service.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Values Section -->
+            <section class="values">
+                <div class="container">
+                    <h2 class="section-title animate-on-scroll">Our Values</h2>
+                    <p class="section-description animate-on-scroll">
+                        Our business is built on core principles that guide everything we do.
+                    </p>
+                    <div class="values-grid">
+                        <div class="value-card animate-on-scroll">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                            </div>
+                            <h3>Quality</h3>
+                            <div class="counter" data-target="500">0</div>
+                            <p>We offer only the highest quality products, thoroughly tested and backed by our guarantee.</p>
+                        </div>
+                        <div class="value-card animate-on-scroll">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
+                            <h3>Customer Focus</h3>
+                            <div class="counter" data-target="10000">0</div>
+                            <p>Our customers are at the heart of everything we do.</p>
+                        </div>
+                        <div class="value-card animate-on-scroll">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            </div>
+                            <h3>Innovation</h3>
+                            <div class="counter" data-target="300">0</div>
+                            <p>We constantly seek the latest technologies to bring cutting-edge solutions.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Team Section -->
+            <section class="team">
+                <div class="container">
+                    <h2 class="section-title animate-on-scroll">Meet Our Team</h2>
+                    <p class="section-description animate-on-scroll">
+                        The passionate people behind ElectroTech who work every day to bring you the best in electronics.
+                    </p>
+                    <div class="team-grid">
+                        <div class="team-card animate-on-scroll">
+                            <div class="team-image">
+                                <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg" alt="David Chen">
+                                <div class="team-overlay">
+                                    <div class="social-links">
+                                        <a href="#" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                                        <a href="#" aria-label="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3>David Chen</h3>
+                            <p class="role">Founder & CEO</p>
+                            <p class="bio">David founded ElectroTech with a vision to make technology accessible to everyone.</p>
+                        </div>
+                        <div class="team-card animate-on-scroll">
+                            <div class="team-image">
+                                <img src="https://images.pexels.com/photos/5905445/pexels-photo-5905445.jpeg" alt="Sarah Johnson">
+                                <div class="team-overlay">
+                                    <div class="social-links">
+                                        <a href="#" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                                        <a href="#" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3>Sarah Johnson</h3>
+                            <p class="role">Chief Technology Officer</p>
+                            <p class="bio">Sarah brings 12 years of experience in consumer electronics and product development.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="contact">
+                <div class="container">
+                    <h2 class="section-title animate-on-scroll">Get in Touch</h2>
+                    <p class="section-description animate-on-scroll">
+                        Have questions or feedback? We'd love to hear from you!
+                    </p>
+                    <form class="contact-form animate-on-scroll" action="#" method="POST">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Testimonials Section -->
+            <section class="testimonials">
+                <div class="container">
+                    <h2 class="section-title animate-on-scroll">What Our Customers Say</h2>
+                    <div class="testimonials-slider">
+                        <div class="testimonials-track">
+                            <div class="testimonial-card">
+                                <div class="quote-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path></svg>
+                                </div>
+                                <p class="testimonial-content">ElectroTech has been my go-to electronics store for years. Their product knowledge and customer service are unmatched.</p>
+                                <div class="testimonial-author">
+                                    <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg" alt="John Michaels">
+                                    <div>
+                                        <h4>John Michaels</h4>
+                                        <p>Technology Enthusiast</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonials-nav">
+                            <button class="prev" aria-label="Previous testimonial">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <button class="next" aria-label="Next testimonial">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+         
+        <!--Section qui sommes-nous?-->
+        <section id="about-head" class="section-p1">  
+            <div>
+                <h4>Bienvenue chez S.M.A.R.T. & Co, votre destination en ligne pour tous vos gadgets tech !</h4>
+                <p>Chez S.M.A.R.T. & Co, nous nous engageons à vous offrir une vaste gamme de gadgets technologiques à des prix imbattables.
+                    Que vous soyez à la recherche des derniers smartphones de toutes marques, de casques Bluetooth ou avec fil, d'écouteurs Bluetooth ou avec fil, de tablettes ou encore d'ordinateurs portables, nous avons tout ce qu'il vous faut pour rester connecté et à la pointe de la technologie.</p>
+                <h4>Notre mission:</h4>
+                <p>Notre objectif est de devenir un géant de l'e-commerce au Bénin, en offrant à nos clients des produits de haute qualité, un service client exceptionnel et une expérience d'achat en ligne fluide et sécurisée. 
+                    Nous croyons que tout le monde mérite d'accéder aux meilleures technologies sans se ruiner, et c'est pourquoi nous mettons tout en œuvre pour vous proposer les meilleures offres du marché.</p>
+                <h4>Ce que Nous Offrons :</h4>
+                <ul>
+                    <li>Smartphones de Toutes Marques : Découvrez notre sélection de smartphones des plus grandes marques, allant des modèles les plus récents aux classiques indémodables.</li>
+                    <li>Casques et Écouteurs : Que vous préfériez les modèles Bluetooth ou avec fil, nous avons une variété de casques et d'écouteurs qui répondront à tous vos besoins audiophiles.</li>
+                    <li>Tablettes : Parfaites pour le travail, les études ou le divertissement, nos tablettes allient performance et praticité.</li>
+                    <li>Ordinateurs Portables : Pour les professionnels et les étudiants, nos ordinateurs portables sont conçus pour offrir une puissance et une flexibilité optimales.</li>
+                </ul>
+                <h4>Pourquoi Choisir S.M.A.R.T. & Co ?</h4>
+                <ul>
+                    <li>Prix Imbattables : Nous nous efforçons de vous offrir les meilleurs prix sur tous nos produits, sans compromettre la qualité.</li>
+                    <li>Service Client Exceptionnel : Notre équipe est toujours prête à vous aider, que ce soit pour un conseil avant l'achat ou pour un support après-vente.</li>
+                    <li>Livraison Rapide et Fiable : Nous veillons à ce que vos commandes vous parviennent rapidement et en parfait état.</li>
+                    <li>Sécurité et Confiance : Votre satisfaction et la sécurité de vos transactions sont notre priorité absolue.</li>
+                </ul>
+                <p>Rejoignez la révolution tech avec S.M.A.R.T. & Co et découvrez comment nous transformons le commerce électronique au Bénin. 
+                    Explorez notre site, profitez de nos offres exceptionnelles et équipez-vous des meilleurs gadgets technologiques du marché.</p>
+                <marquee bgcolor="#ccc" loop="-1" scrollamount="5" width="100%">
+                    Dans un futur très proche, S.M.A.R.T. & Co vous proposera une gamme complète et variée de télévisions à écran plat.
+                </marquee>
+            </div>
+        </section>
+        
+        <!--section app-->
+        <section id="about-app" class="section-p1">
+            <h1>Téléchargez notre <a href="#">App</a></h1>
+            <div class="video">
+                <video autoplay muted loop src="{% static 'images/about.mp4' %}"></video>
+            </div>
+        </section>
+
+        <!--services-->  
+        <section id="services" class="section-p1">
+            <div class="se-box">
+                <img src="{%  static 'images/Service1.png' %}" alt="">
+                <h6>Livraison gratuite</h6>
+            </div>
+            <div class="se-box">
+                <img src="{% static 'images/Service2.png' %}" alt="">
+                <h6>Commande en ligne</h6>
+            </div>
+            <div class="se-box">
+                <img src="{% static 'images/Service3.png' %}" alt="">
+                <h6>Economise ton argent</h6>
+            </div>
+            <div class="se-box">
+                <img src="{% static 'images/Service4.png' %}" alt="">
+                <h6>Fais notre promotion</h6>
+            </div>
+            <div class="se-box">
+                <img src="{% static 'images/Service5.png' %}" alt="">
+                <h6>Très bons prix</h6>
+            </div>
+            <div class="se-box">
+                <img src="{% static 'images/Service6.png' %}" alt="">
+                <h6>Support client 24/7</h6>
+            </div>
+        </section>
+
+            <!--Section newsletter-->
+        <section id="newsletter" class="section-p1 section-m1">
+            <div class="newstext">
+                <h4>Inscrivez-vous à la boîte aux lettes</h4>
+                <p>Recevez des mises à jour par e-mail sur notre boutique et nos <span>dernières offres</span>. </p>
+            </div>
+            <div class="form">
+                <input type="email" placeholder="Votre adresse mail">
+                <button class="normal">Inscrivez-vous</button>
+            </div>
+        </section>
+
+        <!--Section pied de page-->
+        <footer class="section-p1">
+            <div class="col">
+                <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/logo3.png' %}" alt=""></a>
+                <h4>Contact</h4>
+                <p><strong>Adresse:</strong> Godomey Togoude, Rue de la Pharmacie Le Jourdain</p>
+                <p><strong>Numéro:</strong> +229 90835005/ +229 40543686</p>
+                <p><strong>Horaire:</strong> Du lundi au Samedi de 10h à 19h</p>
+                <div class="follow">
+                    <h4>Suivez-nous</h4>
+                    <div class="icon">
+                        <i class="fab fa-facebook-f"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-pinterest-p"></i>        
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <h4>A propos</h4>
+                <a href="{% url 'About' %}">A propos de nous</a>
+                <a href="{% url 'Livraisons' %}">Informations sur la livraison</a>
+                <a href="{% url 'PoliConfi' %}">Politique de confidentialité</a>
+                <a href="{% url 'Termes' %}">Termes et conditions</a>
+                <a href="{% url 'Contact' %}">Nous contacter</a>
+            </div>
+            <div class="col">
+                <h4>Mon compte</h4>
+                {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->    
+                    <a href="{% url 'profile' %}" class="dropdown-toggle">Mon profil</a>
+                {% else %}
+                    <a href="{% url 'login_signup' %}">S'authentifier</a>
+                {% endif %}
+                <a href="#">Voir le panier</a>
+                <a href="#">Mes favoris</a>
+                <a href="#">Suivre ma commande</a>
+                <a href="#">F.A.Q</a>
+            </div>
+            <div class="col install">
+                <h4>Installer l'application</h4>
+                <p>Depuis l'App Store ou Play Store</p>
+                <div class="row">
+                    <img src="{% static 'images/app.jpg' %}" alt="">
+                    <img src="{% static 'images/play.jpg' %}" alt="">
+                </div>
+                <p>Méthodes de paiements sécurisés</p>
+                <img src="{% static 'images/pay.png' %}" alt="">
+            </div>
+            <div class="copyright">
+                <p>Copyright © 2010-2024 S.M.A.R.T. & Co: Boutique en ligne de gadgets électroniques. Tous droits réservés.</p>
+            </div>
+        </footer>
+
+        <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/About.js' %}"></script>
+    </body>
+
+</html>

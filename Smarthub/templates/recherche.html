@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Recherche</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    </head>
+    <body>
+        <section id="header">
+            <a id="logo" href="{% url 'index' %}"><span>S.M.A.R.T.  & Co</span> </a>
+    
+            <!--Barre de recherche-->
+            <div id="search-container">
+                <form id="search-bar" method="GET" action="{% url 'recherche' %}">
+                    <input type="text" name="q" placeholder="Recherchez un produit..." value="{{ request.GET.q }}">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+            <div>
+                <ul id="navbar">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li class="dropdown">
+                        <a href="{% url 'SHOP' %}" class="dropdown-toggle">Boutique
+                            <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'ShopPortables' %}">Smartphones</a></li>
+                            <li><a href="{% url 'ShopPC' %}">PCs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Ecouteurs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Casques</a></li>
+                            <li><a href="{% url 'ShopMontres' %}">Montres</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'About' %}">A propos</a></li>
+                    <li><a href="{% url 'Contact' %}">Contact</a></li>
+                    
+                    {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">Mon Compte
+                                <i class="fa-solid fa-caret-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'profile' %}">Profil</a></li>  
+                                <li><a href="{% url 'logout' %}">Déconnexion</a></li>  
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login_signup' %}">Authentification</a></li>
+                    {% endif %}
+
+                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
+                </ul>
+            </div>
+            <div id="mobile">
+                <button id="mobile-search-toggle" aria-label="Rechercher">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                <i id="bar" class="fa-solid fa-bars"></i> 
+            </div>
+        </section>
+
+        <h2>Résultats pour "{{ query }}"</h2>
+
+        {% if results %}
+            <div class="pro-container">
+                {% for product in results %}
+                    <div class="pro">
+                        <img src="{% if product.smartphones_tablets.image %}{{ product.smartphones_tablets.image.url }}
+                                {% elif product.pcs.image %}{{ product.pcs.image.url }}
+                                {% else %}{% static 'images/default.jpg' %}{% endif %}" 
+                            alt="{{ product.name }}">
+                        <div class="des">
+                        <span>{{ product.brand.name }}</span>
+                        <h5>{{ product.name }}</h5>
+                        <h4>{{ product.price|floatformat:"0" }} CFA</h4>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+        <p>Aucun résultat trouvé pour "{{ query }}".</p>
+        {% endif %}
+
+    </body>
+</html>

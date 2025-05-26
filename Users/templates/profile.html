@@ -1,0 +1,515 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Profil</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Playwrite+NZ:wght@100..400&display=swap" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>  <!--Intégration de animejs-->
+
+    </head>
+
+    <body>
+
+        <!--Section header-->
+        <section id="header">
+            <a id="logo" href="{% url 'index' %}"><span>S.M.A.R.T.  & Co</span> </a>
+
+            <!--Barre de recherche-->
+            <div id="search-container">
+                <div id="search-bar">
+                    <input type="text" placeholder="Recherchez un produit">
+                    <button><i class="fas fa-search"></i></button>
+                </div>   
+            </div>
+            <div>
+                <ul id="navbar">
+                    <li><a class="active" href="{% url 'index' %}">Accueil</a></li>
+                    <li class="dropdown">
+                        <a href="{% url 'SHOP' %}" class="dropdown-toggle">Boutique
+                            <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'ShopPortables' %}">Smartphones</a></li>
+                            <li><a href="{% url 'ShopPC' %}">PCs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Ecouteurs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Casques</a></li>
+                            <li><a href="{% url 'ShopMontres' %}">Montres</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'About' %}">A propos</a></li>
+                    <li><a href="{% url 'Contact' %}">Contact</a></li>
+
+                    {% if user.is_authenticated %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">Mon Compte
+                                <i class="fa-solid fa-caret-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'profile' %}">Profil</a></li>
+                                <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'Login' %}">Connexion</a></li>
+                        <li><a href="{% url 'Signup' %}">Inscription</a></li>
+                    {% endif %}
+
+                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
+                </ul>
+            </div>
+            <div id="mobile">
+                <button id="mobile-search-toggle" aria-label="Rechercher">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                <i id="bar" class="fa-solid fa-bars"></i> 
+            </div>
+        </section>
+
+        <!--Section de notification de mot de passe changé avec succès-->
+        {% if messages %}
+            <div class="message-container">
+                {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            <script>
+                setTimeout(() => {
+                  const alerts = document.querySelectorAll('.alert');
+                  alerts.forEach(alert => {
+                    alert.style.opacity = '0';
+                    alert.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => alert.remove(), 500); // retire complètement l'élément après fondu
+                  });
+                }, 4000); // 4 secondes
+              </script>
+        {% endif %}
+
+        <!--section du compte-->
+        <main>
+            <section class="profile-section">
+                <div class="container">
+
+                    <!--Entête du profil-->
+                    <div class="profile-header">
+                        <h1>Mon compte</h1>
+                        <p>Gérez les détails et les préférences de votre compte.</p>
+                    </div>
+    
+                    <div class="profile-content">
+
+                        <!-- Sidebar -->
+                        <div class="profile-sidebar">
+
+                            <!--Photo de profil-->
+                            <div class="profile-picture-container">
+                                <div class="profile-picture">
+                                    <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg" alt="John Doe" id="profile-image">
+                                </div>
+                                <div class="profile-picture-overlay">
+                                    <span>Changer</span>
+                                </div>
+                            </div>
+                            <div class="profile-name">John Doe</div>
+                            <div class="profile-since">Membre depuis 14 Janvier 2024</div>
+                            
+                            <nav class="profile-nav">
+                                <ul>
+                                    <li><a href="#account" data-section="account">Informations sur le compte</a></li>
+                                    <li><a href="#orders" data-section="orders">Mes commandes</a></li>
+                                    <li><a href="#wishlist" data-section="wishlist">Liste de souhaits</a></li>
+                                    <li><a href="#reviews" data-section="reviews">Mes avis</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+    
+                        <div class="profile-main">
+
+                            <!-- Account Information Section -->
+                            <div class="section-content" id="account-section">
+
+                                <!-- Information de connexion -->
+                                <div class="profile-card">
+                                    <div class="card-header">
+                                        <h2>Activité du compte</h2>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="info-group">
+                                            <div class="info-label">Date d'inscription</div>
+                                            <div class="info-value">January 15, 2024</div>
+                                        </div>
+                                        <div class="info-group">
+                                            <div class="info-label">Dernière connexion</div>
+                                            <div class="info-value">March 15, 2024 14:30</div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <!--Section des informations personnelles-->
+                                <div class="profile-card">
+                                    <div class="card-header">
+                                        <h2>Informations personnelles</h2>
+                                        <button class="btn btn-secondary" id="editInfoBtn">Modifier les informations</button>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="info-group">
+                                            <div class="info-label">Nom complet</div>
+                                            <div class="info-value">John Doe</div>
+                                        </div>
+                                        <div class="info-group">
+                                            <div class="info-label">Adresse email</div>
+                                            <div class="info-value">john.doe@example.com</div>
+                                        </div>
+                                        <div class="info-group">
+                                            <div class="info-label">Numéro de téléphone</div>
+                                            <div class="info-value">+1 (555) 123-4567</div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <!--Section des préférences-->
+                                <div class="profile-card">
+                                    <div class="card-header">
+                                        <h2>Préférences</h2>
+                                        <button class="btn btn-secondary" id="editPreferencesBtn">Modifier les  préférences</button>
+                                    </div>
+                                    <div class="card-content">
+
+                                        <!--Section des préférences générales-->
+                                        <div class="preferences-grid">
+                                            <div class="preference-item">
+                                                <span class="preference-label">Thème</span>
+                                                <span class="preference-value">Blanc</span>
+                                            </div>
+                                            <div class="preference-item">
+                                                <span class="preference-label">Langue</span>
+                                                <span class="preference-value">Français</span>
+                                            </div>
+                                            <div class="preference-item">
+                                                <span class="preference-label">Marques préférées</span>
+                                                <span class="preference-value">Apple, Samsung, Google</span>
+                                            </div>
+                                            <div class="preference-item">
+                                                <span class="preference-label">Devise</span>
+                                                <span class="preference-value">Franc CFA</span>
+                                            </div>
+                                        </div>
+    
+                                        <!--Section des notifications-->
+                                        <div class="notifications-section">
+                                            <h3>Préférences des notification</h3>
+                                            <div class="notification-items">
+                                                <div class="notification-item">
+                                                    <span>Notifications par Email</span>
+                                                    <span class="status enabled">Activé</span>
+                                                </div>
+                                                <div class="notification-item">
+                                                    <span>Notifications push</span>
+                                                    <span class="status enabled">Activé</span>
+                                                </div>
+                                                <div class="notification-item">
+                                                    <span>Notifications par SMS</span>
+                                                    <span class="status disabled">Désactivé</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <!--Section de l'adresse de livraison-->
+                                <div class="profile-card">
+                                    <div class="card-header">
+                                        <h2>Adresse de livraison</h2>
+                                        <button class="btn btn-secondary" id="editAddressBtn">Modifier l'addresse</button>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="address-box">
+                                            <p>123 Main Street</p>
+                                            <p>San Francisco, CA 94105</p>
+                                            <p>United States</p>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <!--Section de la sécurité du compte-->
+                                <div class="profile-card">
+                                    <div class="card-header">
+                                        <h2>Sécurité du compte</h2>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="info-group">
+                                            <div class="info-label">Mot de passe</div>
+                                            <div class="info-value">••••••••</div>
+                                        </div>
+                                        <div class="card-actions">
+                                            <a href="{% url 'password_change' %}"><button class="btn btn-primary" id="changePasswordBtn">Changer mot de passe</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <!--Section commandes -->
+                            <div class="section-content hidden" id="orders-section">
+
+                                <!-- Commande actuelle -->
+                                <div class="profile-card">
+                                    <div class="card-header">
+                                        <h2>Commande actuelle</h2>
+                                        <span class="order-status pending">Traitement</span>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="order-details">
+                                            <div class="order-info">
+                                                <p class="order-number">Order #12345</p>
+                                                <p class="order-date">Placed on March 15, 2024</p>
+                                            </div>
+                                            <div class="order-items">
+                                                <div class="order-item">
+                                                    <img src="https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg" alt="Product 1">
+                                                    <div class="item-details">
+                                                        <h4>Wireless Headphones</h4>
+                                                        <p>Quantity: 1</p>
+                                                        <p class="item-price">$199.99</p>
+                                                    </div>
+                                                </div>
+                                                <div class="order-item">
+                                                    <img src="https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg" alt="Product 2">
+                                                    <div class="item-details">
+                                                        <h4>Smartwatch</h4>
+                                                        <p>Quantity: 1</p>
+                                                        <p class="item-price">$299.99</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="order-summary">
+                                                <div class="summary-item">
+                                                    <span>Subtotal</span>
+                                                    <span>$499.98</span>
+                                                </div>
+                                                <div class="summary-item">
+                                                    <span>Shipping</span>
+                                                    <span>$9.99</span>
+                                                </div>
+                                                <div class="summary-item">
+                                                    <span>Tax</span>
+                                                    <span>$25.00</span>
+                                                </div>
+                                                <div class="summary-item total">
+                                                    <span>Total</span>
+                                                    <span>$534.97</span>
+                                                </div>
+                                            </div>
+                                            <div class="order-actions">
+                                                <button class="btn btn-secondary">Track Order</button>
+                                                <button class="btn btn-secondary">Cancel Order</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <!-- Historique des commandes -->
+                                <div class="profile-card">
+                                    <div class="card-header">
+                                        <h2>Histrique des commandes</h2>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="order-history">
+                                            <div class="order-history-item">
+                                                <div class="order-history-header">
+                                                    <div>
+                                                        <p class="order-number">Order #12344</p>
+                                                        <p class="order-date">March 1, 2024</p>
+                                                    </div>
+                                                    <span class="order-status delivered">Delivered</span>
+                                                </div>
+                                                <div class="order-history-content">
+                                                    <p>2 items</p>
+                                                    <p class="order-total">$234.98</p>
+                                                </div>
+                                                <button class="btn btn-secondary btn-sm">Voir les détails</button>
+                                            </div>
+    
+                                            <div class="order-history-item">
+                                                <div class="order-history-header">
+                                                    <div>
+                                                        <p class="order-number">Order #12343</p>
+                                                        <p class="order-date">February 15, 2024</p>
+                                                    </div>
+                                                    <span class="order-status delivered">Delivered</span>
+                                                </div>
+                                                <div class="order-history-content">
+                                                    <p>1 item</p>
+                                                    <p class="order-total">$129.99</p>
+                                                </div>
+                                                <button class="btn btn-secondary btn-sm">Voir les détails</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <!-- Section Liste de souhaits -->
+                            <div class="section-content hidden" id="wishlist-section">
+                                <div class="profile-card">
+                                    <div class="card-header">
+                                        <h2>My Wishlist</h2>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="wishlist-items">
+                                            <div class="wishlist-item">
+                                                <img src="https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg" alt="Smartwatch">
+                                                <div class="wishlist-item-details">
+                                                    <h4>Premium Smartwatch</h4>
+                                                    <p class="item-price">$299.99</p>
+                                                    <p class="stock-status in-stock">In Stock</p>
+                                                </div>
+                                                <div class="wishlist-item-actions">
+                                                    <button class="btn btn-primary btn-sm">Ajouter au panier</button>
+                                                    <button class="btn btn-secondary btn-sm">Supprimer</button>
+                                                </div>
+                                            </div>
+    
+                                            <div class="wishlist-item">
+                                                <img src="https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg" alt="Headphones">
+                                                <div class="wishlist-item-details">
+                                                    <h4>Wireless Headphones</h4>
+                                                    <p class="item-price">$199.99</p>
+                                                    <p class="stock-status out-of-stock">Out of Stock</p>
+                                                </div>
+                                                <div class="wishlist-item-actions">
+                                                    <button class="btn btn-primary btn-sm" disabled>Ajouter au panier</button>
+                                                    <button class="btn btn-secondary btn-sm">Supprimer</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reviews Section -->
+                        <div class="section-content hidden" id="reviews-section">
+                            <div class="profile-card">
+                                <div class="card-header">
+                                    <h2>My Reviews</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="reviews-list">
+                                        <div class="review-item">
+                                            <div class="review-header">
+                                                <div class="review-product">
+                                                    <img src="https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg" alt="Smartwatch">
+                                                    <div>
+                                                        <h4>Premium Smartwatch</h4>
+                                                        <div class="review-rating">
+                                                            <span class="stars">★★★★★</span>
+                                                            <span class="review-date">March 10, 2024</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="review-actions">
+                                                    <button class="btn btn-secondary btn-sm">Edit</button>
+                                                    <button class="btn btn-secondary btn-sm">Delete</button>
+                                                </div>
+                                            </div>
+                                            <p class="review-text">Amazing smartwatch! The battery life is incredible, and the fitness tracking features are spot-on. Highly recommend for anyone looking for a premium smartwatch experience.</p>
+                                        </div>
+
+                                        <div class="review-item">
+                                            <div class="review-header">
+                                                <div class="review-product">
+                                                    <img src="https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg" alt="Headphones">
+                                                    <div>
+                                                        <h4>Wireless Headphones</h4>
+                                                        <div class="review-rating">
+                                                            <span class="stars">★★★★☆</span>
+                                                            <span class="review-date">February 28, 2024</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="review-actions">
+                                                    <button class="btn btn-secondary btn-sm">Edit</button>
+                                                    <button class="btn btn-secondary btn-sm">Delete</button>
+                                                </div>
+                                            </div>
+                                            <p class="review-text">Great sound quality and comfortable for long listening sessions. The noise cancellation could be better, but overall a solid choice for wireless headphones.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!--Section pied de page-->
+        <hr>
+        <footer class="section-p1">
+            <div class="col" data-aos="fade-right" data-aos-delay="100">
+                <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/logo3.png' %}" alt=""></a>
+                <h4>Contact</h4>
+                <p><strong>Adresse:</strong> Godomey Togoudo, Rue de la Pharmacie Le Jourdain</p>
+                <p><strong>Numéro:</strong> +229 90835005/ +229 40543686</p>
+                <p><strong>Horaire:</strong> Du lundi au Samedi de 10h à 19h</p>
+                <div class="follow">
+                    <h4>Suivez-nous</h4>
+                    <div class="icon">
+                        <i class="fab fa-facebook-f"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-pinterest-p"></i>
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col" data-aos="flip-left" data-aos-delay="200">
+                <h4>A propos</h4>
+                <a href="{% url 'About' %}">A propos de nous</a>
+                <a href="{% url 'Livraisons' %}">Informations sur la livraison</a>
+                <a href="{% url 'PoliConfi' %}">Politique de confidentialité</a>
+                <a href="{% url 'Termes' %}">Termes et conditions</a>
+                <a href="{% url 'Contact' %}">Nous contacter</a>
+            </div>
+            <div class="col" data-aos="flip-right" data-aos-delay="300">
+                <h4>Mon compte</h4>
+                {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->    
+                    <a href="{% url 'profile' %}" class="dropdown-toggle">Mon profil</a>
+                {% else %}
+                    <a href="{% url 'login_signup' %}">S'authentifier</a>
+                {% endif %}
+                <a href="#">Voir le panier</a>
+                <a href="#">Mes favoris</a>
+                <a href="#">Suivre ma commande</a>
+                <a href="#">F.A.Q</a>
+            </div>
+            <div class="col install" data-aos="fade-left" data-aos-delay="400">
+                <h4>Installer l'application</h4>
+                <p>Depuis l'App Store ou Play Store</p>
+                <div class="row">
+                    <img src="{% static 'images/app.jpg' %}" alt="">
+                    <img src="{% static 'images/play.jpg' %}" alt="">
+                </div>
+                <p>Méthodes de paiements sécurisés</p>
+                <img src="{% static 'images/pay.png' %}" alt="">
+            </div>
+            <div class="copyright">
+                <p>Copyright © 2010-2024 S.M.A.R.T. & Co: Boutique en ligne de gadgets électroniques. Tous droits réservés.</p>
+            </div>
+        </footer>
+
+        <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/profile.js' %}"></script>
+    </body>
+
+</html>

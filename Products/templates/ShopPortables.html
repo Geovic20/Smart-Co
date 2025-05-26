@@ -1,0 +1,231 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Boutique</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/ShopCasques.css' %}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    </head>
+
+    <body>
+        <section id="header">
+            <a id="logo" href="{% url 'index' %}"><span>S.M.A.R.T.  & Co</span> </a>
+            
+            <!--Barre de recherche-->
+            <div id="search-container">
+                <form id="search-bar" method="GET" action="{% url 'recherche' %}">
+                    <input type="text" name="q" placeholder="Recherchez un produit..." value="{{ request.GET.q }}">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+            <div>
+                <ul id="navbar">
+                    <li><a href="{% url 'index' %}">Accueil</a></li>
+                    <li class="dropdown">
+                        <a class="active" href="{% url 'SHOP' %}" class="dropdown-toggle">Boutique
+                            <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'ShopPortables' %}">Smartphones</a></li>
+                            <li><a href="{% url 'ShopPC' %}">PCs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Ecouteurs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Casques</a></li>
+                            <li><a href="{% url 'ShopMontres' %}">Montres</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'About' %}">A propos</a></li>
+                    <li><a href="{% url 'Contact' %}">Contact</a></li>
+                    
+                    {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Mon Compte
+                            <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'profile' %}">Profil</a></li>  
+                            <li><a href="{% url 'logout' %}">Déconnexion</a></li>  
+                        </ul>
+                    </li>
+                    {% else %}
+                        <li><a href="{% url 'login_signup' %}">Authentification</a></li>
+                    {% endif %}
+
+                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
+                </ul>
+            </div>
+            <div id="mobile">
+                <button id="mobile-search-toggle" aria-label="Rechercher">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                <i id="bar" class="fa-solid fa-bars"></i> 
+            </div>
+        </section>
+         
+        <div id="product-page-body">
+
+            <!--TOP SECTION-->
+            <div id="product-top-container">
+                <div id="product-top-wrapper">
+                    <div id="product-top-text-section">
+                        <h1>Dernières tendances</h1>
+                        <h2>Smartphones</h2>
+                        <p>📱✨Yo bienvenue dans le quartier VIP des smartphones ! <br>
+                            Ici, c'est la crème de la crème : que tu sois team Infinix, Tecno, Itel, Samsung, Redmi, Apple, Huawei, Xiaomi
+                            ou même Google Pixel... t'as l'embarras du choix ! Style, Performance, batterie de ouf, photos qui claquent...
+                            on a ce qu'il te faut pour briller à chaque appel ! <br>
+                            Alors, prêt(e) à désigner ton futur smartphone de star? Clique, craque et kiffe !
+                        </p>
+                        <form method="get" action="{% url 'ShopPortables' %}">
+                            <label for="brand-select">Choisissez une marque :</label>
+                            <select name="brand" id="brand-select" onchange="this.form.submit()" class="brand-dropdown">
+                                <option value="" {% if not selected_brand %}selected{% endif %}>Toutes les marques</option>
+                                <option value="Apple" {% if selected_brand == "Apple" %}selected{% endif %}>Apple</option>
+                                <option value="Google" {% if selected_brand == "Google" %}selected{% endif %}>Google</option>
+                                <option value="Honor" {% if selected_brand == "Honor" %}selected{% endif %}>Honor</option>
+                                <option value="Huawei" {% if selected_brand == "Huawei" %}selected{% endif %}>Huawei</option>
+                                <option value="Infinix" {% if selected_brand == "Infinix" %}selected{% endif %}>Infinix</option>
+                                <option value="Itel" {% if selected_brand == "Itel" %}selected{% endif %}>Itel</option>
+                                <option value="Motorola" {% if selected_brand == "Motorola" %}selected{% endif %}>Motorola</option>
+                                <option value="Nokia" {% if selected_brand == "Nokia" %}selected{% endif %}>Nokia</option>
+                                <option value="Oppo" {% if selected_brand == "Oppo" %}selected{% endif %}>Oppo</option>
+                                <option value="Realme" {% if selected_brand == "Realme" %}selected{% endif %}>Realme</option>
+                                <option value="Redmi" {% if selected_brand == "Redmi" %}selected{% endif %}>Redmi</option>
+                                <option value="Samsung" {% if selected_brand == "Samsung" %}selected{% endif %}>Samsung</option>
+                                <option value="Tecno" {% if selected_brand == "Tecno" %}selected{% endif %}>Tecno</option>
+                                <option value="Vivo" {% if selected_brand == "Vivo" %}selected{% endif %}>Vivo</option>
+                                <option value="Xiaomi" {% if selected_brand == "Xiaomi" %}selected{% endif %}>Xiaomi</option>
+                            </select>
+                        </form>    
+                    </div>
+                    <div id="product-top-image-section">
+                        <img src="{% static "images/iphones2.png" %}"></img>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!---Produits-->
+        {% for brand_name, products in grouped_products.items %}
+            <section id="produit1" class="section-p1">
+                <h3>{{ brand_name }} ({{ products|length }} produits) </h3>
+                <div class="pro-container">
+                    {% for product in products %}
+                        <div class="pro" >
+
+                            <!-- Image principale -->
+                            {% with Smartphone=product.smartphones_tablets %}
+                                <img onclick="window.location.href='{% url 'Details' product.id %}'"
+                                    class="fixe" 
+                                    src="{% if Smartphone.image %}{{ Smartphone.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}"  
+                                    alt="{{ product.name }}"
+                                >
+
+                                <div class="des">
+
+                                    <!-- Marque et Nom -->
+                                    <span>{{ product.brand.name }}</span>
+                                    <h5>{{ product.name }}</h5>
+
+                                    <!-- Étoiles (statiques dans cet exemple) -->
+                                    <div class="star">
+                                        {% for _ in "12345" %}
+                                            <i class="fas fa-star"></i>
+                                        {% endfor %}
+                                    </div>
+
+                                    <!-- Prix -->
+                                    <h4>{{ product.price|floatformat:"0" }} CFA</h4>
+                                </div>
+                                <a href="{% url 'Details' product.id %}"> <button class="cart">COMMANDER</button></a>
+                            {% endwith %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endfor %}
+
+        <!--Section pagination-->
+        <section  id="pagination" class="section-p1">
+            <a href="#">1</a>
+            <a href="#">2</a>
+            <a href="#"><i class="fa-solid fa-arrow-right"></i></a>
+        </section>
+
+        <!--Section newsletter-->
+        <section id="newsletter" class="section-p1 section-m1">
+            <div class="newstext">
+                <h4>Inscrivez-vous à la boîte aux lettes</h4>
+                <p>Recevez des mises à jour par e-mail sur notre boutique et nos <span>dernières offres</span>. </p>
+            </div>
+            <div class="form">
+                <input type="email" placeholder="Votre adresse mail">
+                <button class="normal">Inscrivez-vous</button>
+            </div>
+        </section>
+
+        <!--Section pied de page-->
+        <footer class="section-p1">
+            <div class="col">
+                <a href="{% url 'index' %}.html"><img class="logo" src="{% static 'images/logo3.png' %}" alt=""></a>
+                <h4>Contact</h4>
+                <p><strong>Adresse:</strong> Godomey Togoude, Rue de la Pharmacie Le Jourdain</p>
+                <p><strong>Numéro:</strong> +229 90835005/ +229 40543686</p>
+                <p><strong>Horaire:</strong> Du lundi au Samedi de 10h à 19h</p>
+                <div class="follow">
+                    <h4>Suivez-nous</h4>
+                    <div class="icon">
+                        <i class="fab fa-facebook-f"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-pinterest-p"></i>        
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <h4>A propos</h4>
+                <a href="{% url 'About' %}">A propos de nous</a>
+                <a href="{% url 'Livraisons' %}">Informations sur la livraison</a>
+                <a href="{% url 'PoliConfi' %}">Politique de confidentialité</a>
+                <a href="{% url 'Termes' %}">Termes et conditions</a>
+                <a href="{% url 'Contact' %}">Nous contacter</a>
+            </div>
+            <div class="col">
+                <h4>Mon compte</h4>
+                {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->    
+                    <a href="{% url 'profile' %}" class="dropdown-toggle">Mon profil</a>
+                {% else %}
+                    <a href="{% url 'login_signup' %}">S'authentifier</a>
+                {% endif %}
+                <a href="#">Voir le panier</a>
+                <a href="#">Mes favoris</a>
+                <a href="#">Suivre ma commande</a>
+                <a href="#">Centre d'aide</a>
+            </div>
+            <div class="col install">
+                <h4>Installer l'application</h4>
+                <p>Depuis l'App Store ou Play Store</p>
+                <div class="row">
+                    <img src="{% static 'images/app.jpg' %}" alt="">
+                    <img src="{% static 'images/play.jpg' %}" alt="">
+                </div>
+                <p>Méthodes de paiements sécurisés</p>
+                <img src="{% static 'images/pay.png' %}" alt="">
+            </div>
+            <div class="copyright">
+                <p>Copyright © 2010-2024 SamrtHub: Boutique en ligne de gadgets électroniques. Tous droits réservés.</p>
+            </div>
+        </footer>
+
+        <script src="{% static 'js/script.js' %}"></script>
+    </body>
+
+</html>

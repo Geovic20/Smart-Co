@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{% static 'css/loginStyle.css' %}">
+        <title>Authentification Smart & Co</title>
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <div class="form-header">
+                <div class="titles">
+                    <div class="title-login">CONNEXION</div>
+                    <div class="title-register">INSCRIPTION</div>
+                </div>
+            </div>
+
+            <!-- FORMULAIRE DE CONNEXION -->
+            <form method ="POST" action="{% url 'login_signup' %}" class="login-form" autocomplete="off">
+                {% csrf_token %}
+                <input type="hidden" name="login" value="1">  <!-- Permet d'identifier le formulaire -->
+
+                <div class="input-box">
+                    <input type="email" class="input-field" name="username" id="id_username" required
+                        value="{{ login_form.email.value|default_if_none:'' }}">
+                    <label for="id_username" class="label">Email</label>
+                    <i class='bx bx-envelope icon'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" 
+                        class="input-field" 
+                        name="password" 
+                        id="id_password" 
+                        required>
+                    <label for="id_password" class="label">Mot de passe</label>
+                    <i class='bx bx-lock-alt icon' ></i>
+                </div>
+
+                {% if login_form.errors %}
+                    <div class="error-message">
+                        Email ou mot de passe incorrect
+                    </div>
+                {% endif %}
+
+                <div class="form-cols">
+                    <div class="col-1"></div>
+                    <div class="col-2">
+                        <a href="{% url 'password_reset' %}">Mot de passe oublié ?</a>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <button class="btn-submit" id="SignInBtn" type="submit" name="login">Se connecter<i class='bx bx-log-in' ></i></button>
+                </div>
+                <div class="switch-form">
+                    <span>Nouveau sur la plateforme ? <a href="#" onclick="registerFunction()">Inscrivez-vous.</a></span>
+                </div>
+            </form>
+
+            <!-- FORMULAIRE D'INSCRIPTION -->
+            <form method ="POST" action="{% url 'login_signup' %}" class="register-form" autocomplete="off">
+                {% csrf_token %}
+
+                <input type="hidden" name="signup" value="1">  <!-- Permet d'identifier le formulaire -->
+
+                <div class="input-box">
+                    <input type="text" 
+                        class="input-field" 
+                        name="first_name" 
+                        id="id_first_name" 
+                        required
+                        value="{{ signup_form.first_name.value|default_if_none:'' }}">
+                    <label for="id_first_name" class="label">Prénom</label>
+                    <i class='bx bx-user icon'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="text" 
+                        class="input-field" 
+                        name="last_name" 
+                        id="id_last_name" 
+                        required
+                        value="{{ signup_form.last_name.value|default_if_none:'' }}">
+                    <label for="id_last_name" class="label">Nom</label>
+                    <i class='bx bx-user icon'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="email" 
+                        class="input-field" 
+                        name="email" 
+                        id="id_email" 
+                        required
+                        value="{{ signup_form.email.value|default_if_none:'' }}">
+                    <label for="id_email" class="label">Email</label>
+                    <i class='bx bx-envelope icon'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" 
+                        class="input-field" 
+                        name="password1" 
+                        id="id_password1" 
+                        required>
+                    <label for="id_password1" class="label">Mot de passe</label>  <!-- Correction ici -->
+                    <i class='bx bx-lock-alt icon'></i>
+                </div>
+                
+                <div class="input-box">
+                    <input type="password" 
+                        class="input-field" 
+                        name="password2" 
+                        id="id_password2" 
+                        required>
+                    <label for="id_password2" class="label">Confirmez le mot de passe</label>
+                    <i class='bx bx-lock-alt icon'></i>
+                </div>
+
+                <div class="form-cols">
+                    <div class="col-1">
+                        <input type="checkbox" id="agree" required>
+                        <label for="agree"> J'accepte les <a href="{% url 'Termes' %}">termes et conditions.</a></label>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+
+                {% if signup_form.errors %}
+                <div class="error-message">
+                    {% for field, errors in signup_form.errors.items %}
+                        {% if field == 'password2' %}
+                            {% for error in errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    {% for error in signup_form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="input-box">
+                    <button class="btn-submit" id="SignUpBtn" type="submit" name="register" >S'inscrire<i class='bx bx-user-plus' ></i></button>
+                </div>
+
+                <div class="switch-form">
+                    <span>Vous avez déjà un compte ? <a href="#" onclick="loginFunction()">Connectez-vous!</a></span>
+                </div>
+            </form>
+        </div>
+
+        <script src="{% static 'js/Login.js' %}"></script>
+    </body>
+</html>
