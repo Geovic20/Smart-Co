@@ -2,10 +2,12 @@
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 const navLinks = document.querySelector('.nav-links');
 
-mobileMenuBtn.addEventListener('click', () => {
+if (mobileMenuBtn && navLinks) {
+  mobileMenuBtn.addEventListener('click', () => {
     navLinks.classList.toggle('active');
     mobileMenuBtn.classList.toggle('active');
-});
+  });
+}
 
 // Smooth scroll for hero button
 const scrollIndicator = document.querySelector('.scroll-indicator');
