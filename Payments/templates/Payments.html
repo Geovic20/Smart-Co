@@ -28,7 +28,7 @@
             </div>
             <div>
                 <ul id="navbar">
-                    <li><a class="active" href="{% url 'index' %}">Accueil</a></li>
+                    <li><a href="{% url 'index' %}">Accueil</a></li>
                     <li class="dropdown">
                         <a href="{% url 'SHOP' %}" class="dropdown-toggle">Boutique
                             <i class="fa-solid fa-caret-down"></i>
@@ -70,6 +70,221 @@
                 <i id="bar" class="fa-solid fa-bars"></i> 
             </div>
         </section>
+
+
+        <div class="containerP">
+
+            <!--Barre de progression-->
+            <header>
+                <div class="progress">
+                    <div class="progress-step complete">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Panier</div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step active">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Paiement</div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Confirmation</div>
+                    </div>
+                </div>
+            </header>
+
+            <main>
+                <!-- Order summary -->
+                <section class="order-summary">
+                    <h2 class="HHH" class="h2P">Récapitulatif de la commande</h2>
+                    <div class="summary-card">
+                       <div class="summary-item">
+                            <div class="item-details">
+                                <img src="https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=100" alt="Smart Watch"></img>
+                                <div>
+                                    <h3>Montre connectée</h3>
+                                    <p>Quantité: 1</p>
+                                </div>
+                            </div>
+                            <div class="item-price">$299.99</div>
+                       </div> 
+                       <div class="summary-divider"></div>
+                       <div class="summary-totals">
+                            <div class="total-line">
+                                <span>Sous-total</span>
+                                <span>$299.99</span>
+                            </div>
+                            <div class="total-line">
+                                <span>Livraison</span>
+                                <span>$9.99</span>
+                            </div>
+                            <div class="total-line">
+                                <span>Taxe</span>
+                                <span>$18.00</span>
+                            </div>
+                            <div class="total-line total">
+                                <span>Total</span>
+                                <span id="total-amount">$327.98</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Payment Method -->
+                <section class="payment-section">
+                    <h2>Méthode de paiement</h2>
+                    <div id="payment-methods" class="payment-methods">
+
+                        <!--MTN Mobile Money-->
+                        <div class="payment-method" data-method="mtn">
+                            <div class="method-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone">
+                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                                <path d="M12 18h.01" />
+                            </svg>
+                            </div>
+                            <div class="method-name">MTN Mobile Money</div>
+                        </div>
+
+                        <!--Flooz (Moov)-->
+                        <div class="payment-method" data-method="flooz">
+                            <div class="method-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone">
+                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                                <path d="M12 18h.01" />
+                            </svg>
+                            </div>
+                            <div class="method-name">Flooz (Moov)</div>
+                        </div>
+
+                        <!--Celtiis Cash-->
+                        <div class="payment-method" data-method="celtiis">
+                            <div class="method-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone">
+                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                                <path d="M12 18h.01" />
+                            </svg>
+                            </div>
+                            <div class="method-name">Celtiis Cash</div>
+                        </div>
+
+                        <!--Orange Money-->
+                        <div class="payment-method" data-method="orange">
+                            <div class="method-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone">
+                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                                <path d="M12 18h.01" />
+                            </svg>
+                            </div>
+                            <div class="method-name">Orange Money</div>
+                        </div>
+
+                        <!--Wave-->
+                        <div class="payment-method" data-method="wave">
+                            <div class="method-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-waves">
+                                <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+                                <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+                                <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+                            </svg>
+                            </div>
+                            <div class="method-name">Wave</div>
+                        </div>
+
+                        <!--Cryptocurrency-->
+                        <div class="payment-method" data-method="crypto">
+                            <div class="method-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bitcoin">
+                                <path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m3.94.694-.347 1.969" />
+                                <path d="M7.116 7.229c3.767-4.082 12.293-4.229 17.277-1.768" />
+                            </svg>
+                            </div>
+                            <div class="method-name">Cryptocurrency</div>
+                        </div>
+
+                        <!--Fedapay-->
+                        <div class="payment-method" data-method="fedapay">
+                            <div class="method-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card">
+                                <rect width="20" height="14" x="2" y="5" rx="2" />
+                                <line x1="2" x2="22" y1="10" y2="10" />
+                            </svg>
+                            </div>
+                            <div class="method-name">Fedapay</div>
+                        </div>
+
+                        <!--Paypal-->
+                        <div class="payment-method" data-method="paypal">
+                            <div class="method-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card">
+                                <rect width="20" height="14" x="2" y="5" rx="2" />
+                                <line x1="2" x2="22" y1="10" y2="10" />
+                            </svg>
+                            </div>
+                            <div class="method-name">PayPal</div>
+                        </div>
+
+                        <!--Bank Account-->
+                        <div class="payment-method" data-method="bank">
+                            <div class="method-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building">
+                                    <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
+                                    <path d="M9 22v-4h6v4" />
+                                    <path d="M8 6h.01" />
+                                    <path d="M16 6h.01" />
+                                    <path d="M12 6h.01" />
+                                    <path d="M12 10h.01" />
+                                    <path d="M12 14h.01" />
+                                    <path d="M16 10h.01" />
+                                    <path d="M16 14h.01" />
+                                    <path d="M8 10h.01" />
+                                    <path d="M8 14h.01" />
+                                </svg>
+                            </div>
+                            <div class="method-name">Compte bancaire</div>
+                        </div>
+                    </div>
+
+                    <!--Payment Forms-->
+                    <div id="payment-forms" class="payment-forms">
+
+                        <!-- MTN Mobile Money Form -->
+                        <div id="mtn-form" class="payment-form">
+                            <h3>MTN Mobile Money</h3>
+                            <form>
+                                <div class="form-group">
+                                    <label for="mtn-phone">Numéro de téléphone</label>
+                                    <input type="tel" id="mtn-phone" placeholder="e.g., 0559876543" required></input>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-info">
+                                    <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
+                                </div>
+                                <button type="submit" class="btn-primary">Payer maintenant</button>
+                            </form>
+                        </div>
+
+                        <!-- Flooz Form -->
+
+                        <!-- Celtiis Cash Form -->
+
+                        <!-- Orange Money Form -->
+
+                        <!-- Wave Form -->
+
+                        <!-- Cryptocurrency Form -->
+
+                        <!-- Fedapay Form -->
+
+                        <!-- PayPal Form -->
+
+                        <!-- Bank Account Form -->
+                    </div>
+                </section>
+            </main>
+
+        </div>
         
         
         
