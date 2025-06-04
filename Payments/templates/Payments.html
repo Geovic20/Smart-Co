@@ -71,7 +71,6 @@
             </div>
         </section>
 
-
         <div class="containerP">
 
             <!--Barre de progression-->
@@ -436,10 +435,35 @@
                     </div>
                 </section>
             </main>
+        </div>
 
+        <!-- Payment Success Modal -->
+        <div id="payment-success" class="modal">
+            <div class="modal-content">
+                <div class="success-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="m9 12 2 2 4-4" />
+                    </svg>
+                </div>
+                <h2>Paiement réussi!</h2>
+                <p>Votre paiement de <span id="success-amount">$327.98</span> a été traité avec succès.</p>
+                <p>Commande #<span id="order-number">TG-2025042</span></p>
+                <div class="confirmation-details">
+                    <p>Un e-mail de confirmation a été envoyé à votre adresse e-mail enregistrée.</p>
+                    <div class="delivery-info">
+                        <h3>Livraison estimée</h3>
+                        <p id="delivery-date">March 15, 2025</p>
+                    </div>
+                    <div class="tracking-info">
+                        <p>You will receive tracking information once your order ships.</p>
+                    </div>
+                </div>
+                <button id="close-modal" class="btn-primary">Continue Shopping</button>
+            </div>
         </div>
         
-        
+        <script src="{% static 'js/Payments.js' %}"></script>
         
     </body>
 </html>
