@@ -266,20 +266,173 @@
                         </div>
 
                         <!-- Flooz Form -->
+                        <div id="flooz-form" class="payment-form">
+                            <h3>Flooz (Moov)</h3>
+                            <form>
+                                <div class="form-group">
+                                    <label for="flooz-phone">Numéro de téléphone</label>
+                                    <input type="tel" id="flooz-phone" placeholder="e.g., 0999876543" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-info">
+                                    <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
+                                </div>
+                                <button type="submit" class="btn-primary">Payer maintenant</button>
+                            </form>
+                        </div>
 
                         <!-- Celtiis Cash Form -->
+                        <div id="celtiis-form" class="payment-form">
+                            <h3>Celtiis Cash</h3>
+                            <form>
+                                <div class="form-group">
+                                    <label for="celtiis-phone">Numéro de téléphone</label>
+                                    <input type="tel" id="celtiis-phone" placeholder="e.g., 0779876543" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-info">
+                                    <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
+                                </div>
+                                <button type="submit" class="btn-primary">Payer maintenant</button>
+                            </form>
+                        </div>
 
                         <!-- Orange Money Form -->
+                        <div id="orange-form" class="payment-form">
+                            <h3>Orange Money</h3>
+                            <form>
+                                <div class="form-group">
+                                    <label for="orange-phone">Numéro de téléphone</label>
+                                    <input type="tel" id="orange-phone" placeholder="e.g., 0779876543" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-info">
+                                    <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
+                                </div>
+                                <button type="submit" class="btn-primary">Payer maintenant</button>
+                            </form>
+                        </div>
 
                         <!-- Wave Form -->
+                        <div id="wave-form" class="payment-form">
+                            <h3>Wave</h3>
+                            <form>
+                            <div class="form-group">
+                                <label for="wave-phone">Numéro de téléphone</label>
+                                <input type="tel" id="wave-phone" placeholder="e.g., 0789876543" required>
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-info">
+                                <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
+                            </div>
+                            <button type="submit" class="btn-primary">Payer maintenant</button>
+                            </form>
+                        </div>
 
                         <!-- Cryptocurrency Form -->
+                        <div id="crypto-form" class="payment-form">
+                            <h3>Paiement en Cryptomonnaie</h3>
+                            <div class="crypto-options">
+                                <div class="form-group">
+                                    <label for="crypto-currency">Sélectionner la Cryptomonnaie</label>
+                                    <select id="crypto-currency" required>
+                                        <option value="" selected disabled>Choisir la Cryptomonnaie</option>
+                                        <option value="btc">Bitcoin (BTC)</option>
+                                        <option value="eth">Ethereum (ETH)</option>
+                                        <option value="usdt">Tether (USDT)</option>
+                                        <option value="bnb">Binance Coin (BNB)</option>
+                                    </select>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="crypto-address">
+                                    <p class="crypto-instruction">Envoyer exactement <span class="crypto-amount">0.0123 BTC</span> à:</p>
+                                    <div class="wallet-address">
+                                        <code id="wallet-address">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code>
+                                        <button type="button" class="btn-copy" onclick="copyWalletAddress()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy">
+                                                <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                                                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="qr-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" alt="Wallet QR Code">
+                                    </div>
+                                </div>
+                                <div class="form-info crypto-info">
+                                    <p>Après avoir envoyé le paiement, cliquez sur le bouton ci-dessous pour vérifier la transaction</p>
+                                </div>
+                                <button type="button" class="btn-primary" onclick="verifyTransaction()">Vérifier le paiement</button>
+                            </div>
+                        </div>
 
                         <!-- Fedapay Form -->
+                        <div id="fedapay-form" class="payment-form">
+                            <h3>Fedapay</h3>
+                            <form>
+                                <div class="form-group">
+                                    <label for="fedapay-card">Numéro de carte</label>
+                                    <input type="text" id="fedapay-card" placeholder="XXXX XXXX XXXX XXXX" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                    <label for="fedapay-expiry">Date d'expiration</label>
+                                    <input type="text" id="fedapay-expiry" placeholder="MM/YY" required>
+                                    <span class="error-message"></span>
+                                    </div>
+                                    <div class="form-group">
+                                    <label for="fedapay-cvv">Code de sécurité</label>
+                                    <input type="text" id="fedapay-cvv" placeholder="XXX" required>
+                                    <span class="error-message"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fedapay-name">Nom du titulaire de la carte</label>
+                                    <input type="text" id="fedapay-name" placeholder="As shown on card" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <button type="submit" class="btn-primary">Pay $327.98</button>
+                            </form>
+                        </div>
 
                         <!-- PayPal Form -->
+                        <div id="paypal-form" class="payment-form">
+                            <h3>PayPal</h3>
+                            <div class="paypal-info">
+                                <p>Vous serez redirigé vers PayPal pour compléter votre paiement de <span class="amount">$327.98</span></p>
+                                <button type="button" class="btn-paypal">Continuer vers PayPal</button>
+                            </div>
+                        </div>
 
                         <!-- Bank Account Form -->
+                        <div id="bank-form" class="payment-form">
+                            <h3>Compte Bancaire</h3>
+                            <form>
+                                <div class="form-group">
+                                    <label for="bank-name">Nom de la banque</label>
+                                    <select id="bank-name" required>
+                                    <option value="" selected disabled>Choisir votre banque</option>
+                                    <option value="ecobank">Ecobank</option>
+                                    <option value="boa">Bank of Africa</option>
+                                    <option value="sgbci">Société Générale</option>
+                                    <option value="other">Autre</option>
+                                    </select>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="account-number">Numéro de compte</label>
+                                    <input type="text" id="account-number" placeholder="Your account number" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="account-name">Nom du titulaire du compte</label>
+                                    <input type="text" id="account-name" placeholder="Name on account" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <button type="submit" class="btn-primary">Confirmer le paiement de $327.98</button>
+                            </form>
+                        </div>
                     </div>
                 </section>
             </main>

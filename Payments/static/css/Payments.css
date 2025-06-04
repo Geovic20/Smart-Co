@@ -233,4 +233,294 @@ main {
   text-align: center;
 }
 
+/* Payment form */
+.payment-forms {
+    margin-top: var(--spacing-6);
+}
+.payment-form {
+  display: none;
+}
+.payment-form.active {
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
+.form-group {
+  margin-bottom: var(--spacing-4);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+}
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: var(--spacing-2);
+}
+input, select {
+  width: 100%;
+  padding: var(--spacing-3);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-white);
+  transition: border-color var(--transition);
+}
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+input.error, select.error {
+  border-color: var(--error);
+}
+.error-message {
+  color: var(--error);
+  font-size: 12px;
+  margin-top: var(--spacing-1);
+  display: none;
+}
+.error-message.visible {
+  display: block;
+}
+.form-info {
+  background-color: var(--primary-light);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-4);
+}
+.form-info p {
+  font-size: 14px;
+  color: var(--primary-dark);
+}
+.amount {
+  font-weight: 600;
+}
+
+
+/* Cryptocurrency Form Styles */
+.crypto-options {
+  margin-top: var(--spacing-4);
+}
+.crypto-address {
+  background-color: var(--bg-light);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-sm);
+  margin: var(--spacing-4) 0;
+}
+.crypto-instruction {
+  font-size: 14px;
+  margin-bottom: var(--spacing-3);
+}
+.wallet-address {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background-color: var(--bg-white);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-4);
+}
+.wallet-address code {
+  flex: 1;
+  font-family: monospace;
+  font-size: 14px;
+  word-break: break-all;
+}
+.btn-copy {
+  background: none;
+  border: none;
+  color: var(--primary);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition);
+}
+.btn-copy:hover {
+  background-color: var(--primary-light);
+}
+.qr-code {
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing-4) 0;
+}
+.qr-code img {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+.crypto-info {
+  margin-top: var(--spacing-4);
+}
+
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-3) var(--spacing-6);
+  font-weight: 500;
+  font-size: 16px;
+  transition: background-color var(--transition);
+  width: 100%;
+}
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+.btn-paypal {
+  background-color: #0070BA;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-3) var(--spacing-6);
+  font-weight: 500;
+  font-size: 16px;
+  transition: background-color var(--transition);
+  width: 100%;
+  margin-top: var(--spacing-4);
+}
+.btn-paypal:hover {
+  background-color: #005EA6;
+}
+.paypal-info {
+  text-align: center;
+  padding: var(--spacing-4) 0;
+}
+
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.active {
+  display: flex;
+  animation: fadeIn 0.3s ease-in-out;
+}
+.modal-content {
+  background-color: var(--bg-white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-6);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+.success-icon {
+  color: var(--success);
+  margin-bottom: var(--spacing-4);
+  animation: scaleIn 0.5s ease-in-out;
+}
+.modal h2 {
+  margin-bottom: var(--spacing-2);
+}
+.modal p {
+  margin-bottom: var(--spacing-3);
+  color: var(--text-medium);
+}
+
+#order-number {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.confirmation-details {
+  text-align: left;
+  margin: var(--spacing-4) 0;
+  padding: var(--spacing-4);
+  background-color: var(--bg-light);
+  border-radius: var(--radius-sm);
+}
+.delivery-info {
+  margin: var(--spacing-4) 0;
+}
+.delivery-info h3 {
+  font-size: 16px;
+  margin-bottom: var(--spacing-2);
+}
+#delivery-date {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.tracking-info {
+  font-size: 14px;
+  color: var(--text-medium);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+  
+  .payment-methods {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .order-summary {
+    position: static;
+    margin-bottom: var(--spacing-6);
+  }
+}
+
+@media (max-width: 576px) {
+  .progress {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+  }
+  
+  .progress-step {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .step-number {
+    margin-bottom: 0;
+    margin-right: var(--spacing-3);
+  }
+  
+  .progress-line {
+    width: 2px;
+    height: 24px;
+    margin: var(--spacing-2) 0;
+    margin-left: 16px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
 
