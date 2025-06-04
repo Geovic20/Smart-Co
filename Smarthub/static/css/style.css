@@ -890,7 +890,6 @@ marquee {
   text-align: center;
   padding-top: 70px;
 }
-
 .hero2-content {
   position: relative;
   z-index: 1;
@@ -918,27 +917,27 @@ marquee {
   color: #000;
 }
 .divider {
-    width: 60px;
-    height: 4px;
-    background: var(--color-primary);
-    margin: 2rem auto;
+  width: 60px;
+  height: 4px;
+  background: var(--color-primary);
+  margin: 2rem auto;
 }
 .hero2-description {
-    font-size: 1.125rem;
-    max-width: 600px;
-    margin: 0 auto;
-    opacity: 0.9;
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.9;
 }
 .scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    animation: bounce 2s infinite;
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  animation: bounce 2s infinite;
 }
 
 @keyframes bounce {
@@ -955,50 +954,50 @@ marquee {
 
 /* Story section */
 .story {
-    padding: 5rem 0;
-    background: var(--color-background-alt);
+  padding: 5rem 0;
+  background: var(--color-background-alt);
 }
 .section-title {
-    font-size: 2.5rem;
-    text-align: center;
-    margin-bottom: 1rem;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 .section-description {
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto 4rem;
-    color: var(--color-text-light);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 4rem;
+  color: var(--color-text-light);
 }
 .timeline {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
 }
 .timeline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 100%;
-    background: var(--color-primary);
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: var(--color-primary);
 }
 .timeline-item {
-    margin-bottom: 4rem;
-    position: relative;
+  margin-bottom: 4rem;
+  position: relative;
 }
 .timeline-content {
-    background: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    width: calc(50% - 2rem);
-    margin-left: auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: calc(50% - 2rem);
+  margin-left: auto;
 }
 .timeline-item:nth-child(odd) .timeline-content {
-    margin-left: 0;
-    margin-right: auto;
+  margin-left: 0;
+  margin-right: auto;
 }
 .timeline-content::before {
     content: '';

@@ -353,7 +353,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col" data-aos="flip-left" data-aos-delay="200">
+            <div class="col" data-aos="fade-up" data-aos-delay="200">
                 <h4>A propos</h4>
                 <a href="{% url 'About' %}">A propos de nous</a>
                 <a href="{% url 'Livraisons' %}">Informations sur la livraison</a>
@@ -361,7 +361,7 @@
                 <a href="{% url 'Termes' %}">Termes et conditions</a>
                 <a href="{% url 'Contact' %}">Nous contacter</a>
             </div>
-            <div class="col" data-aos="flip-right" data-aos-delay="300">
+            <div class="col" data-aos="fade-up" data-aos-delay="300">
                 <h4>Mon compte</h4>
                 {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->    
                     <a href="{% url 'profile' %}" class="dropdown-toggle">Mon profil</a>
