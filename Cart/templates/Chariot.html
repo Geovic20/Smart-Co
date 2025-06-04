@@ -75,7 +75,7 @@
         <main class="container">
             <div class="cart-header" data-aos="fade-up" data-aos-delay="100">
                 <h2>Panier de Géovic (4 articles)</h2>
-                <button class="continue-shopping"><a href="{% url 'ShopPC' %}" >Continuer mes achats</a></button>
+                <a href="{% url 'SHOP' %}" ><button class="continue-shopping">Continuer mes achats</button></a>
             </div>
 
             <!-- Free Shipping Progress -->
@@ -247,7 +247,7 @@
                         <span>Total</span>
                         <span id="total">5039.94 €</span>
                     </div>
-                    <button id="checkout" class="checkout-btn">Procéder au paiement</button>
+                    <a href="{% url 'Payments' %}"><button id="checkout" class="checkout-btn">Procéder au paiement</button></a>
                 </div>
             </div>
 

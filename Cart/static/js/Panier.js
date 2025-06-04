@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="empty-cart">
                             <h3>Votre panier est vide</h3>
                             <p>Découvrez nos produits et ajoutez-les à votre panier</p>
-                            <a href="#" class="checkout-btn">Continuer mes achats</a>
+                            <a href="{% url 'SHOP' %}" class="checkout-btn">Continuer mes achats</a>
                         </div>
                     `;
                 }
