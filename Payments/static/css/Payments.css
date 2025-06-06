@@ -387,6 +387,25 @@ input.error, select.error {
 }
 
 
+/* Footer */
+footer {
+  margin-top: var(--spacing-10);
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+  color: var(--text-medium);
+  font-size: 14px;
+}
+.secure-payment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+  color: var(--text-medium);
+}
+
+
 /* Modal */
 .modal {
   display: none;
