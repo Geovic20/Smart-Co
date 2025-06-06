@@ -300,6 +300,7 @@ body {
 #navbar .dropdown:hover > a i { /* Faire pivoter l'icône au survol */
   transform: rotate(180deg);
 }
+
 /*Dropdown responsive*/
 /* Spécifique pour mobile */
 @media (max-width: 799px) {
@@ -484,6 +485,19 @@ body {
 }
 #produit1 .pro .cart{
   cursor: pointer;
+}
+.fav-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 2rem;
+  transition: color 0.3s ease;
+}
+.fav-btn .fas.fa-heart {
+  color: red;
 }
 
 /*Bannière noire*/
@@ -1957,8 +1971,6 @@ marquee {
   #formulaire .people div{
     margin-top: 15px;
   }
-
-  /* Écrans de tablette (entre 600px et 1024px) */
 }
 
 

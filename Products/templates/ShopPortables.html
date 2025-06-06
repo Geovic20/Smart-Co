@@ -119,6 +119,9 @@
                 <div class="pro-container">
                     {% for product in products %}
                         <div class="pro" >
+                            <div class="fav-btn" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i>
+                            </div>
 
                             <!-- Image principale -->
                             {% with Smartphone=product.smartphones_tablets %}

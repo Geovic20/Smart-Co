@@ -132,3 +132,9 @@ window.addEventListener('scroll', function () {
   }
 });
 
+//Script pour le bouton favoris
+function toggleFavorite(element){
+  const icon = element.querySelector("i");
+  icon.classList.toggle("fas");
+  icon.classList.toggle("far");
+}

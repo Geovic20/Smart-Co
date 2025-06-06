@@ -119,6 +119,9 @@
             <p data-aos="fade-left" data-aos-delay="100">Découvrez les smartphones les plus commandés actuellemnt chez nous !</p>
             <div class="pro-container">
                 <div class="pro" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="fav-btn" onclick="toggleFavorite(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
                     <img src="{% static 'images/products/4C30.jpg' %}" alt="" class="fixe">
                     <div class="des">
                         <Span>Samsung</Span>
@@ -135,6 +138,9 @@
                     <a href=""><button class="cart">COMMANDER</button></a>
                 </div>
                 <div class="pro" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="fav-btn" onclick="toggleFavorite(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
                     <img src="{% static 'images/products/P2.jpg' %}" alt="" class="fixe">
                     <div class="des">
                         <Span>Xiaomi</Span>
@@ -151,6 +157,9 @@
                     <a href=""><button class="cart">COMMANDER</button></a>
                 </div>
                 <div class="pro" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="fav-btn" onclick="toggleFavorite(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
                     <img src="{% static 'images/products/f3.jpg' %}" alt="" class="fixe">
                     <div class="des">
                         <Span>APPLE</Span>
@@ -167,6 +176,9 @@
                     <a href=""><button class="cart">COMMANDER</button></a>
                 </div>
                 <div class="pro" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="fav-btn" onclick="toggleFavorite(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
                     <img src="{% static 'images/products/f4.jpg' %}" alt="" class="fixe">
                     <div class="des">
                         <Span>APPLE</Span>
@@ -183,6 +195,9 @@
                     <a href=""><button class="cart">COMMANDER</button></a>
                 </div>
                 <div class="pro" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="fav-btn" onclick="toggleFavorite(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
                     <img src="{% static 'images/products/f5.jpg' %}" alt="" class="fixe">
                     <div class="des">
                         <Span>APPLE</Span>
@@ -199,6 +214,9 @@
                     <a href=""><button class="cart">COMMANDER</button></a>
                 </div>
                 <div class="pro" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="fav-btn" onclick="toggleFavorite(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
                     <img src="{% static 'images/products/f6.jpg' %}" alt="" class="fixe">
                     <div class="des">
                         <Span>APPLE</Span>
@@ -215,6 +233,9 @@
                     <a href=""><button class="cart">COMMANDER</button></a>
                 </div>
                 <div class="pro" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="fav-btn" onclick="toggleFavorite(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
                     <img src="{% static 'images/products/f7.jpg' %}" alt="" class="fixe">
                     <div class="des">
                         <Span>APPLE</Span>
@@ -231,6 +252,9 @@
                     <a href=""><button class="cart">COMMANDER</button></a>
                 </div>
                 <div class="pro" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="fav-btn" onclick="toggleFavorite(this)">
+                        <i class="far fa-heart"></i>
+                    </div>
                     <img src="{% static 'images/products/f8.jpg' %}" alt="" class="fixe">
                     <div class="des">
                         <Span>APPLE</Span>
@@ -263,6 +287,9 @@
             <div class="pro-container">
                 {% for product in latest_products %}
                     <div class="pro" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="fav-btn" onclick="toggleFavorite(this)">
+                            <i class="far fa-heart"></i>
+                        </div>
                         <img src="{% if product.smartphones_tablets.image %}{{ product.smartphones_tablets.image.url }}
                             {% elif product.pcs.image %}{{ product.pcs.image.url }}
                             {% else %}{% static 'images/default.jpg' %}{% endif %}" 

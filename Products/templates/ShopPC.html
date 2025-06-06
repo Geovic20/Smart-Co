@@ -111,6 +111,9 @@
                 <div class="pro-container">
                     {% for pc in pcs %}
                         <div class="pro" >
+                            <div class="fav-btn" onclick="toggleFavorite(this)">
+                                <i class="far fa-heart"></i>
+                            </div>
 
                             <!-- Image principale -->
                             <img onclick="window.location.href='{% url 'DetailsPC' pc.id %}'"
