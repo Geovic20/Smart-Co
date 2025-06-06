@@ -12,5 +12,6 @@ urlpatterns = [
     
     path('products/<str:category>/', views.product_list, name='product_list'),
     path('product/<int:pk>/', views.Details, name='Details'),
+    path('toggle-favori/', views.toggle_favori, name='toggle_favori'),
     path('Favoris/', views.Favoris, name='Favoris'),
 ]

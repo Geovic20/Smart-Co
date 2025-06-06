@@ -1,23 +1,19 @@
-function toggleFavorite(element) {
-  const icon = element.querySelector("i");
-  const produitId = element.dataset.id;
-
-  fetch('Favoris/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'X-CSRFToken': getCookie('csrftoken') // Django CSRF token
-    },
-    body: `produit_id=${produitId}`
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'added') {
-      icon.classList.remove('far');
-      icon.classList.add('fas');
-    } else {
-      icon.classList.remove('fas');
-      icon.classList.add('far');
-    }
-  });
+function toggleFavorite(element, produitId) {
+    fetch("{% url 'toggle_favori' %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'produit_id=' + produitId
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'added') {
+            element.querySelector('i').classList.add('text-red-500');
+        } else {
+            element.querySelector('i').classList.remove('text-red-500');
+            location.reload(); // Recharge la page si supprimé des favoris
+        }
+    });
 }

@@ -113,21 +113,17 @@ def Details(request, pk):
 
 #Favoris
 @login_required
-def Favoris(request):
+def toggle_favori(request):
     produit_id = request.POST.get('produit_id')
-
-    if not produit_id:
-        return JsonResponse({'status': 'error', 'message': 'Aucun ID produit fourni'}, status=400)
-
-    try:
-        produit = produit.objects.get(id=produit_id)
-    except produit.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Produit non trouvé'}, status=404)
-
-    favoris, created = Favori.objects.get_or_create(user=request.user, produit=produit)
+    produit = Products.objects.get(id=produit_id)
+    favori, created = Favori.objects.get_or_create(utilisateur=request.user, produit=produit)
 
     if not created:
-        favoris.delete()
+        favori.delete()
         return JsonResponse({'status': 'removed'})
-
     return JsonResponse({'status': 'added'})
+
+@login_required
+def Favoris(request):
+    favoris = Favori.objects.filter(utilisateur=request.user)
+    return render(request, 'Favoris.html', {'favoris': favoris})

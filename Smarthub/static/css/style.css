@@ -499,6 +499,32 @@ body {
 .fav-btn .fas.fa-heart {
   color: red;
 }
+.favoris-vide {
+    text-align: center;
+    margin-top: 80px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.btn-retour {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-retour:hover {
+  background-color: #fff;
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 
 /*Bannière noire*/
 #banner{
