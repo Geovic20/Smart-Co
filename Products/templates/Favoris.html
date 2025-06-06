@@ -15,7 +15,83 @@
     </head>
 
     <body>
-        
+        <!--Header-->
+        <section id="header">
+            <a id="logo" href="{% url 'index' %}">
+                <span class="desktop-logo">S.M.A.R.T. & Co</span> 
+            </a>
+
+            <!--Barre de recherche-->
+            <div id="search-container">
+                <div id="search-bar">
+                    <input type="text" placeholder="Recherchez un produit">
+                    <button><i class="fas fa-search"></i></button>
+                </div>   
+            </div>
+            <div>
+                <ul id="navbar">
+                    <li><a class="active" href="{% url 'index' %}">Accueil</a></li>
+                    <li class="dropdown">
+                        <a href="{% url 'SHOP' %}" class="dropdown-toggle">Boutique
+                            <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'ShopPortables' %}">Smartphones</a></li>
+                            <li><a href="{% url 'ShopPC' %}">PCs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Ecouteurs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Casques</a></li>
+                            <li><a href="{% url 'ShopMontres' %}">Montres</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'About' %}">A propos</a></li>
+                    <li><a href="{% url 'Contact' %}">Contact</a></li>
+
+                    {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">Mon Compte
+                                <i class="fa-solid fa-caret-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'profile' %}">Profil</a></li>  
+                                <li><a href="{% url 'Favoris' %}">Favoris</a></li>
+                                <li><a href="{% url 'logout' %}">Déconnexion</a></li>  
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login_signup' %}">Authentification</a></li>
+                    {% endif %}
+
+                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
+                </ul>
+            </div>
+            <div id="mobile">
+                <button id="mobile-search-toggle" aria-label="Rechercher">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                <i id="bar" class="fa-solid fa-bars"></i> 
+            </div>
+        </section>
+
+        <h1>Mes Favoris</h1>
+        {% if favoris %}
+        <div class="favoris-container">
+            {% for favori in favoris %}
+            <div class="produit">
+                <h3>{{ favori.produit.nom }}</h3>
+                <img src="{{ favori.produit.image.url }}" alt="">
+                <p>{{ favori.produit.description }}</p>
+                <span>{{ favori.produit.prix }} €</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>Vous n'avez pas encore de favoris.</p>
+        {% endif %}
+
+
+        <script src="{% static 'js/Favoris.js' %}"></script>
     </body>
 
 
