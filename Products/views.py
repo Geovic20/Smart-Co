@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Products, Smartphones_tablets, PCs
+from .models import Products, Smartphones_tablets, PCs, Favori
 from collections import defaultdict
 from django.db.models import Q  # Pour des requêtes complexes
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 def SHOP(request):
     return render(request, 'SHOP.html')
@@ -109,3 +111,23 @@ def Details(request, pk):
     }
     return render(request, 'Details.html', context)
 
+#Favoris
+@login_required
+def Favoris(request):
+    produit_id = request.POST.get('produit_id')
+
+    if not produit_id:
+        return JsonResponse({'status': 'error', 'message': 'Aucun ID produit fourni'}, status=400)
+
+    try:
+        produit = produit.objects.get(id=produit_id)
+    except produit.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Produit non trouvé'}, status=404)
+
+    favoris, created = Favori.objects.get_or_create(user=request.user, produit=produit)
+
+    if not created:
+        favoris.delete()
+        return JsonResponse({'status': 'removed'})
+
+    return JsonResponse({'status': 'added'})
