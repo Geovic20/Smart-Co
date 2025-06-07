@@ -5,6 +5,7 @@ from django.db.models import Q  # Pour des requêtes complexes
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 def SHOP(request):
     return render(request, 'SHOP.html')
@@ -125,14 +126,29 @@ def Details(request, pk):
 
 #Favoris
 @require_POST
+@csrf_exempt
 def toggle_favori(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Authentication required'}, status=403)
+    
     produit_id = request.POST.get('produit_id')
-    produit = Products.objects.get(id=produit_id)
-    favori, created = Favori.objects.get_or_create(utilisateur=request.user, produit=produit)
-
+    if not produit_id:
+        return JsonResponse({'status': 'error', 'message': 'Product ID missing'}, status=400)
+    
+    try:
+        produit = Products.objects.get(id=produit_id)
+    except Products.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Product not found'}, status=404)
+    
+    favori, created = Favori.objects.get_or_create(
+        utilisateur=request.user,
+        produit=produit
+    )
+    
     if not created:
         favori.delete()
         return JsonResponse({'status': 'removed'})
+    
     return JsonResponse({'status': 'added'})
 
 @login_required
