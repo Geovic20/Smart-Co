@@ -288,8 +288,15 @@
             <div class="pro-container">
                 {% for product in latest_products %}
                     <div class="pro" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="fav-btn" onclick="toggleFavorite(this)">
-                            <i class="far fa-heart"></i>
+                        <div class="fav-btn" 
+                            data-produit-id="{{ produit.id }}" 
+                            data-favori="{{ produit.est_favori|yesno:'true,false' }}" 
+                            onclick="toggleFavorite(this)">
+                            {% if produit.est_favori %}
+                                <i class="fas fa-heart text-red-500"></i>  <!-- cœur plein rouge -->
+                            {% else %}
+                                <i class="far fa-heart"></i>  <!-- cœur vide blanc -->
+                            {% endif %}
                         </div>
                         <img src="{% if product.smartphones_tablets.image %}{{ product.smartphones_tablets.image.url }}
                             {% elif product.pcs.image %}{{ product.pcs.image.url }}
@@ -424,6 +431,8 @@
             duration: 1500, // durée de l'animation en ms
             once: false // true = animation ne se joue qu'une seule fois
             });
+            const TOGGLE_FAVORI_URL = "{% url 'toggle_favori' %}";
+            const CSRF_TOKEN = "{{ csrf_token }}";
         </script>
     </body>
 

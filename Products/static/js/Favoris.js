@@ -1,19 +1,35 @@
-function toggleFavorite(element, produitId) {
-    fetch("{% url 'toggle_favori' %}", {
+function toggleFavorite(element) {
+    console.log("Bouton favori cliqué !");
+    const produitId = element.dataset.produitId;
+    console.log("Produit ID :", produitId);
+
+    if (!produitId) {
+        console.error("ID de produit manquant !");
+        return;
+    }
+
+    fetch('/Products/toggle-favori/', {
         method: 'POST',
         headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie('csrftoken')  // si CSRF activé
         },
-        body: 'produit_id=' + produitId
+        body: `produit_id=${produitId}`
     })
     .then(response => response.json())
     .then(data => {
+        console.log("Réponse du serveur :", data);
+
+        const icon = element.querySelector('i');
         if (data.status === 'added') {
-            element.querySelector('i').classList.add('text-red-500');
-        } else {
-            element.querySelector('i').classList.remove('text-red-500');
-            location.reload(); // Recharge la page si supprimé des favoris
+            icon.classList.remove('far');
+            icon.classList.add('fas', 'text-red-500');
+        } else if (data.status === 'removed') {
+            icon.classList.remove('fas', 'text-red-500');
+            icon.classList.add('far');
         }
     });
 }
+
+console.log("Fichier JS chargé");
+

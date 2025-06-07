@@ -4,6 +4,7 @@ from collections import defaultdict
 from django.db.models import Q  # Pour des requêtes complexes
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 def SHOP(request):
     return render(request, 'SHOP.html')
@@ -24,6 +25,11 @@ def ShopPC(request):
             Q(name__icontains=query) | Q(brand__name__icontains=query)
         )
 
+    favoris_ids = Favori.objects.filter(utilisateur=request.user).values_list('produit_id', flat=True) 
+    for pcs_list in grouped_pcs.values():
+        for pc in pcs_list:
+            pc.is_favori = pc.id in favoris_ids
+            
     grouped_pcs = defaultdict(list)
     for pc in pcs_queryset:
         grouped_pcs[pc.brand.name].append(pc)
@@ -79,6 +85,12 @@ def ShopPortables(request):
     # Trier par nom de marque (facultatif mais propre)
     grouped_products = dict(sorted(grouped_products.items()))
 
+    # Ajouter un champ pour savoir si le produit est dans les favoris
+    favoris_ids = Favori.objects.filter(utilisateur=request.user).values_list('produit_id', flat=True)
+    for product_list in grouped_products.values():
+        for prod in product_list:
+            prod.est_favori = prod.id in favoris_ids
+
     return render(request, 'ShopPortables.html', {
         'grouped_products': grouped_products,
         'selected_brand': selected_brand,
@@ -112,7 +124,7 @@ def Details(request, pk):
     return render(request, 'Details.html', context)
 
 #Favoris
-@login_required
+@require_POST
 def toggle_favori(request):
     produit_id = request.POST.get('produit_id')
     produit = Products.objects.get(id=produit_id)

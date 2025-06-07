@@ -131,10 +131,3 @@ window.addEventListener('scroll', function () {
     header.classList.remove('scrolled');
   }
 });
-
-//Script pour le bouton favoris
-function toggleFavorite(element){
-  const icon = element.querySelector("i");
-  icon.classList.toggle("fas");
-  icon.classList.toggle("far");
-}
