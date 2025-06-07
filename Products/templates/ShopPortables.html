@@ -120,8 +120,11 @@
                 <div class="pro-container">
                     {% for product in products %}
                         <div class="pro" >
-                            <div class="fav-btn" data-produit-id="{{ produit.id }}" onclick="toggleFavorite(this)">
-                                {% if produit.est_favori %}
+                            <div class="fav-btn" 
+                                data-produit-id="{{ product.id }}" 
+                                onclick="toggleFavorite(this)"
+                                data-favori="{{ product.est_favori|yesno:'true,false' }}">
+                                {% if product.est_favori %}
                                     <i class="fas fa-heart text-red-500"></i>  <!-- cœur plein rouge -->
                                 {% else %}
                                     <i class="far fa-heart"></i>  <!-- cœur vide blanc -->

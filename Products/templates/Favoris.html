@@ -74,35 +74,47 @@
             </div>
         </section>
 
-        <h1>Mes Favoris</h1>
+        
 
         {% if favoris %}
+            <h1 class="fav">Mes Favoris</h1>
             <section id="produit1" class="section-p1">
                 {% for favori in favoris %}
-                <div class="pro" data-aos="zoom-in" data-aos-delay="500">
-                    <div class="fav-btn" data-produit-id="{{ produit.id }}" onclick="toggleFavorite(this)">
-                        {% if produit.est_favori %}
-                            <i class="fas fa-heart text-red-500"></i>  <!-- cœur plein rouge -->
-                        {% else %}
-                            <i class="far fa-heart"></i>  <!-- cœur vide blanc -->
-                        {% endif %}
-                    </div>
-                    <img src="{{ favori.produit.image.url }}" alt="" class="fixe">
-                    <div class="des">
-                        <span>{{ favori.produit.marque }}</span>
-                        <h5>{{ favori.produit.nom }}</h5>
-                        <div class="star">
-                            {% for i in "12345" %}
-                            <i class="fas fa-star"></i>
-                            {% endfor %}
+                    <div class="pro" data-aos="zoom-in" data-aos-delay="500">
+                        <div class="fav-btn"
+                            data-produit-id="{{ favori.produit.id }}"
+                            onclick="toggleFavorite(this)">
+                            {% if favori.produit.est_favori %}
+                                <i class="fas fa-heart text-red-500"></i>
+                            {% else %}
+                                <i class="far fa-heart"></i>
+                            {% endif %}
                         </div>
-                        <h4>{{ favori.produit.prix }} F CFA</h4>
+
+                        {% with smartphone=favori.produit.smartphones_tablets %}
+                            <img src="{% if smartphone.image %}{{ smartphone.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}" 
+                                alt="{{ favori.produit.name }}" 
+                                class="fixe">
+                        {% endwith %}
+
+                        <div class="des">
+                            <span>{{ favori.produit.brand.name }}</span>
+                            <h5>{{ favori.produit.name }}</h5>
+                            <div class="star">
+                                {% for i in "12345" %}
+                                    <i class="fas fa-star"></i>
+                                {% endfor %}
+                            </div>
+                            <h4>{{ favori.produit.price|floatformat:"0" }} F CFA</h4>
+                        </div>
+
+                        <a href="{% url 'Details' favori.produit.id %}">
+                            <button class="cart">COMMANDER</button>
+                        </a>
                     </div>
-                    <a href="{% url 'commande' favori.produit.id %}"><button class="cart">COMMANDER</button></a>
-                </div>
                 {% endfor %}
             </section>
-        {% else %}
+            {% else %}
             <section class="favoris-vide" data-aos="fade-in">
                 <h2>Vous n'avez pas encore de favoris 🥲</h2>
                 <p>Explorez notre boutique pour trouver vos produits préférés.</p>
@@ -110,11 +122,6 @@
             </section>
         {% endif %}
 
-
-
         <script src="{% static 'js/Favoris.js' %}"></script>
     </body>
-
-
-
 </html>
