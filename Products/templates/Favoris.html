@@ -7,7 +7,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Favoris</title>
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <link rel="stylesheet" href="{% static 'css/Favoris.css' %}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Playwrite+NZ:wght@100..400&display=swap" rel="stylesheet">
@@ -74,8 +73,6 @@
             </div>
         </section>
 
-        
-
         {% if favoris %}
             <h1 class="fav">Mes Favoris</h1>
             <section id="produit1" class="section-p1">
@@ -92,9 +89,7 @@
                         </div>
 
                         {% with smartphone=favori.produit.smartphones_tablets %}
-                            <img src="{% if smartphone.image %}{{ smartphone.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}" 
-                                alt="{{ favori.produit.name }}" 
-                                class="fixe">
+                            <img src="{{ favori.produit.get_image_url }}" alt="{{ favori.produit.name }}" class="fixe">
                         {% endwith %}
 
                         <div class="des">

@@ -111,8 +111,15 @@
                 <div class="pro-container">
                     {% for pc in pcs %}
                         <div class="pro" >
-                            <div class="fav-btn" onclick="toggleFavorite(this)">
-                                <i class="far fa-heart"></i>
+                            <div class="fav-btn" 
+                                data-produit-id="{{ product.id }}" 
+                                onclick="toggleFavorite(this)"
+                                data-favori="{{ product.est_favori|yesno:'true,false' }}">
+                                {% if product.est_favori %}
+                                    <i class="fas fa-heart text-red-500"></i>  <!-- cœur plein rouge -->
+                                {% else %}
+                                    <i class="far fa-heart"></i>  <!-- cœur vide blanc -->
+                                {% endif %}
                             </div>
 
                             <!-- Image principale -->

@@ -1,7 +1,5 @@
 from django.db import models
-
 from kernel import settings
-
 
 class Brands(models.Model):
     name = models.CharField(max_length=50)
@@ -19,6 +17,20 @@ class Products(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def get_image_url(self):
+        """Retourne l'URL de l'image du produit."""
+        sous_tables = [
+            'smartphones_tablets',
+            'casques_ecouteurs',
+            'pcs'
+        ]
+        for attr in sous_tables:
+            related = getattr(self, attr, None)
+            if related and hasattr(related, 'image') and related.image:
+                return related.image.url
+        # Si aucune image n'est trouvée dans les sous-tables, retourne l'image du produit lui-même
+        return '/static/images/default_image.jpg'  # Chemin par défaut si aucune image n'est trouvée
+                
     def __str__(self):
         return self.name
 
@@ -38,6 +50,7 @@ class Smartphones_tablets(models.Model):
 class Casques_ecouteurs(models.Model):
     product = models.OneToOneField(Products, on_delete=models.CASCADE, primary_key=True)
     battery_life = models.IntegerField()
+    image = models.ImageField(upload_to='products/', default='default_image.jpg')  # Stocke directement l'image
 
     def __str__(self):
         return self.product.name
@@ -65,8 +78,6 @@ class PCs(models.Model):
     battery_life = models.IntegerField()  # en heures
     image = models.ImageField(upload_to='products/', default='default_image.jpg')  # Stocke directement l'image
     
-    
-
     def __str__(self):
         return self.product.name
 
