@@ -48,6 +48,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'profile' %}">Profil</a></li>  
+                                <li><a href="{% url 'Favoris' %}">Favoris</a></li>
                                 <li><a href="{% url 'logout' %}">Déconnexion</a></li>  
                             </ul>
                         </li>
@@ -112,10 +113,10 @@
                     {% for pc in pcs %}
                         <div class="pro" >
                             <div class="fav-btn" 
-                                data-produit-id="{{ product.id }}" 
+                                data-produit-id="{{ pc.id }}" 
                                 onclick="toggleFavorite(this)"
-                                data-favori="{{ product.est_favori|yesno:'true,false' }}">
-                                {% if product.est_favori %}
+                                data-favori="{{ pc.est_favori|yesno:'true,false' }}">
+                                {% if pc.est_favori %}
                                     <i class="fas fa-heart text-red-500"></i>  <!-- cœur plein rouge -->
                                 {% else %}
                                     <i class="far fa-heart"></i>  <!-- cœur vide blanc -->
@@ -130,7 +131,6 @@
                             >
 
                             <div class="des">
-
                                 <!-- Marque et Nom -->
                                 <span>{{ pc.brand.name }}</span>
                                 <h5>{{ pc.name }}</h5>
@@ -144,7 +144,6 @@
 
                                 <!-- Prix -->
                                 <h4>{{ pc.price|floatformat:"0" }} CFA</h4>
-
                             </div>
                             <a href="{% url 'DetailsPC' pc.id %}"> <button class="cart">COMMANDER</button></a>
                         </div>
@@ -220,5 +219,6 @@
         </footer>
 
         <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/Favoris.js' %}"></script>
     </body>
 </html>

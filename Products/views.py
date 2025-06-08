@@ -18,24 +18,27 @@ def ShopCasques(request):
 def ShopPC(request):
     query = request.GET.get('q', '').strip()
 
+    # Récupération des produits de la catégorie "Ordinateur" avec les marques et les détails PC
     pcs_queryset = Products.objects.select_related('brand', 'pcs') \
         .filter(category="Ordinateur")
 
+    # Filtrage par recherche (nom ou marque)
     if query:
         pcs_queryset = pcs_queryset.filter(
             Q(name__icontains=query) | Q(brand__name__icontains=query)
         )
 
-    favoris_ids = Favori.objects.filter(utilisateur=request.user).values_list('produit_id', flat=True) 
-    for pcs_list in grouped_pcs.values():
-        for pc in pcs_list:
-            pc.is_favori = pc.id in favoris_ids
-            
+    # Initialisation du regroupement
     grouped_pcs = defaultdict(list)
+
+    # Identifiants des favoris de l'utilisateur
+    favoris_ids = Favori.objects.filter(utilisateur=request.user).values_list('produit_id', flat=True)
+
+    # Regroupement des PCs par marque
     for pc in pcs_queryset:
+        pc.est_favori = pc.id in favoris_ids  # ✅ Marque les favoris
         grouped_pcs[pc.brand.name].append(pc)
 
-    # Tri par ordre alphabétique de marque
     grouped_pcs = dict(sorted(grouped_pcs.items()))
 
     return render(request, 'ShopPC.html', {
