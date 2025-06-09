@@ -32,7 +32,11 @@ def ShopPC(request):
     grouped_pcs = defaultdict(list)
 
     # Identifiants des favoris de l'utilisateur
-    favoris_ids = Favori.objects.filter(utilisateur=request.user).values_list('produit_id', flat=True)
+    favoris_ids = []
+    if request.user.is_authenticated:
+        # Récupération des IDs des produits favoris de l'utilisateur
+        # pour marquer les produits comme favoris dans le template
+        favoris_ids = Favori.objects.filter(utilisateur=request.user).values_list('produit_id', flat=True)
 
     # Regroupement des PCs par marque
     for pc in pcs_queryset:
@@ -60,7 +64,6 @@ def DetailsPC(request, pk):
 
 def ShopMontres(request):
     return render(request, 'ShopMontres.html')
-
 
 #Liste des produits de la catégorie "Smartphone"
 def ShopPortables(request):
@@ -101,7 +104,6 @@ def ShopPortables(request):
         'query': query
     })
 
-
 #Détails d'un produit de la catégorie "Smartphone"
 def product_list(request, category):
     products = Products.objects.select_related(
@@ -110,7 +112,7 @@ def product_list(request, category):
     ).filter(category=category)
     return render(request, 'ShopPortables.html', {'products': products})
 
-
+# Détails d'un produit de la catégorie "Smartphone"
 def Details(request, pk):
     # Récupère le produit ou renvoie 404 si non trouvé
     product = get_object_or_404(Products, pk=pk)
