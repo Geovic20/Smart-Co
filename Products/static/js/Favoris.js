@@ -14,9 +14,12 @@ function getCookie(name) {
 }
 
 function toggleFavorite(element) {
-    console.log("Bouton favori cliqué !");
-    const produitId = element.dataset.produitId;
-    console.log("Produit ID :", produitId);
+    //Vérifier si l'utilisateur est connecté
+    const isAuthenticated = document.body.dataset.authenticated === 'True';
+    if (!isAuthenticated) {
+        window.location.href = `${Login}?next=${encodeURIComponent(window.location.pathname)}`;
+        return;
+    }
 
     if (!produitId) {
         console.error("ID de produit manquant !");

@@ -70,34 +70,40 @@ def ShopPortables(request):
     selected_brand = request.GET.get('brand', '').strip()
     query = request.GET.get('q', '').strip()
 
-    # Base : tous les smartphones
+    # 🔎 Récupération de tous les produits de catégorie "Smartphone"
     products = Products.objects.select_related('smartphones_tablets', 'brand') \
         .filter(category='Smartphone')
 
-    # Filtrage par marque
+    # 🔍 Filtrage par marque si précisée dans l'URL
     if selected_brand:
         products = products.filter(brand__name__iexact=selected_brand)
 
-    # Filtrage par recherche (nom ou marque)
+    # 🔍 Filtrage par mot-clé dans le nom ou la marque
     if query:
         products = products.filter(
             Q(name__icontains=query) | Q(brand__name__icontains=query)
         )
 
-    # Regroupement par marque
+    #Regroupement des produits par marque dans un dictionnaire
     grouped_products = defaultdict(list)
     for product in products:
         grouped_products[product.brand.name].append(product)
 
-    # Trier par nom de marque (facultatif mais propre)
+    #Tri des marques par ordre alphabétique
     grouped_products = dict(sorted(grouped_products.items()))
 
-    # Ajouter un champ pour savoir si le produit est dans les favoris
-    favoris_ids = Favori.objects.filter(utilisateur=request.user).values_list('produit_id', flat=True)
+    #Gestion des favoris : récupérer les IDs de produits favoris pour l'utilisateur connecté
+    if request.user.is_authenticated:
+        favoris_ids = Favori.objects.filter(utilisateur=request.user).values_list('produit_id', flat=True)
+    else:
+        favoris_ids = []
+
+    #Ajouter un champ est_favori pour chaque produit (True ou False)
     for product_list in grouped_products.values():
         for prod in product_list:
             prod.est_favori = prod.id in favoris_ids
 
+    #Envoi des données au template
     return render(request, 'ShopPortables.html', {
         'grouped_products': grouped_products,
         'selected_brand': selected_brand,
