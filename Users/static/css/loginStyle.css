@@ -87,6 +87,7 @@ body{
     border-top-left-radius: 50%;
     box-shadow: -15px 0 0 var(--primary-color);
 }
+
 /*Password form*/
 .form-headerPSW{
     position: absolute;
@@ -118,6 +119,7 @@ body{
     border-top-left-radius: 50%;
     box-shadow: -15px 0 0 var(--primary-color);
 }
+
 /* TITLES */
 .titles{
     position: relative;
@@ -134,6 +136,7 @@ body{
 .title-register{
     top: 50px;
 }
+
 /*Titres du formulaire de change_password*/
 .titlesPSW{
     position: relative;
@@ -214,6 +217,7 @@ body{
     font-size: 20px;
     color: var(--secondary-color);
 }
+
 /* FORGOT PASSWORD & TERMS AND CONDITIONS */
 .form-cols{
     display: flex;
@@ -225,6 +229,7 @@ body{
     align-items: center;
     gap: 6px;
 }
+
 /* SUBMIT BUTTON */
 .btn-submit{
     display: flex;
@@ -264,7 +269,6 @@ body{
         margin: 20px;
     }
 }
-
 .error-message {
     color: #ff3860;
     font-size: 0.8rem;
@@ -273,12 +277,10 @@ body{
     background: #ffebee;
     border-radius: 4px;
 }
-
 .error-message p {
     margin: 0;
     padding: 0;
 }
-
 .error-message.password-error {
     color: #ff3860;
     font-size: 0.8rem;
@@ -299,12 +301,10 @@ body{
     transition: width 0.3s ease;
     margin-bottom: 5px;
 }
-
 .password-strength-text {
     font-size: 0.85rem;
     color: #555;
 }
-
 .password-match-text {
     font-size: 0.85rem;
     font-weight: 500;
