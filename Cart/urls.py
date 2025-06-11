@@ -2,5 +2,6 @@ from . import views
 from django.urls import path, include 
 
 urlpatterns = [
-    path('', views.Chariot, name='Chariot'),
+    path('Chariot/', views.Chariot, name='Chariot'),
+    path('panier/ajouter/', views.add_to_cart, name='add_to_cart'),
 ]

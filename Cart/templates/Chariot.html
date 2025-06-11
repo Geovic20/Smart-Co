@@ -96,133 +96,42 @@
             <!--Contenu du panier-->
             <div class="cart-container" data-aos="fade-up" data-aos-delay="100">
                 <div class="cart-items">
-                    <!--produit 1-->
-                    <div class="cart-item">
-                        <img src="https://images.pexels.com/photos/5741639/pexels-photo-5741639.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="iPhone 15 Pro">
-                        <div class="item-details">
-                            <h3>iPhone 15 Pro - 256GB</h3>
-                            <p class="category">Smartphones</p>
-                            <p class="price">1099.99 €</p>
-                            <p class="stock-status in-stock">En stock - Livraison estimée : 2-3 jours ouvrés</p>
-                            <div class="warranty-options">
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-1" value="none" checked> Pas de garantie supplémentaire
-                                </label>
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-1" value="1year" data-cost="99.99"> Garantie 1 an (+99.99 €)
-                                </label>
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-1" value="2year" data-cost="179.99"> Garantie 2 ans (+179.99 €)
-                                </label>
+                    {% if cart_items %}
+                        {% for item in cart_items%}
+                            <div class="cart-item">
+                                <img src="https://images.pexels.com/photos/5741639/pexels-photo-5741639.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="iPhone 15 Pro">
+                                <div class="item-details">
+                                    <h3>iPhone 15 Pro - 256GB</h3>
+                                    <p class="category">Smartphones</p>
+                                    <p class="price">1099.99 €</p>
+                                    <p class="stock-status in-stock">En stock - Livraison estimée : 2-3 jours ouvrés</p>
+                                    <div class="warranty-options">
+                                        <label class="warranty-option">
+                                            <input type="radio" name="warranty-1" value="none" checked> Pas de garantie supplémentaire
+                                        </label>
+                                        <label class="warranty-option">
+                                            <input type="radio" name="warranty-1" value="1year" data-cost="99.99"> Garantie 1 an (+99.99 €)
+                                        </label>
+                                        <label class="warranty-option">
+                                            <input type="radio" name="warranty-1" value="2year" data-cost="179.99"> Garantie 2 ans (+179.99 €)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn minus" data-id="1">-</button>
+                                    <input type="number" value="1" min="1" class="quantity-input" data-id="1">
+                                    <button class="quantity-btn plus" data-id="1">+</button>
+                                </div>
+                                <p class="item-total">1099.99 €</p>
+                                <div class="item-actions">
+                                    <button class="save-later">Sauvegarder</button>
+                                    <button class="remove-item" data-id="1">×</button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn minus" data-id="1">-</button>
-                            <input type="number" value="1" min="1" class="quantity-input" data-id="1">
-                            <button class="quantity-btn plus" data-id="1">+</button>
-                        </div>
-                        <p class="item-total">1099.99 €</p>
-                        <div class="item-actions">
-                            <button class="save-later">Sauvegarder</button>
-                            <button class="remove-item" data-id="1">×</button>
-                        </div>
-                    </div>
-
-                    <!--produit 2-->
-                    <div class="cart-item">
-                        <img src="https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="MacBook Pro">
-                        <div class="item-details">
-                            <h3>MacBook Pro 14" M3</h3>
-                            <p class="category">Ordinateurs portables</p>
-                            <p class="price">1999.99 €</p>
-                            <p class="stock-status low-stock">Stock limité - Plus que 2 disponibles</p>
-                            <div class="warranty-options">
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-2" value="none" checked> Pas de garantie supplémentaire
-                                </label>
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-2" value="1year" data-cost="199.99"> Garantie 1 an (+199.99 €)
-                                </label>
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-2" value="2year" data-cost="299.99"> Garantie 2 ans (+299.99 €)
-                                </label>
-                            </div>
-                        </div>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn minus" data-id="2">-</button>
-                            <input type="number" value="1" min="1" class="quantity-input" data-id="2">
-                            <button class="quantity-btn plus" data-id="2">+</button>
-                        </div>
-                        <p class="item-total">1999.99 €</p>
-                        <div class="item-actions">
-                            <button class="save-later">Sauvegarder</button>
-                            <button class="remove-item" data-id="2">×</button>
-                        </div>
-                    </div>
-
-                    <!--produit 3-->
-                    <div class="cart-item">
-                        <img src="https://images.pexels.com/photos/3394666/pexels-photo-3394666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Sony Headphones">
-                        <div class="item-details">
-                            <h3>Sony WH-1000XM5</h3>
-                            <p class="category">Casques audio</p>
-                            <p class="price">349.99 €</p>
-                            <p class="stock-status in-stock">En stock - Livraison estimée : 1-2 jours ouvrés</p>
-                            <div class="warranty-options">
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-3" value="none" checked> Pas de garantie supplémentaire
-                                </label>
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-3" value="1year" data-cost="39.99"> Garantie 1 an (+39.99 €)
-                                </label>
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-3" value="2year" data-cost="69.99">Garantie 2 ans (+69.99 €)
-                                </label>
-                            </div>
-                        </div>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn minus" data-id="3">-</button>
-                            <input type="number" value="2" min="1" class="quantity-input" data-id="3">
-                            <button class="quantity-btn plus" data-id="3">+</button>
-                        </div>
-                        <p class="item-total">699.98 €</p>
-                        <div class="item-actions">
-                            <button class="save-later">Sauvegarder</button>
-                            <button class="remove-item" data-id="3">×</button>
-                        </div>
-                    </div>
-
-                    <!--produit 4-->
-                    <div class="cart-item">
-                        <img src="https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Apple Watch">
-                        <div class="item-details">
-                            <h3>Apple Watch Series 9</h3>
-                            <p class="category">Montres connectées</p>
-                            <p class="price">399.99 €</p>
-                            <p class="stock-status in-stock">En stock - Livraison estimée : 2-3 jours ouvrés</p>
-                            <div class="warranty-options">
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-4" value="none" checked> Pas de garantie supplémentaire
-                                </label>
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-4" value="1year" data-cost="49.99"> Garantie 1 an (+49.99 €)
-                                </label>
-                                <label class="warranty-option">
-                                    <input type="radio" name="warranty-4" value="2year" data-cost="89.99"> Garantie 2 ans (+89.99 €)
-                                </label>
-                            </div>
-                        </div>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn minus" data-id="4">-</button>
-                            <input type="number" value="1" min="1" class="quantity-input" data-id="4">
-                            <button class="quantity-btn plus" data-id="4">+</button>
-                        </div>
-                        <p class="item-total">399.99 €</p>
-                        <div class="item-actions">
-                            <button class="save-later">Sauvegarder</button>
-                            <button class="remove-item" data-id="4">×</button>
-                        </div>
-                    </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="empty-cart">Votre panier est vide.</p>
+                    {% endif %}
                 </div>
 
                 <!--Récapitulatif-->
