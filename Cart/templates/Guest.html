@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/> <!--Intégration de AOS-->
+
     </head>
 
     <body>
@@ -72,28 +73,70 @@
             </div>
         </section>
 
-        <div class="empty-cart-message" data-aos="fade-in" style="text-align: center; padding: 50px;">
-            <!--Animation Lottie-->
-            <div style="max-width: 300px; margin: 0 auto; margin-top: 200px;">
-                <lottie-player
-                    src="https://assets1.lottiefiles.com/packages/lf20_jz1q2vrs.json"
-                    background="transparent"
-                    speed="1"
-                    style="width: 100%; height: 300%;"
-                    loop
-                    autoplay>
-                </lottie-player>
-            </div>
-
+        <div class="empty-cart-message" data-aos="fade-in" style="text-align: center; padding: 50px; margin-bottom: 100px;">
             <section class="favoris-vide" data-aos="fade-in">
                 <h2>Votre panier est vide 🛒</h2>
                 <p>Connectez-vous pour retrouver vos articles enregistrés.</p>
-                <a href="{% url 'SHOP' %}" class="btn-retour">Connectez-vous</a>
+                <a href="{% url 'login_signup' %}" class="btn-retour">Connectez-vous</a>
             </section> 
         </div>
 
+        <!--Section pied de page-->
+        <hr></hr>
+        <footer class="section-p1">
+            <div class="col" data-aos="fade-right" data-aos-delay="100">
+                <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/logo3.png' %}" alt=""></a>
+                <h4>Contact</h4>
+                <p><strong>Adresse:</strong> Godomey Togoudo, Rue de la Pharmacie Le Jourdain</p>
+                <p><strong>Numéro:</strong> +229 90835005/ +229 40543686</p>
+                <p><strong>Horaire:</strong> Du lundi au Samedi de 10h à 19h</p>
+                <div class="follow">
+                    <h4>Suivez-nous</h4>
+                    <div class="icon">
+                        <i class="fab fa-facebook-f"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-pinterest-p"></i>
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col" data-aos="fade-up" data-aos-delay="200">
+                <h4>A propos</h4>
+                <a href="{% url 'About' %}">A propos de nous</a>
+                <a href="{% url 'Livraisons' %}">Informations sur la livraison</a>
+                <a href="{% url 'PoliConfi' %}">Politique de confidentialité</a>
+                <a href="{% url 'Termes' %}">Termes et conditions</a>
+                <a href="{% url 'Contact' %}">Nous contacter</a>
+            </div>
+            <div class="col" data-aos="fade-up" data-aos-delay="300">
+                <h4>Mon compte</h4>
+                {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->    
+                    <a href="{% url 'profile' %}" class="dropdown-toggle">Mon profil</a>
+                {% else %}
+                    <a href="{% url 'login_signup' %}">S'authentifier</a>
+                {% endif %}
+                <a href="#">Voir le panier</a>
+                <a href="#">Mes favoris</a>
+                <a href="#">Suivre ma commande</a>
+                <a href="#">F.A.Q</a>
+            </div>
+            <div class="col install" data-aos="fade-left" data-aos-delay="400">
+                <h4>Installer l'application</h4>
+                <p>Depuis l'App Store ou Play Store</p>
+                <div class="row">
+                    <img src="{% static 'images/app.jpg' %}" alt="">
+                    <img src="{% static 'images/play.jpg' %}" alt="">
+                </div>
+                <p>Méthodes de paiements sécurisés</p>
+                <img src="{% static 'images/pay.png' %}" alt="">
+            </div>
+            <div class="copyright">
+                <p>Copyright © 2010-2024 S.M.A.R.T. & Co: Boutique en ligne de gadgets électroniques. Tous droits réservés.</p>
+            </div>
+        </footer>
+
         <script src="{% static 'js/script.js' %}"></script>
-        <script src="{% static 'js/Panier.js' %}"></script>
          <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
         <script>
             AOS.init({
