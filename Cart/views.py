@@ -32,8 +32,11 @@ def add_to_cart(request):
         'total_items': cart.total_items()
     })
 
-@login_required
+
 def Chariot(request):
+    if not request.user.is_authenticated:
+        return render(request, 'Guest.html')
+    
     cart = Cart.objects.filter(user=request.user).first()  # évite erreur si aucun panier
 
     cart_items = cart.cartitem_set.all() if cart else []
@@ -45,3 +48,6 @@ def Chariot(request):
         'cart_items': cart_items,
         'total': total_general
     })
+    
+def Guest(request):
+    return render(request, 'Guest.html')

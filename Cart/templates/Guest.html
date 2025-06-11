@@ -5,17 +5,15 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Favoris</title>
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <title>Panier</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Playwrite+NZ:wght@100..400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/> <!--Intégration de AOS-->
     </head>
 
     <body>
-        <!--Header-->
+        <!-- Header -->
         <section id="header">
             <a id="logo" href="{% url 'index' %}">
                 <span class="desktop-logo">S.M.A.R.T. & Co</span> 
@@ -30,7 +28,7 @@
             </div>
             <div>
                 <ul id="navbar">
-                    <li><a class="active" href="{% url 'index' %}">Accueil</a></li>
+                    <li><a href="{% url 'index' %}">Accueil</a></li>
                     <li class="dropdown">
                         <a href="{% url 'SHOP' %}" class="dropdown-toggle">Boutique
                             <i class="fa-solid fa-caret-down"></i>
@@ -61,7 +59,7 @@
                         <li><a href="{% url 'login_signup' %}">Authentification</a></li>
                     {% endif %}
 
-                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <li id="lg-bag"><a class="active" href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
                     <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
                 </ul>
             </div>
@@ -74,50 +72,34 @@
             </div>
         </section>
 
-        {% if favoris %}
-            <h1 class="fav">Mes Favoris</h1>
-            <section id="produit1" class="section-p1">
-                {% for favori in favoris %}
-                    <div class="pro" data-aos="zoom-in" data-aos-delay="500">
-                        <div class="fav-btn"
-                            data-produit-id="{{ favori.produit.id }}"
-                            onclick="toggleFavorite(this)">
-                            {% if favori.produit.est_favori %}
-                                <i class="fas fa-heart text-red-500"></i>
-                            {% else %}
-                                <i class="far fa-heart"></i>
-                            {% endif %}
-                        </div>
+        <div class="empty-cart-message" data-aos="fade-in" style="text-align: center; padding: 50px;">
+            <!--Animation Lottie-->
+            <div style="max-width: 300px; margin: 0 auto; margin-top: 200px;">
+                <lottie-player
+                    src="https://assets1.lottiefiles.com/packages/lf20_jz1q2vrs.json"
+                    background="transparent"
+                    speed="1"
+                    style="width: 100%; height: 300%;"
+                    loop
+                    autoplay>
+                </lottie-player>
+            </div>
 
-                        {% with smartphone=favori.produit.smartphones_tablets %}
-                            <img src="{{ favori.produit.get_image_url }}" alt="{{ favori.produit.name }}" class="fixe">
-                        {% endwith %}
-
-                        <div class="des">
-                            <span>{{ favori.produit.brand.name }}</span>
-                            <h5>{{ favori.produit.name }}</h5>
-                            <div class="star">
-                                {% for i in "12345" %}
-                                    <i class="fas fa-star"></i>
-                                {% endfor %}
-                            </div>
-                            <h4>{{ favori.produit.price|floatformat:"0" }} F CFA</h4>
-                        </div>
-
-                        <a href="{% url 'Details' favori.produit.id %}">
-                            <button class="cart">COMMANDER</button>
-                        </a>
-                    </div>
-                {% endfor %}
-            </section>
-            {% else %}
             <section class="favoris-vide" data-aos="fade-in">
-                <h2>Vous n'avez pas encore de favoris 🥲</h2>
-                <p>Explorez notre boutique pour trouver vos produits préférés.</p>
-                <a href="{% url 'SHOP' %}" class="btn-retour">← Retour à la boutique</a>
-            </section>
-        {% endif %}
+                <h2>Votre panier est vide 🛒</h2>
+                <p>Connectez-vous pour retrouver vos articles enregistrés.</p>
+                <a href="{% url 'SHOP' %}" class="btn-retour">Connectez-vous</a>
+            </section> 
+        </div>
 
-        <script src="{% static 'js/Favoris.js' %}"></script>
+        <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/Panier.js' %}"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+        <script>
+            AOS.init({
+            duration: 1500, // durée de l'animation en ms
+            once: false // true = animation ne se joue qu'une seule fois
+            });
+        </script>
     </body>
 </html>
