@@ -3,8 +3,6 @@ from Products.models import Products
 from django.db.models import Q
 from .models import Products
 
-# Create your views here.
-
 def About(request):
     return render(request, 'About.html')
 
