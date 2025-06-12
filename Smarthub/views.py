@@ -42,3 +42,6 @@ def recherche(request):
         'query': query,
         'results': results,
     })
+
+def FAQ(request):
+    return render(request, 'FAQ.html')

@@ -9,5 +9,5 @@ urlpatterns = [
     path('PoliConfi/',views.PoliConfi, name="PoliConfi"),
     path('Termes/', views.Termes, name="Termes"),
     path('recherche/', views.recherche, name='recherche'),
-
+    path('FAQ/', views.FAQ, name='FAQ'),
 ]
