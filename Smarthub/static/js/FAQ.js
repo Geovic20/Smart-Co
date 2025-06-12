@@ -3,8 +3,8 @@ const faqData = [
     // Commandes
     {
         id: 1,
-        question: "Comment passer une commande sur votre site ?",
-        answer: "Pour passer commande, ajoutez simplement vos produits au panier, cliquez sur 'Commander', renseignez vos informations de livraison et choisissez votre mode de paiement. Nous acceptons les cartes bancaires, PayPal et Apple Pay.",
+        question: "Comment passer une commande sur notre site ?",
+        answer: "Pour passer une commande sur notre site, vous ajoutez simplement vos produits au panier, cliquez sur 'Commander', renseignez vos informations de livraison et choisissez votre mode de paiement. Nous acceptons une multitude de moyens de paiements.",
         category: "commandes"
     },
     {

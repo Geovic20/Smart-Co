@@ -169,7 +169,7 @@
                                 </svg>
                                 Chat en direct
                             </button>
-                            <button class="btn-secondary">Nous contacter</button>
+                            <a href="#"><button class="btn-secondary">Nous contacter</button></a>
                         </div>
                     </div>
                 </div>
@@ -214,6 +214,62 @@
                 </div>
             </div>
         </main>
+
+        <!--Section pied de page-->
+        <hr></hr>
+        <footer class="section-p1">
+            <div class="col" data-aos="fade-right" data-aos-delay="100">
+                <a href="{% url 'index' %}"><img class="logo" src="{% static 'images/logo3.png' %}" alt=""></a>
+                <h4>Contact</h4>
+                <p><strong>Adresse:</strong> Godomey Togoudo, Rue de la Pharmacie Le Jourdain</p>
+                <p><strong>Numéro:</strong> +229 90835005/ +229 40543686</p>
+                <p><strong>Horaire:</strong> Du lundi au Samedi de 10h à 19h</p>
+                <div class="follow">
+                    <h4>Suivez-nous</h4>
+                    <div class="icon">
+                        <i class="fab fa-facebook-f"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-pinterest-p"></i>
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col" data-aos="fade-up" data-aos-delay="200">
+                <h4>A propos</h4>
+                <a href="{% url 'About' %}">A propos de nous</a>
+                <a href="{% url 'Livraisons' %}">Informations sur la livraison</a>
+                <a href="{% url 'PoliConfi' %}">Politique de confidentialité</a>
+                <a href="{% url 'Termes' %}">Termes et conditions</a>
+                <a href="{% url 'Contact' %}">Nous contacter</a>
+            </div>
+            <div class="col" data-aos="fade-up" data-aos-delay="300">
+                <h4>Mon compte</h4>
+                {% if user.is_authenticated %}       
+                    <a href="{% url 'profile' %}" class="dropdown-toggle">Mon profil</a>
+                    <a href="{% url "Favoris" %}">Mes favoris</a>
+                {% else %}
+                    <a href="{% url 'login_signup' %}">S'authentifier</a>
+                    <a href="{% url 'login_signup' %}?next={% url 'Favoris' %}">Mes favoris</a>
+                {% endif %}
+                <a href="{% url 'Chariot' %}">Voir le panier</a>
+                <a href="#">Suivre ma commande</a>
+                <a href="{% url 'FAQ' %}">F.A.Q</a>
+            </div>
+            <div class="col install" data-aos="fade-left" data-aos-delay="400">
+                <h4>Installer l'application</h4>
+                <p>Depuis l'App Store ou Play Store</p>
+                <div class="row">
+                    <img src="{% static 'images/app.jpg' %}" alt="">
+                    <img src="{% static 'images/play.jpg' %}" alt="">
+                </div>
+                <p>Méthodes de paiements sécurisés</p>
+                <img src="{% static 'images/pay.png' %}" alt="">
+            </div>
+            <div class="copyright">
+                <p>Copyright © 2010-2024 S.M.A.R.T. & Co: Boutique en ligne de gadgets électroniques. Tous droits réservés.</p>
+            </div>
+        </footer>
 
         <script src="{% static 'js/script.js' %}"></script>
         <script src="{% static 'js/FAQ.js' %}"></script>
