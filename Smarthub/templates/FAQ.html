@@ -1,0 +1,221 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/FAQ.css' %}">
+        <title>FAQ - Smart & Co</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    </head>
+
+    <body>
+        <!--Header-->
+        <section id="header">
+            <a id="logo" href="{% url 'index' %}">
+                <span class="desktop-logo">S.M.A.R.T. & Co</span> 
+            </a>
+
+            <!--Barre de recherche-->
+            <div id="search-container">
+                <div id="search-bar">
+                    <input type="text" placeholder="Recherchez un produit">
+                    <button><i class="fas fa-search"></i></button>
+                </div>   
+            </div>
+            <div>
+                <ul id="navbar">
+                    <li><a  href="{% url 'index' %}">Accueil</a></li>
+                    <li class="dropdown">
+                        <a href="{% url 'SHOP' %}" class="dropdown-toggle">Boutique
+                            <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'ShopPortables' %}">Smartphones</a></li>
+                            <li><a href="{% url 'ShopPC' %}">PCs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Ecouteurs</a></li>
+                            <li><a href="{% url 'ShopCasques' %}">Casques</a></li>
+                            <li><a href="{% url 'ShopMontres' %}">Montres</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'About' %}">A propos</a></li>
+                    <li><a href="{% url 'Contact' %}">Contact</a></li>
+
+                    {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">Mon Compte
+                                <i class="fa-solid fa-caret-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'profile' %}">Profil</a></li>  
+                                <li><a href="{% url 'Favoris' %}">Favoris</a></li>
+                                <li><a href="{% url 'logout' %}">Déconnexion</a></li>  
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login_signup' %}">Authentification</a></li>
+                    {% endif %}
+
+                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
+                </ul>
+            </div>
+            <div id="mobile">
+                <button id="mobile-search-toggle" aria-label="Rechercher">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                <i id="bar" class="fa-solid fa-bars"></i> 
+            </div>
+        </section>
+
+        <!--Contenu de la page FAQ-->
+        <header class="header">
+            <div class="containerFAQ">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <h1>Centre d'aide</h1>
+                    <p>Trouvez rapidement les réponses à vos questions sur nos gadgets électroniques, la livraison, les retours et plus encore.</p>
+                </div>
+            </div>
+        </header>
+
+        <!--Main content-->
+        <main class="mainFAQ">
+            <div class="containerFAQ">
+                <!-- Search and Filters -->
+                <div class="search-section">
+                    <div class="search-bar">
+                        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Rechercher dans la FAQ...">
+                    </div>
+
+                    <div class="category-filters">
+                        <button class="filter-btn active" data-category="all">Toutes</button>
+                        <button class="filter-btn" data-category="commandes">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 16h6v6h-6z"/>
+                                <path d="M8 8h6v6H8z"/>
+                                <path d="M2 2h6v6H2z"/>
+                            </svg>
+                            Commandes
+                        </button>
+                        <button class="filter-btn" data-category="livraison">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
+                                <path d="M15 18H9"/>
+                                <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
+                                <circle cx="17" cy="18" r="2"/>
+                                <circle cx="7" cy="18" r="2"/>
+                            </svg>
+                            Livraison
+                        </button>
+                        <button class="filter-btn" data-category="retours">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                                <path d="M3 3v5h5"/>
+                            </svg>
+                            Retours
+                        </button>
+                        <button class="filter-btn" data-category="support">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/>
+                            </svg>
+                            Support technique
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FAQ Items -->
+                <div class="faq-container" id="faqContainer">
+                    <!-- FAQ items will be generated by JavaScript -->
+                </div>
+
+                <!-- No Results -->
+                <div class="no-results" id="noResults" style="display: none;">
+                    <div class="no-results-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <h3>Aucun résultat trouvé</h3>
+                    <p>Essayez de modifier vos termes de recherche ou contactez notre support.</p>
+                </div>
+
+                <!-- Contact Section -->
+                <div class="contact-section">
+                    <div class="contact-content">
+                        <div class="contact-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/>
+                            </svg>
+                        </div>
+                        <h2>Vous ne trouvez pas votre réponse ?</h2>
+                        <p>Notre équipe support est disponible 24h/7j pour vous aider</p>
+                        <div class="contact-buttons">
+                            <button class="btn-primary">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
+                                Chat en direct
+                            </button>
+                            <button class="btn-secondary">Nous contacter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="quick-links">
+                    <div class="quick-link-card">
+                        <div class="quick-link-icon orange">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+                                <path d="M12 18h.01"/>
+                            </svg>
+                        </div>
+                        <h3>Guides produits</h3>
+                        <p>Découvrez comment utiliser au mieux vos nouveaux gadgets</p>
+                        <a href="#" class="quick-link-btn orange">Voir les guides →</a>
+                    </div>
+
+                    <div class="quick-link-card">
+                        <div class="quick-link-icon teal">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect width="16" height="10" x="2" y="3" rx="2" ry="2"/>
+                                <path d="M6 21h12"/>
+                                <path d="M12 17v4"/>
+                            </svg>
+                        </div>
+                        <h3>Tutoriels vidéo</h3>
+                        <p>Apprenez en regardant nos tutoriels étape par étape</p>
+                        <a href="#" class="quick-link-btn teal">Voir les vidéos →</a>
+                    </div>
+
+                    <div class="quick-link-card">
+                        <div class="quick-link-icon blue">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                            </svg>
+                        </div>
+                        <h3>Garanties</h3>
+                        <p>Tout savoir sur vos garanties et extensions</p>
+                        <a href="#" class="quick-link-btn blue">En savoir plus →</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/FAQ.js' %}"></script>
+    </body>
+</html>
