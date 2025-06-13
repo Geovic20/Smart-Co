@@ -793,7 +793,6 @@ footer .copyright{
   font-weight: 600;
 }
 
-
 /*Page détails*/
 #prodetails{
   display: flex;
@@ -829,17 +828,36 @@ footer .copyright{
   padding: 6px 0;
   font-size: 20px;
 }
+#prodetails .price {
+  font-size: 25px;
+}
+#prodetails .quantité {
+  font-size: 20px;
+}
 #prodetails .details_produit select{
   display: block;
   padding: 5px 10px;
   margin-bottom: 10px;
+}
+.normalD{
+  padding: 10px 10px;
+  width: 150px;
+  border: none;
+  color: #fff;
+  margin-bottom: 15px;
+}
+.normalD a {
+  color: #fff;
+  font-weight: bold;
 }
 #prodetails .details_produit input{
   width: 50px;
   height: 40px;
   padding-left: 10px;
   font-size: 16px;
+  margin-top: 10px;
   margin-right: 10px;
+  margin-bottom: 15px;
 }
 #prodetails .details_produit input:focus{
   outline: none;
@@ -854,6 +872,10 @@ footer .copyright{
 }
 #prodetails .details_produit span{
   line-height: 25px;
+}
+#prodetails span {
+  font-size: 20px;
+  margin-top: 10px;
 }
 a{
   text-decoration: none;

@@ -78,7 +78,7 @@
             <h1 class="fav">Mes Favoris</h1>
             <section id="produit1" class="section-p1">
                 {% for favori in favoris %}
-                    <div class="pro" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="pro" data-aos="zoom-in">
                         <div class="fav-btn"
                             data-produit-id="{{ favori.produit.id }}"
                             onclick="toggleFavorite(this)">
@@ -111,7 +111,7 @@
                 {% endfor %}
             </section>
             {% else %}
-            <section class="favoris-vide" data-aos="fade-in">
+            <section class="favoris-vide">
                 <h2>Vous n'avez pas encore de favoris 🥲</h2>
                 <p>Explorez notre boutique pour trouver vos produits préférés.</p>
                 <a href="{% url 'SHOP' %}" class="btn-retour">← Retour à la boutique</a>
