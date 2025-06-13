@@ -1,13 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap");
 :root {
-    --color-primary: #007bff;
-    --color-primary-dark: #2563EB;
-    --color-secondary: #000;
-    --color-text: #000;
-    --color-text-light: #000;
-    --color-background: #FFFFFF;
-    --color-background-alt: #F3F4F6;
-    --transition: all 0.5s ease;
+  --color-primary: #007bff;
+  --color-primary-dark: #2563EB;
+  --color-secondary: #000;
+  --color-text: #000;
+  --color-text-light: #000;
+  --color-background: #FFFFFF;
+  --color-background-alt: #F3F4F6;
+  --transition: all 0.5s ease;
 }
 * {
   margin: 0;
@@ -797,7 +797,7 @@ footer .copyright{
 /*Page détails*/
 #prodetails{
   display: flex;
-  margin-top: 20px;
+  margin-top: 100px;
 }
 #prodetails .single-pro-image{
   width: 40%;
