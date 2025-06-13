@@ -3,38 +3,56 @@ const faqData = [
     // Commandes
     {
         id: 1,
-        question: "Comment passer une commande sur notre site ?",
-        answer: "Pour passer une commande sur notre site, vous ajoutez simplement vos produits au panier, cliquez sur 'Commander', renseignez vos informations de livraison et choisissez votre mode de paiement. Nous acceptons une multitude de moyens de paiements.",
+        question: "Comment passer une commande sur votre site ?",
+        answer: "Il vous suffit de sélectionner un produit, de cliquer sur 'Ajouter au panier', puis de valider votre commande en suivant les étapes de paiement.",
         category: "commandes"
     },
     {
         id: 2,
         question: "Puis-je modifier ma commande après validation ?",
-        answer: "Vous pouvez modifier votre commande dans les 30 minutes suivant la validation en nous contactant immédiatement. Passé ce délai, votre commande entre en préparation et ne peut plus être modifiée.",
+        answer: "Oui, vous pouvez modifier votre commande dans les 30 minutes suivant la validation en nous contactant immédiatement via le support. Passé ce délai, votre commande entre en préparation et ne peut plus être modifiée.",
         category: "commandes"
     },
     {
         id: 3,
-        question: "Quels moyens de paiement acceptez-vous ?",
-        answer: "Nous acceptons les cartes Visa, Mastercard, American Express, PayPal, Apple Pay, Google Pay et les virements bancaires. Tous les paiements sont sécurisés par cryptage SSL.",
+        question: "Comment suivre ma commande ?",
+        answer: "Une fois votre commande expédiée, vous recevrez un lien de suivi par e-mail ou dans votre espace client. Vous pouvez suivre l'état de votre livraison en temps réel.",
+        category: "commandes"
+    },
+    {
+        id: 4,
+        question: "Que faire si j’ai commandé le mauvais article ?",
+        answer: "Contactez notre service client dans les plus brefs délais pour annuler ou modifier votre commande avant son expédition.",
+        category: "commandes"
+    },
+    {
+        id: 5,
+        question: "Est-ce que je peux commander sans créer de compte ?",
+        answer: "Non, pour des raisons de sécurité et de suivi, un compte est nécessaire pour passer commande. Vous pouvez créer un compte rapidement lors de votre première commande.",
+        category: "commandes"
+    },
+    {
+        id: 6,
+        question: "Puis-je commander en dehors du Bénin ?",
+        answer: "Non, pour le moment, nous ne livrons qu'au Bénin. Nous prévoyons d'étendre nos services à d'autres pays dans un avenir très proche. Abonnez-vous à notre newsletter pour être informé des prochaines livraisons internationales.",
         category: "commandes"
     },
 
     // Livraison
     {
-        id: 4,
+        id: 7,
         question: "Quels sont vos délais de livraison ?",
         answer: "Livraison standard : 3-5 jours ouvrés. Livraison express : 24-48h. Livraison premium : le lendemain avant 13h. Les délais peuvent varier selon votre localisation et la disponibilité des produits.",
         category: "livraison"
     },
     {
-        id: 5,
+        id: 8,
         question: "Livrez-vous à l'international ?",
         answer: "Oui, nous livrons dans plus de 50 pays. Les frais et délais de livraison internationale varient selon la destination. Consultez notre page dédiée pour plus d'informations sur votre pays.",
         category: "livraison"
     },
     {
-        id: 6,
+        id: 9,
         question: "Comment suivre ma commande ?",
         answer: "Dès l'expédition, vous recevez un email avec le numéro de suivi. Vous pouvez aussi suivre votre commande depuis votre compte client en temps réel.",
         category: "livraison"
@@ -42,19 +60,19 @@ const faqData = [
 
     // Retours
     {
-        id: 7,
+        id: 10,
         question: "Quelle est votre politique de retour ?",
         answer: "Vous disposez de 30 jours pour retourner tout produit. Les articles doivent être dans leur emballage d'origine, non utilisés. Le remboursement s'effectue sous 5-7 jours après réception du retour.",
         category: "retours"
     },
     {
-        id: 8,
+        id: 11,
         question: "Comment retourner un produit défectueux ?",
         answer: "Contactez notre service client avec votre numéro de commande et des photos du défaut. Nous vous fournirons une étiquette de retour gratuite et traiterons votre demande en priorité.",
         category: "retours"
     },
     {
-        id: 9,
+        id: 12,
         question: "Les frais de retour sont-ils gratuits ?",
         answer: "Les retours sont gratuits en cas de défaut ou d'erreur de notre part. Pour les retours de convenance, les frais sont à votre charge sauf pour les membres Premium.",
         category: "retours"
@@ -62,19 +80,19 @@ const faqData = [
 
     // Support technique
     {
-        id: 10,
+        id: 13,
         question: "Comment configurer mon nouveau smartphone ?",
         answer: "Nous fournissons un guide de configuration détaillé avec chaque smartphone. Vous pouvez aussi contacter notre support technique 7j/7 ou regarder nos tutoriels vidéo sur notre chaîne YouTube.",
         category: "support"
     },
     {
-        id: 11,
+        id: 14,
         question: "Que faire si mon produit ne fonctionne pas ?",
         answer: "Vérifiez d'abord notre section dépannage en ligne. Si le problème persiste, contactez notre support technique avec le modèle exact et la description du problème. Nous vous assisterons pas à pas.",
         category: "support"
     },
     {
-        id: 12,
+        id: 15,
         question: "Proposez-vous une garantie étendue ?",
         answer: "Oui, nous proposons une garantie étendue de 2 ou 3 ans selon les produits. Elle couvre les pannes, la casse accidentelle et inclut un service de remplacement express.",
         category: "support"
