@@ -163,6 +163,10 @@ body {
     background: #dbeafe;
     color: #3b82f6;
 }
+.question-icon.paiements {
+    background: #fef2f2;
+    color: #b91c1c;
+}
 .question-icon.livraison {
     background: #dcfce7;
     color: #16a34a;
@@ -174,6 +178,14 @@ body {
 .question-icon.support {
     background: #f0f9ff;
     color: #0284c7;
+}
+.question-icon.sécurité {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+.question-icon.autres {
+    background: #fef9c3;
+    color: #b45309;
 }
 .question-text h3 {
     font-size: 1.125rem;
