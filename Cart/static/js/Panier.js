@@ -225,13 +225,13 @@ document.addEventListener('DOMContentLoaded', function() {
             //Ajout de produit
             const productId = this.dataset.id;
 
-            fetch('/Panier/ajouter/',{
+            fetch('/panier/ajouter/',{
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-urlencoded',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRFToken': getCookie('csrftoken') 
                 },
-                body: `product_id = ${produitId}&quantity=1`
+                body: `product_id=${produitId}&quantity=1`
             })
             .then(response => response.json())
             .then(data => {
