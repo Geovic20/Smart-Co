@@ -1,3 +1,18 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Elements
     const quantityInputs = document.querySelectorAll('.quantity-input');
@@ -206,6 +221,39 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 message.remove();
             }, 3000);
+
+            //Ajout de produit
+            const productId = this.dataset.id;
+
+            fetch('/Panier/ajouter/',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken') 
+                },
+                body: `product_id = ${produitId}&quantity=1`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Mettre à jour l’icône panier
+                    const countElement = document.getElementById('cart-count');
+                    if (countElement) {
+                        countElement.textContent = data.total_items;
+                    }
+
+                    // Feedback visuel
+                    button.textContent = 'Ajouté ✅';
+                    button.classList.add('added');
+
+                    setTimeout(() => {
+                        button.textContent = 'Ajouter au panier';
+                        button.classList.remove('added');
+                    }, 2000);
+                } else {
+                    alert(data.message || "Erreur lors de l'ajout au panier.");
+                }
+            });
         });
     });
 
@@ -234,3 +282,4 @@ document.addEventListener('DOMContentLoaded', function() {
     updateDeliveryTimer();
     setInterval(updateDeliveryTimer, 60000); // Update timer every minute
 });
+
