@@ -56,7 +56,12 @@
                         <li><a href="{% url 'login_signup' %}">Authentification</a></li>
                     {% endif %}
                     
-                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <li id="lg-bag" >
+                        <a class="active" href="{% url 'Chariot' %}">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span id="cart-count">0</span>
+                        </a>
+                    </li>
                     <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
                 </ul>
             </div>
@@ -110,7 +115,7 @@
                         Quantité : <input type="number" value="1">
                     </div>
                     
-                    <button class="normalD" class="add-to-cart-btn" data-product-id="{{ product.id }}">
+                    <button class="normalD" class="cart" class="add-to-cart-btn" data-product-id="{{ product.id }}">
                         <a href="{% url 'Chariot' %}">Ajouter au panier</a>
                     </button>
                     <br>
@@ -279,6 +284,7 @@
         </script>
        
         <script src="{% static 'js/script.js' %}"></script>
+        
         <script>
             const ADD_TO_CART_URL = "{% url 'add_to_cart' %}"
         </script>

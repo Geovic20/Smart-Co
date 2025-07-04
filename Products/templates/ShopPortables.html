@@ -57,7 +57,12 @@
                         <li><a href="{% url 'login_signup' %}">Authentification</a></li>
                     {% endif %}
 
-                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <li id="lg-bag" >
+                        <a class="active" href="{% url 'Chariot' %}">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span id="cart-count">0</span>
+                        </a>
+                    </li>
                     <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
                 </ul>
             </div>

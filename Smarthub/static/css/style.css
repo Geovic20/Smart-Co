@@ -168,6 +168,14 @@ body {
   bottom: -4px;
   left: 20px;
 }
+#navbar li span{
+  font-size: 20px; 
+  font-weight: bold;
+  color: #FFF;
+  position: absolute;
+  top: -12px;
+  right: -1px;
+}
 #mobile{
   display: none;
   align-items: center;
@@ -182,7 +190,6 @@ body {
   color: #1a1a1a;
   transition: 0.3s ease;
 }
-
 /*Barre de recherche*/
 #search-container{
   position: relative;
