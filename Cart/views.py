@@ -1,16 +1,26 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.urls import reverse
 from Cart.models import Cart, CartItem
 from Products.models import Products
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
+import logging
+logger = logging.getLogger(__name__)
 # Cart/views.py
 @require_POST
 @login_required
 def add_to_cart(request):
+    logger.debug(f"Received add_to_cart request: {request.POST}")
     product_id = request.POST.get('product_id')
     quantity = int(request.POST.get('quantity', 1))
+    
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'status': 'redirect', 
+            'url': reverse('login_signup')  # Assurez-vous que 'login_signup' est le nom de votre URL de connexion
+        }, status=401)
 
     try:
         product = Products.objects.get(id=product_id)

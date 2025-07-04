@@ -229,11 +229,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': getCookie('csrftoken') 
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-Requested-With': 'XMLHttpRequest'  // Important pour Django
                 },
-                body: `product_id=${produitId}&quantity=1`
+                body: `product_id=${productId}&quantity=1`
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 401) {
+                    return response.json().then(data => {
+                        if (data.status === 'redirect') {
+                            window.location.href = data.url;
+                        }
+                    })
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.status === 'success') {
                     // Mettre à jour l’icône panier
@@ -241,6 +251,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (countElement) {
                         countElement.textContent = data.total_items;
                     }
+
+                    window.location.href = "{% url 'Chariot' %}";
 
                     // Feedback visuel
                     button.textContent = 'Ajouté ✅';
