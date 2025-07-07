@@ -112,9 +112,8 @@
                     </ul>
             
                     <div class="quantité">
-                        Quantité : <input type="number" value="1">
+                        Quantité : <input type="number" value="1" id="quantity-input">
                     </div>
-                    
                     <button class="normalD add-to-cart-btn" data-id="{{ product.id }}">
                         Ajouter au panier
                     </button>
@@ -288,6 +287,7 @@
         <script>
             const ADD_TO_CART_URL = "{% url 'add_to_cart' %}"
         </script>
+        
     </body>
 
 </html>
