@@ -5,8 +5,8 @@ from Cart.models import Cart, CartItem
 from Products.models import Products
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-
 import logging
+
 logger = logging.getLogger(__name__)
 # Cart/views.py
 @require_POST
@@ -19,7 +19,7 @@ def add_to_cart(request):
     if not request.user.is_authenticated:
         return JsonResponse({
             'status': 'redirect', 
-            'url': reverse('login_signup')  # Assurez-vous que 'login_signup' est le nom de votre URL de connexion
+            'url': reverse('login_signup') 
         }, status=401)
 
     try:
