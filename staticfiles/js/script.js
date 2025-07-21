@@ -80,48 +80,6 @@ if (mobileSearchToggle && searchBar) {
   });
 }
 
-//Animation du logo
-
-//Découper chaque caractère dans un span
-// Découper chaque caractère dans un span
-const textWrapper = document.querySelector('#logo');
-textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-
-function setupLogoAnimation() {
-  const screenWidth = window.innerWidth;
-  const isMobile = screenWidth <= 799; // Écrans de petite taille
-  const isTabletOrDesktop = screenWidth >= 800;
-
-  anime.remove('#logo .letter'); // Supprimer toute animation existante
-
-  if (isTabletOrDesktop) {
-    // Animation pour tablette et PC uniquement
-    anime({
-      targets: '#logo .letter',
-      translateY: [
-        { value: '-3vh', duration: 600, easing: 'easeOutExpo' },
-        { value: '0vh', duration: 800, delay: 100, easing: 'easeOutBounce' }
-      ],
-      rotate: [
-        { value: '-360deg', duration: 1000, easing: 'easeOutCirc' }
-      ],
-      delay: (el, i) => i * 50,
-      loop: true,
-      direction: 'alternate'
-    });
-  }
-  // Sur mobile, aucune animation n'est appliquée
-}
-
-// Initialisation
-setupLogoAnimation();
-
-// Réexécuter à chaque redimensionnement de la fenêtre
-window.addEventListener('resize', () => {
-  setupLogoAnimation();
-});
-
-
 //Script pour rétrécir légèrement la navbar dès le défilement
 window.addEventListener('scroll', function () {
   const header = document.getElementById('header');
