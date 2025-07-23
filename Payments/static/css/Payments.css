@@ -502,11 +502,9 @@ footer {
   main {
     grid-template-columns: 1fr;
   }
-  
   .payment-methods {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
-  
   .order-summary {
     position: static;
     margin-bottom: var(--spacing-6);
@@ -519,25 +517,21 @@ footer {
     align-items: flex-start;
     gap: var(--spacing-4);
   }
-  
   .progress-step {
     flex-direction: row;
     align-items: center;
     width: 100%;
   }
-  
   .step-number {
     margin-bottom: 0;
     margin-right: var(--spacing-3);
   }
-  
   .progress-line {
     width: 2px;
     height: 24px;
     margin: var(--spacing-2) 0;
     margin-left: 16px;
   }
-  
   .form-row {
     grid-template-columns: 1fr;
   }

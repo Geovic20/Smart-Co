@@ -16,7 +16,7 @@
         <!--Header-->
         <section id="header">
             <a id="logo" href="{% url 'index' %}">
-                <span class="desktop-logo">S.M.A.R.T. & Co</span> 
+                <span class="logo">S.M.A.R.T. & Co</span> 
             </a>
 
             <!--Barre de recherche-->
@@ -83,11 +83,16 @@
                     <div class="progress-line"></div>
                     <div class="progress-step active">
                         <div class="step-number">2</div>
-                        <div class="step-text">Paiement</div>
+                        <div class="step-text">Livraison</div>
                     </div>
                     <div class="progress-line"></div>
                     <div class="progress-step">
                         <div class="step-number">3</div>
+                        <div class="step-text">Paiement</div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step">
+                        <div class="step-number">4</div>
                         <div class="step-text">Confirmation</div>
                     </div>
                 </div>
@@ -146,15 +151,15 @@
                             <div class="method-name">MTN Mobile Money</div>
                         </div>
 
-                        <!--Flooz (Moov)-->
-                        <div class="payment-method" data-method="flooz">
+                        <!--Moov-->
+                        <div class="payment-method" data-method="moov">
                             <div class="method-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone">
                                 <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
                                 <path d="M12 18h.01" />
                             </svg>
                             </div>
-                            <div class="method-name">Flooz (Moov)</div>
+                            <div class="method-name">Moov</div>
                         </div>
 
                         <!--Celtiis Cash-->
@@ -199,7 +204,7 @@
                                 <path d="M7.116 7.229c3.767-4.082 12.293-4.229 17.277-1.768" />
                             </svg>
                             </div>
-                            <div class="method-name">Cryptocurrency</div>
+                            <div class="method-name">Crypto-monnaie</div>
                         </div>
 
                         <!--Fedapay-->
@@ -254,7 +259,7 @@
                             <form>
                                 <div class="form-group">
                                     <label for="mtn-phone">Numéro de téléphone</label>
-                                    <input type="tel" id="mtn-phone" placeholder="e.g., 0559876543" required></input>
+                                    <input type="tel" id="mtn-phone" placeholder="01XXXXXXXX" required></input>
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="form-info">
@@ -264,13 +269,13 @@
                             </form>
                         </div>
 
-                        <!-- Flooz Form -->
-                        <div id="flooz-form" class="payment-form">
-                            <h3>Flooz (Moov)</h3>
+                        <!-- Moov Form -->
+                        <div id="moov-form" class="payment-form">
+                            <h3>Moov</h3>
                             <form>
                                 <div class="form-group">
-                                    <label for="flooz-phone">Numéro de téléphone</label>
-                                    <input type="tel" id="flooz-phone" placeholder="e.g., 0999876543" required>
+                                    <label for="moov-phone">Numéro de téléphone</label>
+                                    <input type="tel" id="moov-phone" placeholder="01XXXXXXXX" required>
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="form-info">
@@ -286,7 +291,7 @@
                             <form>
                                 <div class="form-group">
                                     <label for="celtiis-phone">Numéro de téléphone</label>
-                                    <input type="tel" id="celtiis-phone" placeholder="e.g., 0779876543" required>
+                                    <input type="tel" id="celtiis-phone" placeholder="01XXXXXXXX" required>
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="form-info">
@@ -346,7 +351,7 @@
                                 <div class="crypto-address">
                                     <p class="crypto-instruction">Envoyer exactement <span class="crypto-amount">0.0123 BTC</span> à:</p>
                                     <div class="wallet-address">
-                                        <code id="wallet-address">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code>
+                                        <code id="wallet-address">bc1p9r4s9uqfhwthpclga3t33xwjx8hqeemfvdc7uvlrk56v956py4vqzl4u5j</code>
                                         <button type="button" class="btn-copy" onclick="copyWalletAddress()">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy">
                                                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
@@ -355,7 +360,7 @@
                                         </button>
                                     </div>
                                     <div class="qr-code">
-                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" alt="Wallet QR Code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bc1p9r4s9uqfhwthpclga3t33xwjx8hqeemfvdc7uvlrk56v956py4vqzl4u5j" alt="Wallet QR Code">
                                     </div>
                                 </div>
                                 <div class="form-info crypto-info">

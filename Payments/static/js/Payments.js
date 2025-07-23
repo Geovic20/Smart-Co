@@ -12,11 +12,11 @@ const orderNumber = document.getElementById('order-number');
 
 // Phone number patterns by provider
 const phonePatterns = {
-  mtn: /^01(90|96|97|98|99|67|68|69)\d{6}$/,  // MTN pattern
-  flooz: /^01(91|92|93|94|95)\d{6}$/,  // Flooz pattern
-  celtiis: /^0[7][0-9]{8}$/,  // Celtiis pattern
-  orange: /^0[7][0-9]{8}$/,  // Orange pattern
-  wave: /^0[7][0-9]{8}$/,   // Wave pattern
+  mtn: /^01(42|46|50|51|52|53|54|56|57|59|61|62|66|67|69|90|91|92|93|96|97)\d{6}$/,  // MTN pattern
+  moov: /^01(45|55|58|60|63|64|65|68|94|95|98|99)\d{6}$/,  // Moov pattern
+  celtiis: /^01(40|41|43|44|47)\d{6}$/,  // Celtiis pattern
+  orange: /^0[7][0-9]{6}$/,  // Orange pattern
+  wave: /^0[7][0-9]{6}$/,   // Wave pattern
 };
 
 // Cryptocurrency conversion rates (example values)
@@ -29,10 +29,10 @@ const cryptoRates = {
 
 // Wallet addresses for each cryptocurrency
 const walletAddresses = {
-  btc: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
-  eth: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
-  usdt: 'TRzxsqF5qm4yKHU5skeZJUhc9umAPXkFVe',
-  bnb: 'bnb136ns6lfw4zs5hg4n85vdthaad7hq5m4gtkgf23'
+  btc: 'bc1p9r4s9uqfhwthpclga3t33xwjx8hqeemfvdc7uvlrk56v956py4vqzl4u5j',
+  eth: '0xE83cbCED090e3075d67D84cb9C23a56c2CfF0aC3',
+  usdt: '0xE83cbCED090e3075d67D84cb9C23a56c2CfF0aC3',
+  bnb: '0xE83cbCED090e3075d67D84cb9C23a56c2CfF0aC3'
 };
 
 // Set amounts everywhere
@@ -213,12 +213,12 @@ function processPayment(e) {
   let isValid = true;
   
   // Validate based on payment method
-  if (['mtn', 'flooz', 'celtiis', 'orange', 'wave'].includes(paymentMethod)) {
+  if (['mtn', 'moov', 'celtiis', 'orange', 'wave'].includes(paymentMethod)) {
     const phoneInput = form.querySelector('input[type="tel"]');
     const phoneNumber = phoneInput.value.trim();
     
     if (!validatePhoneNumber(phoneNumber, paymentMethod)) {
-      showError(phoneInput, 'Please enter a valid phone number');
+      showError(phoneInput, 'Veuillez entrer un numéro de téléphone valide');
       isValid = false;
     } else {
       clearError(phoneInput);
@@ -237,28 +237,28 @@ function processPayment(e) {
     const cardValidation = validateCardDetails(cardNumber, expiry, cvv);
     
     if (!cardValidation.card) {
-      showError(cardInput, 'Please enter a valid 16-digit card number');
+      showError(cardInput, 'Veuillez entrer un numéro de carte valide');
       isValid = false;
     } else {
       clearError(cardInput);
     }
     
     if (!cardValidation.expiry) {
-      showError(expiryInput, 'Please enter a valid expiry date (MM/YY)');
+      showError(expiryInput, 'Veuillez entrer une date d\'expiration valide (MM/YY)');
       isValid = false;
     } else {
       clearError(expiryInput);
     }
     
     if (!cardValidation.cvv) {
-      showError(cvvInput, 'Please enter a valid CVV code');
+      showError(cvvInput, 'Veuillez entrer un code CVV valide');
       isValid = false;
     } else {
       clearError(cvvInput);
     }
     
     if (name.length < 3) {
-      showError(nameInput, 'Please enter the cardholder name');
+      showError(nameInput, 'Veuillez entrer le nom du titulaire de la carte');
       isValid = false;
     } else {
       clearError(nameInput);
@@ -269,21 +269,21 @@ function processPayment(e) {
     const accountName = form.querySelector('#account-name');
     
     if (bankSelect.value === '') {
-      showError(bankSelect, 'Please select your bank');
+      showError(bankSelect, 'Veuillez sélectionner votre banque');
       isValid = false;
     } else {
       clearError(bankSelect);
     }
     
     if (accountNumber.value.trim().length < 5) {
-      showError(accountNumber, 'Please enter a valid account number');
+      showError(accountNumber, 'Veuillez entrer un numéro de compte valide');
       isValid = false;
     } else {
       clearError(accountNumber);
     }
     
     if (accountName.value.trim().length < 3) {
-      showError(accountName, 'Please enter the account holder name');
+      showError(accountName, 'Veuillez entrer le nom du titulaire du compte');
       isValid = false;
     } else {
       clearError(accountName);
@@ -295,7 +295,7 @@ function processPayment(e) {
     // Simulate processing
     const button = form.querySelector('button[type="submit"]');
     const originalText = button.textContent;
-    button.textContent = 'Processing...';
+    button.textContent = 'Traitement...';
     button.disabled = true;
     
     setTimeout(() => {
