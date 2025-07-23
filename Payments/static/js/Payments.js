@@ -392,3 +392,72 @@ if (closeModalButton) {
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', init);
+
+// Initialize the page gpt
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+
+  const quartierSelect = document.getElementById("Quartier");
+  const fraisElement = document.getElementById("frais");
+  const deliveryForm = document.getElementById("delivery-form");
+  const paymentSection = document.querySelector(".payment-section");
+  const totalAmountDisplay = document.getElementById("total-amount");
+
+  const amountElements = document.querySelectorAll('.amount');
+
+  quartierSelect.addEventListener("change", function () {
+    const frais = parseInt(this.options[this.selectedIndex].getAttribute("data-frais")) || 0;
+    fraisElement.textContent = frais + " FCFA";
+
+    // Recalcul du total
+    const sousTotal = 299.99;  // Remplacer par valeur dynamique si possible
+    const taxe = 18.00;
+    const total = sousTotal + frais + taxe;
+
+    const totalFormatted = total.toLocaleString("fr-FR", {
+      style: "currency",
+      currency: "USD"
+    });
+
+    totalAmountDisplay.textContent = totalFormatted;
+
+    // Mettre à jour toutes les autres zones de montant
+    amountElements.forEach(el => {
+      el.textContent = totalFormatted;
+    });
+
+    // Met à jour la valeur utilisée pour crypto aussi
+    window.updatedTotal = total;
+  });
+
+  deliveryForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const requiredFields = deliveryForm.querySelectorAll("input[required], textarea[required], select[required]");
+    let allValid = true;
+
+    requiredFields.forEach(field => {
+      if (!field.value.trim()) {
+        field.classList.add("error");
+        allValid = false;
+      } else {
+        field.classList.remove("error");
+      }
+    });
+
+    if (allValid) {
+      // Afficher la section Paiement
+      paymentSection.classList.remove("hidden");
+
+      // Activer l'étape 3
+      const step3 = document.querySelectorAll(".progress-step")[2];
+      const step2 = document.querySelectorAll(".progress-step")[1];
+      step2.classList.remove("active");
+      step2.classList.add("complete");
+      step3.classList.add("active");
+
+      // Scroll automatique vers la section paiement
+      paymentSection.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+});
