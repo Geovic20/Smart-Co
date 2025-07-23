@@ -135,8 +135,80 @@
                     </div>
                 </section>
 
+                <!-- Livraison -->
+                <section class="delivery-section">
+                    <form id="delivery-form">
+                        <h2>Informations de livraison</h2>
+
+                        <!--Quartier-->
+                        <div class="form-group">
+                            <label for="Quartier">Choisissez votre quartier :</label>
+                            <select id="Quartier" name="Quartier" required>
+                                <option value="" selected disabled>Choisissez votre quartier</option>
+                                <option value="Quartier 1" data-frais="1000">Quartier 1</option>
+                                <option value="Quartier 2" data-frais="2000">Quartier 2</option>
+                                <option value="Quartier 3" data-frais="3000">Quartier 3</option>
+                            </select>
+
+                            <!-- Montant de la livraison -->
+                            <div class="delivery-cost">
+                                <p>Frais de livraison : <strong id="frais">0</strong> FCFA</p>
+                            </div>
+
+                            <!-- Détails du lieu -->
+                            <div class="form-group">
+                                <label for="details">Détails sur le lieu exact :</label>
+                                <textarea id="details" name="details" required placeholder="Ex : Maison verte près du marché..."></textarea>
+                            </div>  
+
+                            <!-- Numéro de téléphone -->
+                            <div class="form-group">
+                                <label for="phone">Numéro de téléphone à contacter :</label>
+                                <input type="tel" id="phone" name="phone" required placeholder="Ex : 01 23 45 67 89">
+                            </div>
+
+                            <!-- Jour de livraison -->
+                            <div class="form-group">
+                                <label for="jour">Jour souhaité :</label>
+                                <input type="date" id="jour" name="jour" required>
+                            </div>
+
+                            <!-- Heure de livraison -->
+                            <div class="form-group">
+                                <label for="heure">Heure souhaitée :</label>
+                                <input type="time" id="heure" name="heure" required>
+                            </div>
+
+                            <!-- Mode de paiement -->
+                            <div class="form-group">
+                                <label>Mode de paiement :</label>
+                                <div class="payment-mode-options">
+                                    <label class="payment-mode-option">
+                                        <input type="radio" name="payment-mode" value="online" checked>
+                                        <span class="radio-custom"></span>
+                                        <div class="option-content">
+                                            <strong>Payer maintenant en ligne</strong>
+                                            <small>Paiement sécurisé par carte ou mobile money</small>
+                                        </div>
+                                    </label>
+                                    <label class="payment-mode-option">
+                                        <input type="radio" name="payment-mode" value="delivery">
+                                        <span class="radio-custom"></span>
+                                        <div class="option-content">
+                                            <strong>Payer à la livraison</strong>
+                                            <small>Paiement en espèces ou mobile money au livreur</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="continue-button">Continuer vers le paiement</button>
+                    </form>
+                </section>    
+
                 <!-- Payment Method -->
-                <section class="payment-section">
+                <section class="payment-section hidden">
                     <h2>Méthode de paiement</h2>
                     <div id="payment-methods" class="payment-methods">
 
@@ -251,7 +323,7 @@
                     </div>
 
                     <!--Payment Forms-->
-                    <div id="payment-forms" class="payment-forms">
+                    <div id="payment-forms" class="payment-forms hidden">
 
                         <!-- MTN Mobile Money Form -->
                         <div id="mtn-form" class="payment-form">
