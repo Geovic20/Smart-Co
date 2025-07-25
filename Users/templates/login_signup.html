@@ -143,14 +143,19 @@
                 {% endif %}
 
                 <div class="input-box">
-                    <button class="btn-submit" id="SignUpBtn" type="submit" name="register" >S'inscrire<i class='bx bx-user-plus' ></i></button>
+                    <button class="btn-submit" id="SignUpBtn" type="submit" name="signup" >S'inscrire<i class='bx bx-user-plus' ></i></button>
                 </div>
 
                 <div class="switch-form">
                     <span>Vous avez déjà un compte ? <a href="#" onclick="loginFunction()">Connectez-vous!</a></span>
                 </div>
             </form>
+
         </div>
+
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
 
         <script src="{% static 'js/Login.js' %}"></script>
     </body>

@@ -12,26 +12,25 @@ def home_view(request):
 #Page d'authentification et d'inscription combinée
 # Cette vue gère à la fois l'authentification et l'inscription des utilisateurs.
 def login_signup_combined_view(request): 
+    login_form = CustomerAuthenticationForm()
+    signup_form = CustomerCreationForm()
+    
     if request.method == 'POST':
         if 'login' in request.POST:
-            form = CustomerAuthenticationForm(request, data=request.POST)
-            if form.is_valid():
-                email = form.cleaned_data.get('username')
-                password = form.cleaned_data.get('password')
+            login_form = CustomerAuthenticationForm(request, data=request.POST)
+            if login_form.is_valid():
+                email = login_form.cleaned_data.get('username')
+                password = login_form.cleaned_data.get('password')
                 user = authenticate(request, email=email, password=password)
                 if user is not None:
                     login(request, user)
                     return redirect('index')
         elif 'signup' in request.POST:
-            form = CustomerCreationForm(request.POST)
-            if form.is_valid():
-                user = form.save()
+            signup_form = CustomerCreationForm(request.POST)
+            if signup_form.is_valid():
+                user = signup_form.save()
                 login(request, user)
                 return redirect('index')
-    else:
-        login_form = CustomerAuthenticationForm()
-        signup_form = CustomerCreationForm()
-
     return render(request, 'login_signup.html', {
         'login_form': login_form,
         'signup_form': signup_form

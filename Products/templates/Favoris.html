@@ -13,7 +13,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Playwrite+NZ:wght@100..400&display=swap" rel="stylesheet">
     </head>
 
-    <body>
+    <body data-authenticated="{% if user.is_authenticated %}True{% else %}False{% endif %}">
         <!--Header-->
         <section id="header">
             <a id="logo" href="{% url 'index' %}">
@@ -117,6 +117,9 @@
             </section>
         {% endif %}
 
+        <script>
+            window.LOGIN_URL = "{% url 'login_signup' %}";
+        </script>
         <script src="{% static 'js/Favoris.js' %}"></script>
     </body>
 </html>

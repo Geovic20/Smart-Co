@@ -17,16 +17,19 @@ function toggleFavorite(element) {
     //Vérifier si l'utilisateur est connecté
     const isAuthenticated = document.body.dataset.authenticated === 'True';
     if (!isAuthenticated) {
-        window.location.href = `${Login}?next=${encodeURIComponent(window.location.pathname)}`;
+        window.location.href = `${window.LOGIN_URL}?next=${encodeURIComponent(window.location.pathname)}`;
         return;
     }
+
+    //Récupérer l'ID du produit depuis l'attribut data
+    const produitId = element.getAttribute('data-produit-id');
 
     if (!produitId) {
         console.error("ID de produit manquant !");
         return;
     }
 
-    fetch('/Products/toggle-favori/', {
+    fetch('/toggle-favori/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -34,7 +37,12 @@ function toggleFavorite(element) {
         },
         body: `produit_id=${produitId}`
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erreur lors de la requête');
+        }
+        return response.json();
+    })
     .then(data => {
         console.log("Réponse du serveur :", data);
 
@@ -46,6 +54,9 @@ function toggleFavorite(element) {
             icon.classList.remove('fas', 'text-red-500');
             icon.classList.add('far');
         }
+    })
+    .catch(error => {
+        console.error("Erreur lors de la requête :", error);
     });
 }
 
