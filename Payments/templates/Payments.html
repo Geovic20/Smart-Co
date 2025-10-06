@@ -1,12 +1,13 @@
 {% load static %}
+{% load cart_extras %}
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Paiement</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'css/Payments.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
@@ -58,7 +59,14 @@
                         <li><a href="{% url 'login_signup' %}">Authentification</a></li>
                     {% endif %}
 
-                    <li id="lg-bag"><a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                    <li id="lg-bag"><a href="{% url 'Chariot' %}">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        {% if user.is_authenticated %}
+                            <span id="cart-count">{{ cart_items.count }}</span>
+                        {% else %}
+                            <span id="cart-count">0</span>
+                        {% endif %}
+                    </a></li>
                     <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
                 </ul>
             </div>
@@ -66,7 +74,14 @@
                 <button id="mobile-search-toggle" aria-label="Rechercher">
                     <i class="fas fa-search"></i>
                 </button>
-                <a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                <a href="{% url 'Chariot' %}">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    {% if user.is_authenticated %}
+                        <span id="cart-count">{{ cart_items.count }}</span>
+                    {% else %}
+                        <span id="cart-count">0</span>
+                    {% endif %}
+                </a>
                 <i id="bar" class="fa-solid fa-bars"></i> 
             </div>
         </section>

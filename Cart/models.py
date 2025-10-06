@@ -7,6 +7,12 @@ from kernel import settings
 class Cart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def total_items(self):
+        return sum(item.quantity for item in self.cartitem_set.all())
+    
+    def get_total_price(self):
+        return sum(item.product.price * item.quantity for item in self.cartitem_set.all())
 
     def __str__(self):
         return f"Cart {self.id}"

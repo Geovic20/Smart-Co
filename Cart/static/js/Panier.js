@@ -1,222 +1,292 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Elements
+    // ==================== CONFIGURATION ====================
+    const ADD_TO_CART_URL = '/panier/ajouter/';
+    const UPDATE_CART_URL = '/panier/modifier/';
+    const REMOVE_CART_URL = '/panier/supprimer/';
+    const CART_URL = '/Chariot/';
+
+    // ==================== ELEMENTS ====================
     const quantityInputs = document.querySelectorAll('.quantity-input');
     const plusButtons = document.querySelectorAll('.plus');
     const minusButtons = document.querySelectorAll('.minus');
     const removeButtons = document.querySelectorAll('.remove-item');
     const promoButton = document.getElementById('apply-promo');
     const checkoutButton = document.getElementById('checkout');
-    const saveLaterButtons = document.querySelectorAll('.save-later');
+    const saveLaterButtons = document.querySelectorAll('.save-for-later');
     const warrantyOptions = document.querySelectorAll('.warranty-option input');
-
-    // Add new elements for suggestions
     const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
 
-    // Update shipping progress bar
+    // ==================== HELPER FUNCTIONS ====================
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function showMessage(text, type = 'success') {
+        const message = document.createElement('div');
+        message.className = `alert-message ${type}`;
+        message.textContent = text;
+        message.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 1000;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
+            background-color: ${type === 'success' ? '#28a745' : '#dc3545'};
+            color: white;
+        `;
+        
+        document.body.appendChild(message);
+        setTimeout(() => {
+            message.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => message.remove(), 300);
+        }, 3000);
+    }
+
+    // ==================== SHIPPING PROGRESS ====================
     function updateShippingProgress() {
-        const subtotal = parseFloat(document.getElementById('subtotal').textContent);
+        const subtotalElement = document.getElementById('subtotal');
+        if (!subtotalElement) return;
+
+        const subtotalText = subtotalElement.textContent.replace(/[^\d]/g, '');
+        const subtotal = parseFloat(subtotalText) || 0;
         const progressBar = document.querySelector('.progress-fill');
-        const freeShippingThreshold = 100;
+        const progressText = document.getElementById('progress-text');
+        
+        if (!progressBar || !progressText) return;
+
+        const freeShippingThreshold = 75000; // 75 000 F CFA
         const progress = (subtotal / freeShippingThreshold) * 100;
         progressBar.style.width = Math.min(progress, 100) + '%';
         
         const remaining = Math.max(0, freeShippingThreshold - subtotal);
-        const progressText = document.getElementById('progress-text');
         if (remaining > 0) {
-            progressText.textContent = `Plus que ${remaining.toFixed(2)} € pour la livraison gratuite !`;
+            progressText.textContent = `Plus que ${remaining.toLocaleString()} F CFA pour la livraison gratuite !`;
         } else {
             progressText.textContent = 'Félicitations ! Vous bénéficiez de la livraison gratuite.';
         }
     }
 
-    // Update delivery countdown timer
-    function updateDeliveryTimer() {
-        const now = new Date();
-        const cutoffTime = new Date();
-        cutoffTime.setHours(20, 0, 0, 0); // 20:00 cutoff time
-        
-        if (now > cutoffTime) {
-            cutoffTime.setDate(cutoffTime.getDate() + 1);
-        }
-        
-        const timeLeft = cutoffTime - now;
-        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        
-        const timerElement = document.querySelector('.delivery-timer');
-        timerElement.textContent = `Commandez dans les ${hours}h ${minutes}m pour une livraison demain !`;
-    }
-
-    // Update totals
+    // ==================== UPDATE TOTALS ====================
     function updateTotals() {
         let subtotal = 0;
         const items = document.querySelectorAll('.cart-item');
         
         items.forEach(item => {
-            const price = parseFloat(item.querySelector('.price').textContent);
-            const quantity = parseInt(item.querySelector('.quantity-input').value);
+            const priceText = item.querySelector('.price').textContent.replace(/[^\d]/g, '');
+            const price = parseFloat(priceText) || 0;
+            const quantity = parseInt(item.querySelector('.quantity-input').value) || 1;
             const itemTotal = price * quantity;
             
-            // Add warranty cost if selected
+            // Warranty cost (optional)
             const selectedWarranty = item.querySelector('.warranty-option input:checked');
-            if (selectedWarranty) {
+            if (selectedWarranty && selectedWarranty.dataset.cost) {
                 const warrantyCost = parseFloat(selectedWarranty.dataset.cost);
                 subtotal += warrantyCost;
             }
             
-            item.querySelector('.item-total').textContent = itemTotal.toFixed(2) + ' €';
+            const itemTotalElement = item.querySelector('.item-total');
+            if (itemTotalElement) {
+                itemTotalElement.textContent = `${price.toLocaleString()} x ${quantity} = ${itemTotal.toLocaleString()} F CFA`;
+            }
             subtotal += itemTotal;
         });
 
-        const shipping = subtotal > 100 ? 0 : 10;
-        const tax = subtotal * 0.20;
+        const shipping = subtotal > 75000 ? 0 : 5000; // 5000 F CFA frais de livraison
+        const tax = subtotal * 0.20; // TVA 20%
         const total = subtotal + shipping + tax;
 
-        document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' €';
-        document.getElementById('shipping').textContent = shipping === 0 ? 'Gratuite' : shipping.toFixed(2) + ' €';
-        document.getElementById('tax').textContent = tax.toFixed(2) + ' €';
-        document.getElementById('total').textContent = total.toFixed(2) + ' €';
+        // Update DOM
+        const subtotalElement = document.getElementById('subtotal');
+        const shippingElement = document.getElementById('shipping');
+        const taxElement = document.getElementById('tax');
+        const totalElement = document.getElementById('total');
+
+        if (subtotalElement) subtotalElement.textContent = `${subtotal.toLocaleString()} F CFA`;
+        if (shippingElement) shippingElement.textContent = shipping === 0 ? 'Gratuite' : `${shipping.toLocaleString()} F CFA`;
+        if (taxElement) taxElement.textContent = `${Math.round(tax).toLocaleString()} F CFA`;
+        if (totalElement) totalElement.textContent = `${Math.round(total).toLocaleString()} F CFA`;
 
         updateShippingProgress();
+        updateCartCount();
     }
 
-    // Save for later functionality
-    saveLaterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const item = this.closest('.cart-item');
-            const savedItems = document.querySelector('.saved-items');
-            
-            // Create saved item element
-            const savedItem = document.createElement('div');
-            savedItem.className = 'saved-item';
-            savedItem.innerHTML = `
-                <img src="${item.querySelector('img').src}" alt="${item.querySelector('h3').textContent}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 1rem;">
-                <div style="flex: 1;">
-                    <h4>${item.querySelector('h3').textContent}</h4>
-                    <p>${item.querySelector('.price').textContent}</p>
-                </div>
-                <button class="move-to-cart">Remettre au panier</button>
-            `;
-            
-            savedItems.appendChild(savedItem);
-            item.remove();
-            updateTotals();
-            
-            // Show success message
-            const message = document.createElement('div');
-            message.className = 'success-message';
-            message.textContent = 'Article sauvegardé pour plus tard';
-            document.body.appendChild(message);
-            setTimeout(() => message.remove(), 3000);
-        });
-    });
+    // ==================== UPDATE CART COUNT ====================
+    function updateCartCount() {
+        const items = document.querySelectorAll('.cart-item');
+        const totalQuantity = Array.from(items).reduce((sum, item) => {
+            const quantity = parseInt(item.querySelector('.quantity-input').value) || 0;
+            return sum + quantity;
+        }, 0);
 
-    // Warranty selection
-    warrantyOptions.forEach(option => {
-        option.addEventListener('change', updateTotals);
-    });
+        const cartCountElement = document.getElementById('cart-count');
+        if (cartCountElement) {
+            cartCountElement.textContent = totalQuantity;
+        }
 
-    // Quantity controls
+        // Update header
+        const cartHeader = document.querySelector('.cart-header h2');
+        if (cartHeader) {
+            cartHeader.textContent = `Panier de Géovic (${items.length} articles)`;
+        }
+    }
+
+    // ==================== QUANTITY CONTROLS ====================
     quantityInputs.forEach(input => {
         input.addEventListener('change', function() {
             if (this.value < 1) this.value = 1;
-            updateTotals();
+            const itemId = this.dataset.id;
+            const quantity = parseInt(this.value);
+            updateCartItemQuantity(itemId, quantity);
         });
     });
 
     plusButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const input = this.parentElement.querySelector('.quantity-input');
-            input.value = parseInt(input.value) + 1;
-            updateTotals();
+            const itemId = this.dataset.id;
+            const input = document.querySelector(`.quantity-input[data-id="${itemId}"]`);
+            if (input) {
+                const newQuantity = parseInt(input.value) + 1;
+                input.value = newQuantity;
+                updateCartItemQuantity(itemId, newQuantity);
+            }
         });
     });
 
     minusButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const input = this.parentElement.querySelector('.quantity-input');
-            if (input.value > 1) {
-                input.value = parseInt(input.value) - 1;
-                updateTotals();
+            const itemId = this.dataset.id;
+            const input = document.querySelector(`.quantity-input[data-id="${itemId}"]`);
+            if (input && input.value > 1) {
+                const newQuantity = parseInt(input.value) - 1;
+                input.value = newQuantity;
+                updateCartItemQuantity(itemId, newQuantity);
             }
         });
     });
 
-    // Remove items
+    // ==================== UPDATE CART ITEM (AJAX) ====================
+    function updateCartItemQuantity(itemId, quantity) {
+        fetch(`${UPDATE_CART_URL}${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: `quantity=${quantity}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                updateTotals();
+                showMessage('Panier mis à jour', 'success');
+            } else {
+                showMessage('Erreur lors de la mise à jour', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('Erreur de connexion', 'error');
+        });
+    }
+
+    // ==================== REMOVE ITEM ====================
     removeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            if (confirm('Voulez-vous vraiment supprimer cet article ?')) {
-                this.closest('.cart-item').remove();
-                updateTotals();
-                
-                // Update cart count in header
-                const remainingItems = document.querySelectorAll('.cart-item').length;
-                document.querySelector('.cart-header h2').textContent = `Mon Panier (${remainingItems} articles)`;
-                
-                // Show empty cart message if no items remain
-                if (remainingItems === 0) {
-                    const cartContainer = document.querySelector('.cart-container');
-                    cartContainer.innerHTML = `
-                        <div class="empty-cart">
-                            <h3>Votre panier est vide</h3>
-                            <p>Découvrez nos produits et ajoutez-les à votre panier</p>
-                            <a href="{% url 'SHOP' %}" class="checkout-btn">Continuer mes achats</a>
-                        </div>
-                    `;
-                }
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            if (!confirm('Voulez-vous vraiment supprimer cet article ?')) {
+                return;
             }
+
+            const form = this.closest('form');
+            const formData = new FormData(form);
+            const actionUrl = form.action;
+
+            fetch(actionUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const cartItem = this.closest('.cart-item');
+                    cartItem.style.animation = 'fadeOut 0.3s ease';
+                    setTimeout(() => {
+                        cartItem.remove();
+                        updateTotals();
+                        
+                        // Check if cart is empty
+                        const remainingItems = document.querySelectorAll('.cart-item').length;
+                        if (remainingItems === 0) {
+                            showEmptyCartMessage();
+                        }
+                    }, 300);
+                    
+                    showMessage('Article supprimé', 'success');
+                } else {
+                    showMessage('Erreur lors de la suppression', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Erreur de connexion', 'error');
+            });
         });
     });
 
-    // Add to cart functionality for suggested products
+    // ==================== EMPTY CART MESSAGE ====================
+    function showEmptyCartMessage() {
+        const cartContainer = document.querySelector('.cart-items');
+        if (cartContainer) {
+            cartContainer.innerHTML = `
+                <div class="empty-cart" style="text-align: center; padding: 3rem;">
+                    <i class="fa-solid fa-cart-shopping" style="font-size: 4rem; color: #ccc; margin-bottom: 1rem;"></i>
+                    <h3>Votre panier est vide</h3>
+                    <p style="color: #666; margin: 1rem 0;">Découvrez nos produits et ajoutez-les à votre panier</p>
+                    <a href="/SHOP/" class="checkout-btn" style="display: inline-block; margin-top: 1rem;">Continuer mes achats</a>
+                </div>
+            `;
+        }
+    }
+
+    // ==================== ADD TO CART (Suggestions) ====================
     addToCartButtons.forEach(button => {
         button.addEventListener('click', function() {
+            const productId = this.dataset.id;
             const item = this.closest('.suggestion-item');
             const name = item.querySelector('h3').textContent;
-            const price = parseFloat(item.querySelector('.price').textContent);
             
-            // Animation feedback
-            this.textContent = 'Ajouté !';
-            this.style.backgroundColor = '#28a745';
-            this.style.borderColor = '#28a745';
-            this.style.color = '#fff';
-            
-            setTimeout(() => {
-                this.textContent = 'Ajouter au panier';
-                this.style.backgroundColor = '';
-                this.style.borderColor = '#007bff';
-                this.style.color = '#007bff';
-            }, 2000);
-
-            // Show success message
-            const message = document.createElement('div');
-            message.className = 'success-message';
-            message.textContent = `${name} a été ajouté à votre panier`;
-            message.style.position = 'fixed';
-            message.style.top = '100px';
-            message.style.right = '20px';
-            message.style.backgroundColor = '#28a745';
-            message.style.color = '#fff';
-            message.style.padding = '1rem';
-            message.style.borderRadius = '4px';
-            message.style.zIndex = '1000';
-            
-            document.body.appendChild(message);
-            
-            setTimeout(() => {
-                message.remove();
-            }, 3000);
-
-            //Ajout de produit
-            const productId = this.dataset.id;
-            const quantity = document.getElementById('quantity-input').value || 1;
+            // Visual feedback
+            const originalText = this.textContent;
+            this.textContent = 'Ajout...';
+            this.disabled = true;
 
             fetch(ADD_TO_CART_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRFToken': getCookie('csrftoken'),
-                    'X-Requested-With': 'XMLHttpRequest'  // Important pour Django
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: `product_id=${productId}&quantity=1`
             })
@@ -226,74 +296,124 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (data.status === 'redirect') {
                             window.location.href = data.url;
                         }
-                    })
+                    });
                 }
                 return response.json();
             })
             .then(data => {
                 if (data.status === 'success') {
-                    // Mettre à jour l’icône panier
+                    // Success feedback
+                    this.textContent = 'Ajouté ✓';
+                    this.style.backgroundColor = '#28a745';
+                    this.style.borderColor = '#28a745';
+                    this.style.color = '#fff';
+
+                    // Update cart count
                     const countElement = document.getElementById('cart-count');
-                    if (countElement) {
+                    if (countElement && data.total_items) {
                         countElement.textContent = data.total_items;
                     }
 
-                    window.location.href = "{% url 'Chariot' %}";
+                    showMessage(`${name} ajouté au panier`, 'success');
 
-                    // Feedback visuel
-                    button.textContent = 'Ajouté ✅';
-                    button.classList.add('added');
-
+                    // Reset button after 2 seconds
                     setTimeout(() => {
-                        button.textContent = 'Ajouter au panier';
-                        button.classList.remove('added');
+                        this.textContent = originalText;
+                        this.style.backgroundColor = '';
+                        this.style.borderColor = '';
+                        this.style.color = '';
+                        this.disabled = false;
                     }, 2000);
                 } else {
-                    alert(data.message || "Erreur lors de l'ajout au panier.");
+                    this.textContent = originalText;
+                    this.disabled = false;
+                    showMessage(data.message || "Erreur lors de l'ajout", 'error');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                this.textContent = originalText;
+                this.disabled = false;
+                showMessage('Erreur de connexion', 'error');
             });
         });
     });
 
-    // Promo code
-    promoButton.addEventListener('click', function() {
-        const promoInput = document.getElementById('promo');
-        const promoCode = promoInput.value.trim().toUpperCase();
-        
-        if (promoCode === 'WELCOME10') {
-            const subtotal = parseFloat(document.getElementById('subtotal').textContent);
-            const discount = subtotal * 0.1;
-            alert('Code promo appliqué ! -10% sur votre commande');
+    // ==================== SAVE FOR LATER ====================
+    saveLaterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const item = this.closest('.cart-item');
+            const savedItems = document.querySelector('.saved-items');
+            
+            if (!savedItems) return;
+
+            const imgSrc = item.querySelector('img').src;
+            const title = item.querySelector('h3').textContent;
+            const price = item.querySelector('.price').textContent;
+            
+            const savedItem = document.createElement('div');
+            savedItem.className = 'saved-item';
+            savedItem.style.cssText = 'display: flex; align-items: center; padding: 1rem; border: 1px solid #ddd; margin-bottom: 1rem; border-radius: 8px;';
+            savedItem.innerHTML = `
+                <img src="${imgSrc}" alt="${title}" style="width: 60px; height: 60px; object-fit: cover; margin-right: 1rem; border-radius: 4px;">
+                <div style="flex: 1;">
+                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem;">${title}</h4>
+                    <p style="margin: 0; color: #666;">${price}</p>
+                </div>
+                <button class="move-to-cart" style="padding: 0.5rem 1rem; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Remettre au panier</button>
+            `;
+            
+            savedItems.appendChild(savedItem);
+            item.remove();
             updateTotals();
-        } else {
-            alert('Code promo invalide');
-        }
+            showMessage('Article sauvegardé pour plus tard', 'success');
+        });
     });
 
-    // Checkout
-    checkoutButton.addEventListener('click', function() {
-        alert('Redirection vers la page de paiement...');
+    // ==================== WARRANTY OPTIONS ====================
+    warrantyOptions.forEach(option => {
+        option.addEventListener('change', updateTotals);
     });
 
-    // Initialize
-    updateTotals();
-    updateDeliveryTimer();
-    setInterval(updateDeliveryTimer, 60000); // Update timer every minute
-});
+    // ==================== PROMO CODE ====================
+    if (promoButton) {
+        promoButton.addEventListener('click', function() {
+            const promoInput = document.getElementById('promo');
+            if (!promoInput) return;
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+            const promoCode = promoInput.value.trim().toUpperCase();
+            
+            // Simple validation (à adapter selon vos besoins)
+            if (promoCode === 'WELCOME10') {
+                showMessage('Code promo appliqué ! -10% sur votre commande', 'success');
+                // TODO: Implémenter la réduction côté serveur
+            } else if (promoCode === '') {
+                showMessage('Veuillez entrer un code promo', 'error');
+            } else {
+                showMessage('Code promo invalide', 'error');
             }
-        }
+        });
     }
-    return cookieValue;
-}
 
-
+    // ==================== INITIALIZATION ====================
+    updateTotals();
+    updateCartCount();
+    
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+});
