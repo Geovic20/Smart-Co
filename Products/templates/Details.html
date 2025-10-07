@@ -41,7 +41,7 @@
                     <li><a href="{% url 'About' %}">A propos</a></li>
                     <li><a href="{% url 'Contact' %}">Contact</a></li>
 
-                    {% if user.is_authenticated %}   <!-- Vérification si l'utilisateur est connecté -->
+                    {% if user.is_authenticated %}   
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle">Mon Compte
                             <i class="fa-solid fa-caret-down"></i>
@@ -60,7 +60,7 @@
                         <a class="active" href="{% url 'Chariot' %}">
                             <i class="fa-solid fa-cart-shopping"></i>
                             {% if user.is_authenticated %}
-                                <span id="cart-count">{{ cart_items.count }}</span>
+                                <span id="cart-count">{% show_cart_items_count user %}</span>
                             {% else %}
                                 <span id="cart-count">0</span>
                             {% endif %}
@@ -76,7 +76,7 @@
                 <a href="{% url 'Chariot' %}">
                     <i class="fa-solid fa-cart-shopping"></i>
                     {% if user.is_authenticated %}
-                        <span id="cart-count">{{ cart_items.count }}</span>
+                        <span id="cart-count">{% show_cart_items_count user %}</span>
                     {% else %}
                         <span id="cart-count">0</span>
                     {% endif %}
@@ -89,21 +89,32 @@
         <section id="prodetails" class="section-p1">
             {% if smartphone_details %}  
                 <div class="single-pro-image">
-                    <img src="{% if Smartphone.image %}{{ Smartphone.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}" width="100%" id="MainImg" alt="Image de {{ product.name }}">
+                    <img src="{% if smartphone_details.image %}{{ smartphone_details.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}" 
+                    width="100%" id="MainImg" alt="Image de {{ product.name }}">
                     
+                    <!--Miniatures des images-->
                     <div class="small-img-group">
-                        <div class="small-img-col">
-                            <img src="{% static 'images/products/f2.jpg' %}" width="100%" class="small-img" alt="">
-                        </div>
-                        <div class="small-img-col">
-                            <img src="{% static 'images/products/f7.jpg' %}" width="100%" class="small-img" alt="">
-                        </div>
-                        <div class="small-img-col">
-                            <img src="{% static 'images/products/f4.jpg' %}" width="100%" class="small-img" alt="">
-                        </div>
-                        <div class="small-img-col">
-                            <img src="{% static 'images/products/f8.jpg' %}" width="100%" class="small-img" alt="">
-                        </div>
+                        {% for image in secondary_images %}
+                            <div class="small-img-col">
+                                <img src="{{ image.image.url }}" width="100%"
+                                 class="small-img {% if forloop.first %}active{% endif %}" 
+                                 alt="{% if image.alt_text %}{{ image.alt_text }}{% else %}Image {{ forloop.counter }} de {{ product.name }}{% endif %}">
+                            </div>
+                        {% empty %}
+                            <!-- Fallback si pas d'images secondaires -->
+                            <div class="small-img-col">
+                                <img src="{% static 'images/products/f2.jpg' %}" width="100%" class="small-img" alt="">
+                            </div>
+                            <div class="small-img-col">
+                                <img src="{% static 'images/products/f7.jpg' %}" width="100%" class="small-img" alt="">
+                            </div>
+                            <div class="small-img-col">
+                                <img src="{% static 'images/products/f4.jpg' %}" width="100%" class="small-img" alt="">
+                            </div>
+                            <div class="small-img-col">
+                                <img src="{% static 'images/products/f8.jpg' %}" width="100%" class="small-img" alt="">
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
           
@@ -118,16 +129,51 @@
                         <li>🔋 Batterie : {{ smartphone_details.battery }} mAh</li>
                         <li>⚙️ Processeur : {{ smartphone_details.processor }}</li>
                         <li>📏 Taille de l'écran : {{ smartphone_details.screen_size }} pouces</li>
-                        <li> Stock : {{ smartphone_details.stock_quantity }} pouces</li>
+                        <li> 📦 Stock : 
+                            {% if product.stock_quantity > 10 %}
+                                <span style="color: #28a745; font-weight: bold;">{{ product.stock_quantity }} disponibles</span>
+                            {% elif product.stock_quantity > 0 %}
+                                <span style="color: #ffc107; font-weight: bold;">Plus que {{ product.stock_quantity }} en stock !</span>
+                            {% else %}
+                                <span style="color: #dc3545; font-weight: bold;">Rupture de stock</span>
+                            {% endif %}
+                        </li>
                         <div class="price">💵 Prix : {{ product.price }} FCFA</div>
                     </ul>
             
-                    <div class="quantité">
-                        Quantité : <input type="number" value="1" id="quantity-input">
+                    <div class="quantity-section" style="margin: 1.5rem 0;">
+                        <label for="quantity-input" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
+                            📊 Quantité :
+                        </label>
+                        <div class="quantité" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <!-- Les boutons +/- seront ajoutés dynamiquement par JavaScript -->
+                            <button type="button" class="qty-btn minus-btn" id="decrease-qty">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" 
+                                value="1" 
+                                min="1" 
+                                max="{{ product.stock_quantity }}" 
+                                id="quantity-input"
+                                style="width: 60px; text-align: center; padding: 0.5rem; border: 2px solid #088178; border-radius: 6px;">
+                            <button type="button" class="qty-btn plus-btn" id="increase-qty">
+                                <i class="fas fa-plus"></i>
+                            </button>       
+                        </div>
+                        
+                        {% if product.stock_quantity > 0 %}
+                            <button class="normalD add-to-cart-btn" 
+                            data-id="{{ product.id }}"
+                            data-name="{{product.name}}" 
+                            style="width: 100%; padding: 1rem;">
+                            <i class="fas fa-cart-plus"></i> Ajouter au panier
+                            </button>
+                        {% else %}
+                            <button class="normalD" disabled style="width: 100%; padding: 1rem; opacity: 0.5; cursor: not-allowed;">
+                                <i class="fas fa-ban"></i> Rupture de stock
+                            </button>
+                        {% endif %}
                     </div>
-                    <button class="normalD add-to-cart-btn" data-id="{{ product.id }}">
-                        Ajouter au panier
-                    </button>
                     <br>
                     <span>📝 {{ product.description }}</span>
                 </div>
@@ -274,29 +320,160 @@
             </div>
         </footer>
 
-        <script>
-            // script for image change on click
-            var MainImg = document.getElementById("MainImg");
-            var smallimg = document.getElementsByClassName("small-img");
-
-            smallimg[0].onclick = function(){
-                MainImg.src = smallimg[0].src;
-            }
-            smallimg[1].onclick = function(){
-                MainImg.src = smallimg[1].src;
-            }
-            smallimg[2].onclick = function(){
-                MainImg.src = smallimg[2].src;
-            }
-            smallimg[3].onclick = function(){
-                MainImg.src = smallimg[3].src;
-            }
-        </link>
-       
+        <!--Scripts-->
         <script src="{% static 'js/script.js' %}"></script>
         <script src="{% static 'js/Panier.js' %}"></script>
         <script>
-            const ADD_TO_CART_URL = "{% url 'add_to_cart' %}"
+            // Configuration pour js/Panier.js
+            const ADD_TO_CART_URL = "{% url 'add_to_cart' %}" 
+             
+            // Script spécifique pour la page Détails
+            document.addEventListener('DOMContentLoaded', function() {
+                const stockQuantity = {{ smartphone_details.stock_quantity|default:0 }};
+                
+                // ========== GESTION DES MINIATURES D'IMAGES ==========
+                const MainImg = document.getElementById("MainImg");
+                const smallImgs = document.getElementsByClassName("small-img");
+    
+                for (let i = 0; i < smallImgs.length; i++) {
+                    smallImgs[i].onclick = function() {
+                        MainImg.src = this.src;
+                        // Retirer la classe active de toutes les images
+                        Array.from(smallImgs).forEach(img => img.classList.remove('active'));
+                        // Ajouter la classe active à l'image cliquée
+                        this.classList.add('active');
+                    }
+                }
+    
+                // ========== GESTION DE LA QUANTITÉ ==========
+                const quantityInput = document.getElementById('quantity-input');
+                const decreaseBtn = document.getElementById('decrease-qty');
+                const increaseBtn = document.getElementById('increase-qty');
+    
+                if (quantityInput) {
+                    // Validation en temps réel
+                    quantityInput.addEventListener('input', function() {
+                        let value = parseInt(this.value);
+                        
+                        if (isNaN(value) || value < 1) {
+                            this.value = 1;
+                        } else if (value > stockQuantity) {
+                            this.value = stockQuantity;
+                            showNotification(`Stock maximum: ${stockQuantity}`, 'warning');
+                        }
+                    });
+    
+                    // Bouton diminuer
+                    if (decreaseBtn) {
+                        decreaseBtn.addEventListener('click', function() {
+                            let value = parseInt(quantityInput.value);
+                            if (value > 1) {
+                                quantityInput.value = value - 1;
+                            }
+                        });
+                    }
+    
+                    // Bouton augmenter
+                    if (increaseBtn) {
+                        increaseBtn.addEventListener('click', function() {
+                            let value = parseInt(quantityInput.value);
+                            if (value < stockQuantity) {
+                                quantityInput.value = value + 1;
+                            } else {
+                                showNotification(`Stock maximum: ${stockQuantity}`, 'warning');
+                            }
+                        });
+                    }
+                }
+            });
+
+            //Fonction de notification
+            function showNotification(message, type = 'success') {
+                const colors = {
+                    success : '#28a745',
+                    warning : '#ffc107',
+                    error : '#dc3545',
+                    info : '#007bff'
+                };
+
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 100px;
+                    right: 20px;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    z-index: 9999;
+                    font-weight: 500;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    animation: slideIn 0.3s ease;
+                    background-color: ${colors[type] || colors.info};
+                    color: ${type === 'warning' ? '#000' : '#fff'};
+                `;
+
+                document.body.appendChild(notification);
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+
+            //Styles CSS inline 
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+
+                .small-img {
+                    cursor: pointer;
+                    opacity: 0.5;
+                    transition: all 0.3s ease;
+                    borde : 2px solid transparent:
+                }
+
+                .small-img:hover,
+                .small-img.active {
+                    opacity: 1;
+                    border-color : #088178;
+                    transform: scale(1.05);
+                }
+
+                .qty-btn {
+                    width: 35px;
+                    height: 35px;
+                    border : 2px solid #088178;
+                    background-color : #fff;
+                    color: #088178;
+                    border-radius: 4px:
+                    cursor : pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 114px; 
+                }
+
+                .qty-btn:hiver {
+                    background-color: #088178;
+                    color: #fff    
+                }
+
+                .quantity-input:focus {
+                    outline: none;
+                    border-color: #088178;
+                    box-shawdow: 0 0 0 2px  rgba(8, 129, 120, 0.1);
+                }
+            `;
+            documment.head.appendChild(style);
+                
         </script>
     </body>
 </html>

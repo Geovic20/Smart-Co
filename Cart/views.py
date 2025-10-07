@@ -1,9 +1,7 @@
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST, require_http_methods
-from django.db.models import Sum, F
+from django.views.decorators.http import require_POST
 from Cart.models import Cart, CartItem
 from Products.models import Products
 import logging

@@ -63,7 +63,7 @@
                         <a class="active" href="{% url 'Chariot' %}">
                             <i class="fa-solid fa-cart-shopping"></i>
                             {% if user.is_authenticated %}
-                                <span id="cart-count">{{ cart_items.count }}</span>
+                                <span id="cart-count">{{ items.count }}</span>
                             {% else %}
                                 <span id="cart-count">0</span>
                             {% endif %}
@@ -158,7 +158,7 @@
                     </div>
                     <div class="summary-item">
                         <span>TVA (20%)</span>
-                        <span id="total">{{ grand_total|floatformat:"0" }} F CFA</span>
+                        <span id="tax">{{ tax|floatformat:"0" }} F CFA</span>
                     </div>
                     <div class="promo-code">
                         <input type="text" id="promo" placeholder="Code promo">
@@ -166,9 +166,7 @@
                     </div>
                     <div class="summary-total">
                         <span>Total</span>
-                        {% for item in cart_items %}
-                            <span id="total">{{ total|add:total|mul:0.2|floatformat:"0" }} F CFA</span>
-                        {% endfor %}
+                        <span id="total">{{ grand_total|floatformat:"0" }} F CFA</span>
                     </div>
                     <a href="{% url 'Payments' %}"><button id="checkout" class="checkout-btn">Procéder au paiement</button></a>
                 </div>

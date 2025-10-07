@@ -83,9 +83,9 @@ class PCs(models.Model):
 
 
 class Images(models.Model):
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    image_url = models.CharField(max_length=255)
-    alt_text = models.CharField(max_length=255)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='products/')
+    alt_text = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f"Image for {self.product.name}"

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Products, Smartphones_tablets, PCs, Favori
+from .models import Products, Smartphones_tablets, PCs, Favori, Images
 from collections import defaultdict
 from django.db.models import Q  # Pour des requêtes complexes
 from django.http import JsonResponse
@@ -128,16 +128,19 @@ def Details(request, pk):
         Smartphone_details = product.smartphones_tablets
     except Smartphones_tablets.DoesNotExist:
         Smartphone_details = None
+        
+    # Récupérer les 4 images secondaires
+    secondary_images = Images.objects.filter(product=product)[:4]  # Limite à 4 images
     
     context = {
         'product': product,
-        'smartphone_details': Smartphone_details
+        'smartphone_details': Smartphone_details,
+        'secondary_images': secondary_images
     }
     return render(request, 'Details.html', context)
 
 #Favoris
 @require_POST
-@csrf_exempt
 def toggle_favori(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Authentication required'}, status=403)
@@ -160,7 +163,11 @@ def toggle_favori(request):
         favori.delete()
         return JsonResponse({'status': 'removed'})
     
-    return JsonResponse({'status': 'added'})
+    return JsonResponse({
+        'status': 'added',
+        'message': 'Produit ajouté aux favoris',
+        'favori_count': Favori.objects.filter(utilisateur=request.user).count()
+    })
 
 @login_required
 def Favoris(request):
