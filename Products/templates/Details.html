@@ -10,6 +10,10 @@
         <title>Détails</title>
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <!-- 🔌 Icône du site -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/icons8-gadgets-32.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/icons8-gadgets-32.png' %}">
+        <meta name="theme-color" content="#007BFF">
     </head>
 
     <body>
@@ -433,8 +437,7 @@
                 }
 
                 .small-img {
-                    cursor: pointer;
-                    opacity: 0.5;
+                    cursor: pointer; 
                     transition: all 0.3s ease;
                     borde : 2px solid transparent:
                 }
@@ -458,7 +461,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 114px; 
+                    font-size: 11px; 
                 }
 
                 .qty-btn:hiver {
@@ -472,7 +475,7 @@
                     box-shawdow: 0 0 0 2px  rgba(8, 129, 120, 0.1);
                 }
             `;
-            documment.head.appendChild(style);
+            document.head.appendChild(style);
                 
         </script>
     </body>

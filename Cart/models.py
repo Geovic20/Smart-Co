@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from Products.models import Products
 from kernel import settings
 

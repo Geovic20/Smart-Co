@@ -5,13 +5,17 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Smarthub</title>
+        <title>Smart & Co</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Playwrite+NZ:wght@100..400&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/> <!--Intégration de AOS-->
+        <!-- 🔌 Icône du site -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/icons8-gadgets-32.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/icons8-gadgets-32.png' %}">
+        <meta name="theme-color" content="#007BFF">
     </head>
 
     <body>
@@ -387,6 +391,8 @@
                 <p><strong>Adresse:</strong> Godomey Togoudo, Rue de la Pharmacie Le Jourdain</p>
                 <p><strong>Numéro:</strong> +229 90835005/ +229 40543686</p>
                 <p><strong>Horaire:</strong> Du lundi au Samedi de 10h à 19h</p>
+                <a target="_blank" href="https://icons8.com/icon/blpKd0mpBEOj/multiple-devices">Gadgets</a> icône par 
+                <a target="_blank" href="https://icons8.com">Icons8</a> 
                 <div class="follow">
                     <h4>Suivez-nous</h4>
                     <div class="icon">
@@ -445,7 +451,6 @@
             const TOGGLE_FAVORI_URL = "{% url 'toggle_favori' %}";
             const CSRF_TOKEN = "{{ csrf_token }}";
             const Login = "{% url 'login_signup' %}";
-        </script>          
+        </script>         
     </body>
-
 </html>

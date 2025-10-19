@@ -4,81 +4,84 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from Cart.models import Cart, CartItem
 from Products.models import Products
+from django.db import transaction
+from django.db.models import Sum
 import logging
 
 logger = logging.getLogger(__name__)
 
 
 @require_POST
-@login_required
 def add_to_cart(request):
-    """
-    Ajoute un produit au panier de l'utilisateur connecté
-    """
-    logger.debug(f"Received add_to_cart request: {request.POST}")
-    
+    # Vérification authentification
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'status': 'redirect',
+            'message': 'Authentification requise',
+            'url': '/login_signup/?next=' + request.path
+        }, status=401)
+
     product_id = request.POST.get('product_id')
-    quantity = int(request.POST.get('quantity', 1))
-    
-    # Validation de la quantité
-    if quantity <= 0:
-        return JsonResponse({
-            'status': 'error', 
-            'message': 'Quantité invalide'
-        }, status=400)
-    
-    # Vérification du produit
+    qty_raw = request.POST.get('quantity', '1')
+
+    #Validation de la quantité
     try:
-        product = Products.objects.get(id=product_id)
-    except Products.DoesNotExist:
-        return JsonResponse({
-            'status': 'error', 
-            'message': 'Produit introuvable'
-        }, status=404)
-    
-    # Vérification du stock
-    if hasattr(product, 'stock') and product.stock < quantity:
-        return JsonResponse({
-            'status': 'error', 
-            'message': f'Stock insuffisant. Seulement {product.stock} disponible(s)'
-        }, status=400)
-    
-    # Récupère ou crée le panier de l'utilisateur
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    
-    # Ajoute ou met à jour l'article
-    item, item_created = CartItem.objects.get_or_create(
-        cart=cart, 
-        product=product,
-        defaults={'quantity': quantity}
-    )
-    
-    if not item_created:
-        # Vérification du stock total
-        new_quantity = item.quantity + quantity
-        if hasattr(product, 'stock') and product.stock < new_quantity:
+        quantity = int(qty_raw)
+    except (TypeError, ValueError):
+        return JsonResponse({'status': 'error', 'message': 'Quantité invalide'}, status=400)
+
+    if quantity <= 0:
+        return JsonResponse({'status': 'error', 'message': 'Quantité invalide'}, status=400)
+
+    try:
+        with transaction.atomic():
+            product = Products.objects.select_for_update().get(id=product_id)
+
+            # Vérif stock (si tu as un champ stock_quantity)
+            if product.stock_quantity < quantity:
+                return JsonResponse ({
+                    'status': 'error',
+                    'message': f'Stock insuffisant. Disponible : {product.stock_quantity}'
+                }, status=400)
+            
+            #Récupérer ou créer le panier
+            cart, created = Cart.objects.get_or_create(user=request.user)
+            
+            #Récupérer ou créer l'item du panier
+            cart_items, item_created = CartItem.objects.get_or_create(
+                cart=cart,
+                prodcut=product,
+                defaults={'quantity': quantity}
+            )   
+                
+            #Si l'item existe déjà, augmenter la quantité
+            if not item_created:
+                new_quantity = cart_item.quantity  + quantity
+                if new_quantity > product.stock_quantity:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': f'Stock insuffisant. Max : {product.stock_quantity}'
+                    }, status=400)
+                cart_item.quantity = new_quantity  
+                cart_item.save()
+                
+            #Calcul des totaux
+            total_items = cart.total_items()
+            total_price = cart.get_total_price()
+           
             return JsonResponse({
-                'status': 'error', 
-                'message': f'Stock insuffisant. Maximum {product.stock} article(s)'
-            }, status=400)
-        
-        item.quantity = new_quantity
-        item.save()
-        message = 'Quantité mise à jour'
-    else:
-        message = 'Ajouté au panier'
-    
-    # Calcul du nombre total d'articles
-    total_items = cart.total_items()
-    
-    logger.info(f"Product {product_id} added to cart for user {request.user.id}")
-    
-    return JsonResponse({
-        'status': 'success',
-        'message': message,
-        'total_items': total_items,
-        'cart_total': cart.get_total_price()
-    })
+                'status': 'success',
+                'message': f'{product.name} ajouté au panier',
+                'total_items': total_items,
+                'total_price': float(total_price),
+                'cart_item_id': cart_item.id
+            })
+
+    except Products.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Produit introuvable'}, status=404)
+    except Exception as e:
+        logger.exception("Erreur add_to_cart: %s", e)
+        return JsonResponse({'status': 'error', 'message': 'Erreur serveur'}, status=500)
 
 
 @require_POST
@@ -133,36 +136,43 @@ def update_cart_quantity(request, item_id):
 
 
 @require_POST
-@login_required
 def remove_cart_item(request, item_id):
-    """
-    Supprime un article du panier
-    """
+    """Supprime un article du panier"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Non authentifié'}, status=401)
+    
     try:
-        item = CartItem.objects.select_related('cart').get(
+        cart_item = CartItem.objects.select_related('cart').get(
             id=item_id, 
             cart__user=request.user
         )
-        cart = item.cart
-        product_name = item.product.name
-        item.delete()
+        cart = cart_item.cart
+        cart_item.delete()
         
-        logger.info(f"CartItem {item_id} removed from cart")
+        total_items = cart.total_items()
+        total_price = cart.get_total_price()
         
-        return JsonResponse({
-            'status': 'success',
-            'message': f'{product_name} supprimé du panier',
-            'cart_total': cart.get_total_price(),
-            'total_items': cart.total_items()
-        })
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Article supprimé',
+                'total_items': total_items,
+                'total_price': float(total_price)
+            })
+        else:
+            # Redirection si pas AJAX
+            from django.shortcuts import redirect
+            return redirect('Chariot')
+        
     except CartItem.DoesNotExist:
-        return JsonResponse({
-            'status': 'error', 
-            'message': 'Article introuvable'
-        }, status=404)
+        return JsonResponse({'status': 'error', 'message': 'Item introuvable'}, status=404)
+    except Exception as e:
+        logger.error(f"Erreur remove_cart : {e}")
+        return JsonResponse({'status': 'error', 'message': 'Erreur serveur'}, status=500)
 
 
 @login_required
+@require_POST
 def clear_cart(request):
     """
     Vide complètement le panier de l'utilisateur
@@ -171,14 +181,10 @@ def clear_cart(request):
         cart = Cart.objects.get(user=request.user)
         items_count = cart.cartitem_set.count()
         cart.cartitem_set.all().delete()
-        
         logger.info(f"Cart cleared for user {request.user.id} - {items_count} items removed")
-        
+
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({
-                'status': 'success',
-                'message': 'Panier vidé'
-            })
+            return JsonResponse({'status': 'success', 'message': 'Panier vidé'})
         else:
             return render(request, 'Chariot.html', {
                 'cart': cart,
@@ -188,55 +194,42 @@ def clear_cart(request):
             })
     except Cart.DoesNotExist:
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Panier introuvable'
-            }, status=404)
+            return JsonResponse({'status': 'error', 'message': 'Panier introuvable'}, status=404)
         else:
             return render(request, 'Guest.html')
 
-
 def Chariot(request):
-    """
-    Affiche le panier de l'utilisateur
-    """
+    """Affiche le panier de l'utilisateur"""
+    
     if not request.user.is_authenticated:
         return render(request, 'Guest.html')
-    
-    # Récupère le panier avec optimisation des requêtes
-    cart = Cart.objects.prefetch_related(
-        'cartitem_set__product'
-    ).filter(user=request.user).first()
-    
+
+    # Une seule requête optimisée
+    cart = (Cart.objects
+            .filter(user=request.user)
+            .prefetch_related('cartitem_set__product')
+            .first())
+
     if not cart:
-        # Crée un panier vide si n'existe pas
         cart = Cart.objects.create(user=request.user)
         cart_items = []
         total_general = 0
     else:
         cart_items = cart.cartitem_set.select_related('product').all()
-        total_general = sum(
-            item.product.price * item.quantity 
-            for item in cart_items
-        )
-    
-    # Calcul des frais
+        total_general = sum(item.product.price * item.quantity for item in cart_items)
+
     shipping_cost = 0 if total_general > 75000 else 5000
     tax = total_general * 0.20
     grand_total = total_general + shipping_cost + tax
-    
-    context = {
+
+    return render(request, 'Chariot.html', {
         'cart': cart,
         'cart_items': cart_items,
         'total': total_general,
-        'shipping_cost': shipping_cost,
+        'shipping': shipping_cost,
         'tax': tax,
-        'grand_total': grand_total,
-        'free_shipping_threshold': 75000,
-        'items_count': cart_items.count() if cart_items else 0
-    }
-    
-    return render(request, 'Chariot.html', context)
+        'grand_total': grand_total
+    })
 
 
 @login_required

@@ -17,19 +17,21 @@ class Products(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # Dans models.py - Products
     def get_image_url(self):
         """Retourne l'URL de l'image du produit."""
-        sous_tables = [
-            'smartphones_tablets',
-            'casques_ecouteurs',
-            'pcs'
-        ]
-        for attr in sous_tables:
-            related = getattr(self, attr, None)
-            if related and hasattr(related, 'image') and related.image:
-                return related.image.url
-        # Si aucune image n'est trouvée dans les sous-tables, retourne l'image du produit lui-même
-        return '/static/images/default_image.jpg'  # Chemin par défaut si aucune image n'est trouvée
+        try:
+            # Essayer d'abord les sous-tables
+            if hasattr(self, 'smartphones_tablets') and self.smartphones_tablets.image:
+                return self.smartphones_tablets.image.url
+            if hasattr(self, 'pcs') and self.pcs.image:
+                return self.pcs.image.url
+            if hasattr(self, 'casques_ecouteurs') and self.casques_ecouteurs.image:
+                return self.casques_ecouteurs.image.url
+        except models.ObjectDoesNotExist:
+            pass
+        
+        return '/static/images/default.jpg'
                 
     def __str__(self):
         return self.name

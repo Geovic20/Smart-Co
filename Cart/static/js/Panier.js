@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // ==================== CONFIGURATION ====================
-    const ADD_TO_CART_URL = '/panier/ajouter/';
+    const ADD_TO_CART_URL = window.URLS?.add_to_cart;
     const UPDATE_CART_URL = '/panier/modifier/';
     const REMOVE_CART_URL = '/panier/supprimer/';
     const CART_URL = '/Chariot/';
@@ -215,16 +215,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const form = this.closest('form');
-            const formData = new FormData(form);
             const actionUrl = form.action;
 
             fetch(actionUrl, {
                 method: 'POST',
                 headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRFToken': getCookie('csrftoken'),
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: formData
+                body: `csrfmiddlewaretoken=${getCookie('csrftoken')}`
             })
             .then(response => response.json())
             .then(data => {
@@ -269,72 +269,56 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ==================== ADD TO CART (Suggestions) ====================
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.dataset.id;
-            const item = this.closest('.suggestion-item');
-            const name = item.querySelector('h3').textContent;
-            
-            // Visual feedback
-            const originalText = this.textContent;
-            this.textContent = 'Ajout...';
-            this.disabled = true;
-
-            fetch(ADD_TO_CART_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: `product_id=${productId}&quantity=1`
+    // ==================== ADD TO CART  ====================
+    addToCartButtons.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+    
+          const productId = this.dataset.id;
+          if (!productId) {
+            showMessage("ID produit manquant", 'error');
+            return;
+          }
+    
+          // Feedback visuel
+          const originalText = this.textContent;
+          this.textContent = 'Ajout...';
+          this.disabled = true;
+    
+          fetch(ADD_TO_CART_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'X-CSRFToken': getCookie('csrftoken'),
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: `product_id=${encodeURIComponent(productId)}&quantity=1`
+          })
+          .then(async (response) => {
+            let data = {};
+            try { data = await response.json(); } catch (e) {}
+    
+            if (response.status === 401 && data.status === 'redirect' && data.url) {
+              window.location.href = data.url;
+              return;
+            }
+    
+            if (!response.ok) {
+              throw new Error(data.message || 'Erreur lors de l’ajout au panier');
+            }
+    
+            // Succès
+            document.querySelectorAll('#cart-count').forEach(el => {
+                if (data.total_items != null) el.textContent = data.total_items;
+              });
+              showMessage('Ajouté au panier ✅', 'success');
             })
-            .then(response => {
-                if (response.status === 401) {
-                    return response.json().then(data => {
-                        if (data.status === 'redirect') {
-                            window.location.href = data.url;
-                        }
-                    });
-                }
-                return response.json();
+            .catch(err => {
+              showMessage(err.message || 'Erreur réseau', 'error');
             })
-            .then(data => {
-                if (data.status === 'success') {
-                    // Success feedback
-                    this.textContent = 'Ajouté ✓';
-                    this.style.backgroundColor = '#28a745';
-                    this.style.borderColor = '#28a745';
-                    this.style.color = '#fff';
-
-                    // Update cart count
-                    const countElement = document.getElementById('cart-count');
-                    if (countElement && data.total_items) {
-                        countElement.textContent = data.total_items;
-                    }
-
-                    showMessage(`${name} ajouté au panier`, 'success');
-
-                    // Reset button after 2 seconds
-                    setTimeout(() => {
-                        this.textContent = originalText;
-                        this.style.backgroundColor = '';
-                        this.style.borderColor = '';
-                        this.style.color = '';
-                        this.disabled = false;
-                    }, 2000);
-                } else {
-                    this.textContent = originalText;
-                    this.disabled = false;
-                    showMessage(data.message || "Erreur lors de l'ajout", 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                this.textContent = originalText;
-                this.disabled = false;
-                showMessage('Erreur de connexion', 'error');
+            .finally(() => {
+              this.textContent = originalText;
+              this.disabled = false;
             });
         });
     });
