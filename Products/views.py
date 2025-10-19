@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import render, get_object_or_404
 from .models import Products, Smartphones_tablets, PCs, Favori, Images
 from collections import defaultdict
@@ -5,7 +6,8 @@ from django.db.models import Q  # Pour des requêtes complexes
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
+
+logger = logging.getLogger(__name__)
 
 def SHOP(request):
     return render(request, 'SHOP.html')

@@ -38,8 +38,8 @@ def add_to_cart(request):
             product = Products.objects.select_for_update().get(id=product_id)
 
             # Vérif stock (si tu as un champ stock_quantity)
-            if product.stock_quantity < quantity:
-                return JsonResponse ({
+            if hasattr(product, 'stock_quantity') and product.stock_quantity < quantity:
+                return JsonResponse({
                     'status': 'error',
                     'message': f'Stock insuffisant. Disponible : {product.stock_quantity}'
                 }, status=400)
@@ -48,16 +48,16 @@ def add_to_cart(request):
             cart, created = Cart.objects.get_or_create(user=request.user)
             
             #Récupérer ou créer l'item du panier
-            cart_items, item_created = CartItem.objects.get_or_create(
+            cart_item, item_created = CartItem.objects.get_or_create(
                 cart=cart,
-                prodcut=product,
+                product=product,  # Correction : prodcut -> product
                 defaults={'quantity': quantity}
-            )   
+            )
                 
             #Si l'item existe déjà, augmenter la quantité
             if not item_created:
-                new_quantity = cart_item.quantity  + quantity
-                if new_quantity > product.stock_quantity:
+                new_quantity = cart_item.quantity + quantity
+                if hasattr(product, 'stock_quantity') and new_quantity > product.stock_quantity:
                     return JsonResponse({
                         'status': 'error',
                         'message': f'Stock insuffisant. Max : {product.stock_quantity}'
@@ -87,9 +87,7 @@ def add_to_cart(request):
 @require_POST
 @login_required
 def update_cart_quantity(request, item_id):
-    """
-    Met à jour la quantité d'un article dans le panier
-    """
+    """Modifier la quantité d'un article dans le panier"""
     quantity = int(request.POST.get('quantity', 1))
     
     try:
@@ -114,10 +112,10 @@ def update_cart_quantity(request, item_id):
         })
     
     # Vérification du stock
-    if hasattr(item.product, 'stock') and item.product.stock < quantity:
+    if hasattr(item.product, 'stock_quantity') and item.product.stock_quantity < quantity:
         return JsonResponse({
             'status': 'error', 
-            'message': f'Stock insuffisant. Maximum {item.product.stock} disponible(s)'
+            'message': f'Stock insuffisant. Maximum {item.product.stock_quantity} disponible(s)'
         }, status=400)
     
     # Mise à jour de la quantité
@@ -174,9 +172,7 @@ def remove_cart_item(request, item_id):
 @login_required
 @require_POST
 def clear_cart(request):
-    """
-    Vide complètement le panier de l'utilisateur
-    """
+    """Vide complètement le panier de l'utilisateur"""
     try:
         cart = Cart.objects.get(user=request.user)
         items_count = cart.cartitem_set.count()
@@ -300,7 +296,5 @@ def get_cart_summary(request):
 
 
 def Guest(request):
-    """
-    Page pour les utilisateurs non connectés
-    """
+    """Page pour les utilisateurs non connectés"""
     return render(request, 'Guest.html')

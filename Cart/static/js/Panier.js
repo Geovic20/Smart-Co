@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     // ==================== CONFIGURATION ====================
-    const ADD_TO_CART_URL = window.URLS?.add_to_cart;
-    const UPDATE_CART_URL = '/panier/modifier/';
-    const REMOVE_CART_URL = '/panier/supprimer/';
-    const CART_URL = '/Chariot/';
+    const ADD_TO_CART_URL = window.URLS?.add_to_cart || '/Cart/panier/ajouter/';  // Fallback si undefined
+    const UPDATE_CART_URL = window.URLS?.update_cart || 'Cart//panier/modifier/';
+    const REMOVE_CART_URL = window.URLS?.remove_cart || 'Cart//panier/supprimer/';
+    const CART_URL = window.URLS?.cart || 'Cart//Chariot/';  // Ajoute cart si défini dans window.URLS
 
     // ==================== ELEMENTS ====================
     const quantityInputs = document.querySelectorAll('.quantity-input');
@@ -155,14 +155,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    plusButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const itemId = this.dataset.id;
-            const input = document.querySelector(`.quantity-input[data-id="${itemId}"]`);
-            if (input) {
-                const newQuantity = parseInt(input.value) + 1;
-                input.value = newQuantity;
-                updateCartItemQuantity(itemId, newQuantity);
+    plusButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.closest('.quantity-controls').querySelector('.quantity-input');
+            let value = parseInt(input.value) || 1;
+            const maxStock = parseInt(input.dataset.maxStock) || Infinity;  // Assume tu ajoutes data-max-stock="{{ item.product.stock_quantity }}" dans le template Chariot.html
+            if (value < maxStock) {
+                input.value = ++value;
+                updateQuantityAjax(input);  // Ta fonction pour envoyer AJAX
+            } else {
+                showMessage('Stock maximum atteint', 'error');
             }
         });
     });
@@ -280,6 +282,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
           }
     
+          // Récupérer la quantité dynamique si input présent (e.g., page détails), sinon 1
+          const quantityInput = this.closest('.details_produit')?.querySelector('#quantity-input');
+          const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+
+          if (isNaN(quantity) || quantity <= 0) {
+            showMessage("Quantité invalide", 'error');
+            return;
+          }
+
+          console.log('Sending to:', ADD_TO_CART_URL, 'with productId:', productId, 'quantity:', quantity);
+          
           // Feedback visuel
           const originalText = this.textContent;
           this.textContent = 'Ajout...';

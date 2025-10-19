@@ -333,7 +333,7 @@
              
             // Script spécifique pour la page Détails
             document.addEventListener('DOMContentLoaded', function() {
-                const stockQuantity = {{ smartphone_details.stock_quantity|default:0 }};
+                const stockQuantity = {{ product.stock_quantity|default:0 }};
                 
                 // ========== GESTION DES MINIATURES D'IMAGES ==========
                 const MainImg = document.getElementById("MainImg");
