@@ -7,6 +7,7 @@ from Products.models import Products
 from django.db import transaction
 from django.db.models import Sum
 import logging
+from decimal import Decimal
 
 logger = logging.getLogger(__name__)
 
@@ -132,7 +133,6 @@ def update_cart_quantity(request, item_id):
         'total_items': item.cart.total_items()
     })
 
-
 @require_POST
 def remove_cart_item(request, item_id):
     """Supprime un article du panier"""
@@ -167,7 +167,6 @@ def remove_cart_item(request, item_id):
     except Exception as e:
         logger.error(f"Erreur remove_cart : {e}")
         return JsonResponse({'status': 'error', 'message': 'Erreur serveur'}, status=500)
-
 
 @login_required
 @require_POST
@@ -215,24 +214,19 @@ def Chariot(request):
         total_general = sum(item.product.price * item.quantity for item in cart_items)
 
     shipping_cost = 0 if total_general > 75000 else 5000
-    tax = total_general * 0.20
-    grand_total = total_general + shipping_cost + tax
+    grand_total = total_general + shipping_cost
 
     return render(request, 'Chariot.html', {
         'cart': cart,
         'cart_items': cart_items,
         'total': total_general,
         'shipping': shipping_cost,
-        'tax': tax,
         'grand_total': grand_total
     })
 
-
 @login_required
 def get_cart_count(request):
-    """
-    Retourne le nombre total d'articles dans le panier (pour AJAX)
-    """
+    """ Retourne le nombre total d'articles dans le panier (pour AJAX)"""
     try:
         cart = Cart.objects.get(user=request.user)
         total_items = cart.total_items()
@@ -250,9 +244,7 @@ def get_cart_count(request):
 
 @login_required
 def get_cart_summary(request):
-    """
-    Retourne un résumé complet du panier (pour AJAX)
-    """
+    """Retourne un résumé complet du panier (pour AJAX)"""
     try:
         cart = Cart.objects.prefetch_related('cartitem_set__product').get(
             user=request.user
@@ -272,7 +264,6 @@ def get_cart_summary(request):
         
         total = cart.get_total_price()
         shipping_cost = 0 if total > 75000 else 5000
-        tax = total * 0.20
         
         return JsonResponse({
             'status': 'success',
@@ -280,8 +271,7 @@ def get_cart_summary(request):
             'total_items': cart.total_items(),
             'subtotal': float(total),
             'shipping': float(shipping_cost),
-            'tax': float(tax),
-            'grand_total': float(total + shipping_cost + tax)
+            'grand_total': float(total + shipping_cost)
         })
     except Cart.DoesNotExist:
         return JsonResponse({
