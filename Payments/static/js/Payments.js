@@ -1,463 +1,598 @@
-// Elements
-const paymentMethods = document.querySelectorAll('.payment-method');
-const paymentForms = document.querySelectorAll('.payment-form');
-const submitButtons = document.querySelectorAll('.payment-form button[type="submit"]');
-const paypalButton = document.querySelector('.btn-paypal');
-const modal = document.getElementById('payment-success');
-const closeModalButton = document.getElementById('close-modal');
-const totalAmount = document.getElementById('total-amount').textContent;
-const amountElements = document.querySelectorAll('.amount');
-const successAmount = document.getElementById('success-amount');
-const orderNumber = document.getElementById('order-number');
-
-// Phone number patterns by provider
-const phonePatterns = {
-  mtn: /^01(42|46|50|51|52|53|54|56|57|59|61|62|66|67|69|90|91|92|93|96|97)\d{6}$/,  // MTN pattern
-  moov: /^01(45|55|58|60|63|64|65|68|94|95|98|99)\d{6}$/,  // Moov pattern
-  celtiis: /^01(40|41|43|44|47)\d{6}$/,  // Celtiis pattern
-  orange: /^0[7][0-9]{6}$/,  // Orange pattern
-  wave: /^0[7][0-9]{6}$/,   // Wave pattern
+// Configuration des méthodes de paiement
+const paymentMethods = {
+  mtn: {
+      name: 'MTN Mobile Money',
+      fields: [
+        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+      ]
+  },
+  moov: {
+      name: 'Moov Money',
+      fields: [
+        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+      ]
+  },
+  celtiis: {
+      name: 'Celtiis Cash',
+      fields: [
+        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+      ]
+  },
+  orange: {
+      name: 'Orange Money',
+      fields: [
+        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+      ]
+  },
+  wave: {
+      name: 'Wave',
+      fields: [
+        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+      ]
+  },
+  crypto: {
+      name: 'Crypto-monnaie',
+      fields: [
+          { 
+            type: 'select', 
+            name: 'currency', 
+            label: 'Choisir la crypto-monnaie', 
+            options: ['Bitcoin (BTC)', 'Ethereum (ETH)', 'USDT (TRC20)', 'USDT (ERC20)'], 
+            required: true 
+          },
+          { type: 'text', name: 'wallet', label: 'Adresse de portefeuille', placeholder: 'Votre adresse wallet', required: true }
+      ]
+  },
+  fedapay: {
+      name: 'Fedapay',
+      fields: [
+        { type: 'email', name: 'email', label: 'Adresse email', placeholder: 'votre@email.com', required: true },
+        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+      ]
+  },
+  paypal: {
+      name: 'PayPal',
+      fields: [
+        { type: 'email', name: 'email', label: 'Adresse email PayPal', placeholder: 'votre@email.com', required: true }
+      ]
+  },
+  card: {
+      name: 'Compte bancaire',
+      fields: [
+        { type: 'text', name: 'cardNumber', label: 'Numéro de carte', placeholder: '1234 5678 9012 3456', required: true },
+        { type: 'text', name: 'cardName', label: 'Nom sur la carte', placeholder: 'John Doe', required: true },
+        { type: 'text', name: 'expiryDate', label: 'Date d\'expiration', placeholder: 'MM/AA', required: true, class: 'half' },
+        { type: 'text', name: 'cvv', label: 'CVV', placeholder: '123', required: true, class: 'half' }
+      ]
+  }
 };
 
-// Cryptocurrency conversion rates (example values)
-const cryptoRates = {
-  btc: 0.000023,  // 1 USD = 0.000023 BTC
-  eth: 0.00041,   // 1 USD = 0.00041 ETH
-  usdt: 1,        // 1 USD = 1 USDT
-  bnb: 0.0027     // 1 USD = 0.0027 BNB
-};
+// Variables globales
+let selectedMethod = '';
+let baseAmount = 299.99;
+let deliveryFee = 0;
+let totalAmount = baseAmount;
+let deliveryInfo = {};
 
-// Wallet addresses for each cryptocurrency
-const walletAddresses = {
-  btc: 'bc1p9r4s9uqfhwthpclga3t33xwjx8hqeemfvdc7uvlrk56v956py4vqzl4u5j',
-  eth: '0xE83cbCED090e3075d67D84cb9C23a56c2CfF0aC3',
-  usdt: '0xE83cbCED090e3075d67D84cb9C23a56c2CfF0aC3',
-  bnb: '0xE83cbCED090e3075d67D84cb9C23a56c2CfF0aC3'
-};
-
-// Set amounts everywhere
-amountElements.forEach(element => {
-  element.textContent = totalAmount;
+// Initialisation
+document.addEventListener('DOMContentLoaded', function() {
+  initializeDeliveryForm();
+  setupEventListeners();
+  updateOrderTotal();
+  console.log('DOM chargé, écouteurs configurés'); 
 });
-successAmount.textContent = totalAmount;
 
-// Generate a random order number
-function generateOrderNumber() {
-  const prefix = 'TG-';
-  const currentYear = new Date().getFullYear();
-  const randomDigits = Math.floor(Math.random() * 900000) + 100000;
-  return `${prefix}${currentYear}${randomDigits}`;
+// Configuration du formulaire de livraison
+function initializeDeliveryForm() {
+  const deliveryForm = document.getElementById('livraison-form');
+  if (!deliveryForm) {
+        console.error('Formulaire de livraison non trouvé');
+        return;
+    }
+  const quartierSelect = document.getElementById('quartier');
+  const phoneInput = document.getElementById('phone');
+  
+  // Écouteur pour le changement de quartier
+  quartierSelect.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const frais = selectedOption.getAttribute('data-frais');
+      
+      if (frais) {
+        deliveryFee = parseInt(frais);
+        document.getElementById('frais').textContent = deliveryFee;
+        updateOrderTotal();
+      } else {
+        deliveryFee = 0;
+        document.getElementById('frais').textContent = '0';
+        updateOrderTotal();
+      }
+  });
+  
+  // Formatage du numéro de téléphone
+  phoneInput.addEventListener('input', function() {
+    formatPhoneNumber(this);
+  });
+  
+  // Soumission du formulaire de livraison
+  deliveryForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (validateDeliveryForm()) {
+          const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
+          
+          // Sauvegarder les informations de livraison
+          deliveryInfo = {
+              quartier: document.getElementById('quartier').value,
+              details: document.getElementById('details').value,
+              phone: document.getElementById('phone').value,
+              jour: document.getElementById('jour').value,
+              heure: document.getElementById('heure').value,
+              frais: deliveryFee,
+              paymentMode: paymentMode
+          };
+          
+          if (paymentMode === 'delivery') {
+              // Paiement à la livraison - générer la facture
+              generateInvoice();
+          } else {
+              // Passer à l'étape paiement en ligne
+              showPaymentSection();
+              updateProgressStep(3);
+          }
+      }
+  });
+  
+  // Définir la date minimum à aujourd'hui
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('jour').setAttribute('min', today);
 }
 
-// Set estimated delivery date
-function setDeliveryDate() {
-  const deliveryDate = document.getElementById('delivery-date');
+// Validation du formulaire de livraison
+function validateDeliveryForm() {
+  const quartier = document.getElementById('quartier').value;
+  const details = document.getElementById('details').value;
+  const phone = document.getElementById('phone').value;
+  const jour = document.getElementById('jour').value;
+  const heure = document.getElementById('heure').value;
+  
+  if (!quartier) {
+      showNotification('Veuillez sélectionner un quartier', 'error');
+      return false;
+  }
+  
+  if (!details.trim()) {
+      showNotification('Veuillez fournir les détails du lieu', 'error');
+      return false;
+  }
+  
+  if (!phone.trim()) {
+      showNotification('Veuillez fournir un numéro de téléphone', 'error');
+      return false;
+  }
+  
+  if (!jour) {
+      showNotification('Veuillez sélectionner un jour de livraison', 'error');
+      return false;
+  }
+  
+  if (!heure) {
+      showNotification('Veuillez sélectionner une heure de livraison', 'error');
+      return false;
+  }
+  return true;
+}
+
+// Génération de la facture pour paiement à la livraison
+function generateInvoice() {
+  const invoiceNumber = generateInvoiceNumber();
+  
+  // Remplir les informations de la facture
+  document.getElementById('invoice-number').textContent = invoiceNumber;
+  document.getElementById('client-phone').textContent = deliveryInfo.phone;
+  document.getElementById('client-quartier').textContent = deliveryInfo.quartier;
+  document.getElementById('client-address').textContent = deliveryInfo.details;
+  document.getElementById('client-delivery-time').textContent = `${deliveryInfo.jour} à ${deliveryInfo.heure}`;
+  document.getElementById('invoice-delivery-fee').textContent = `$${(deliveryFee / 655.957).toFixed(2)}`;
+  document.getElementById('invoice-total').textContent = `$${(totalAmount / 655.957).toFixed(2)}`;
+  
+  // Afficher le modal de facture
+  const invoiceModal = document.getElementById('invoice-modal');
+  invoiceModal.classList.remove('hidden');
+  
+  // Mettre à jour l'étape de progression
+  updateProgressStep(4);
+}
+
+// Génération d'un numéro de facture
+function generateInvoiceNumber() {
   const date = new Date();
-  date.setDate(date.getDate() + 14); // 14 days from now
-  deliveryDate.textContent = date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  
+  return `INV-${year}${month}${day}-${random}`;
+}
+
+// Fermeture du modal de facture
+function closeInvoiceModal() {
+  const modal = document.getElementById('invoice-modal');
+  modal.classList.add('hidden');
+}
+
+// Afficher la section paiement
+function showPaymentSection() {
+  document.querySelector('.delivery-section').classList.add('hidden');
+  document.querySelector('.payment-section').classList.remove('hidden');
+  initializePaymentMethods();
+}
+
+// Mise à jour du total de la commande
+function updateOrderTotal() {
+  totalAmount = baseAmount + deliveryFee + tax;
+  
+  // Mettre à jour l'affichage de la livraison
+  const deliveryRow = document.querySelector('.total-row:nth-child(2) span:last-child');
+  if (deliveryRow) {
+      deliveryRow.textContent = `$${(deliveryFee / 655.957).toFixed(2)}`;
+  }
+  
+  // Mettre à jour le total
+  const totalElement = document.getElementById('total-amount');
+  if (totalElement) {
+      totalElement.textContent = `$${(totalAmount / 655.957).toFixed(2)}`;
+  }
+  
+  // Mettre à jour le montant de paiement
+  const paymentAmount = document.getElementById('payment-amount');
+  if (paymentAmount) {
+      paymentAmount.textContent = `$${(totalAmount / 655.957).toFixed(2)}`;
+  }
+}
+
+// Configuration des méthodes de paiement
+function initializePaymentMethods() {
+  const methods = document.querySelectorAll('.payment-method');
+  
+  methods.forEach(method => {
+      method.addEventListener('click', function() {
+          // Retirer la sélection précédente
+          methods.forEach(m => m.classList.remove('selected'));
+          
+          // Ajouter la sélection actuelle
+          this.classList.add('selected');
+          
+          const methodId = this.getAttribute('data-method');
+          selectPaymentMethod(methodId);
+      });
   });
 }
 
-orderNumber.textContent = generateOrderNumber();
-setDeliveryDate();
-
-// Initialize
-function init() {
-  // Hide all payment forms initially
-  paymentForms.forEach(form => {
-    form.classList.remove('active');
-  });
-  
-  // Select the first payment method by default
-  if (paymentMethods.length > 0) {
-    selectPaymentMethod(paymentMethods[0]);
-  }
-
-  // Add event listener for cryptocurrency selection
-  const cryptoSelect = document.getElementById('crypto-currency');
-  if (cryptoSelect) {
-    cryptoSelect.addEventListener('change', updateCryptoAmount);
-  }
-}
-
-// Select payment method
-function selectPaymentMethod(methodElement) {
-  // Remove active class from all methods
-  paymentMethods.forEach(method => {
-    method.classList.remove('active');
-  });
-  
-  // Add active class to selected method
-  methodElement.classList.add('active');
-  
-  // Show corresponding form
-  const methodType = methodElement.getAttribute('data-method');
-  const formId = `${methodType}-form`;
-  const form = document.getElementById(formId);
-  
-  // Hide all forms
-  paymentForms.forEach(paymentForm => {
-    paymentForm.classList.remove('active');
-  });
-  
-  // Show selected form
-  if (form) {
-    form.classList.add('active');
-  }
-
-  // Update crypto amount if crypto method is selected
-  if (methodType === 'crypto') {
-    updateCryptoAmount();
-  }
-}
-
-// Update cryptocurrency amount and address
-function updateCryptoAmount() {
-  const cryptoSelect = document.getElementById('crypto-currency');
-  const amountElement = document.querySelector('.crypto-amount');
-  const walletAddressElement = document.getElementById('wallet-address');
-  const qrCodeElement = document.querySelector('.qr-code img');
-  
-  if (!cryptoSelect || !amountElement || !walletAddressElement) return;
-
-  const selectedCrypto = cryptoSelect.value;
-  if (!selectedCrypto) return;
-
-  const usdAmount = parseFloat(totalAmount.replace('$', ''));
-  const cryptoAmount = (usdAmount * cryptoRates[selectedCrypto]).toFixed(8);
-  const walletAddress = walletAddresses[selectedCrypto];
-
-  amountElement.textContent = `${cryptoAmount} ${selectedCrypto.toUpperCase()}`;
-  walletAddressElement.textContent = walletAddress;
-  qrCodeElement.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${walletAddress}`;
-}
-
-// Copy wallet address to clipboard
-function copyWalletAddress() {
-  const walletAddress = document.getElementById('wallet-address').textContent;
-  navigator.clipboard.writeText(walletAddress).then(() => {
-    const copyButton = document.querySelector('.btn-copy');
-    const originalHTML = copyButton.innerHTML;
-    copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><polyline points="20 6 9 17 4 12"/></svg>';
-    setTimeout(() => {
-      copyButton.innerHTML = originalHTML;
-    }, 2000);
+// Configuration des écouteurs d'événements
+function setupEventListeners() {
+  // Formatage automatique pour les champs
+  document.addEventListener('input', function(e) {
+      if (e.target.name === 'phone') {
+          formatPhoneNumber(e.target);
+      } else if (e.target.name === 'cardNumber') {
+          formatCardNumber(e.target);
+      } else if (e.target.name === 'expiryDate') {
+          formatExpiryDate(e.target);
+      } else if (e.target.name === 'cvv') {
+          formatCVV(e.target);
+      }
   });
 }
 
-// Verify cryptocurrency transaction
-function verifyTransaction() {
-  const button = document.querySelector('#crypto-form button');
-  button.textContent = 'Verifying...';
-  button.disabled = true;
-
-  // Simulate verification process
-  setTimeout(() => {
-    button.textContent = 'Verify Payment';
-    button.disabled = false;
-    showSuccessModal();
-  }, 2000);
-}
-
-// Validate phone number
-function validatePhoneNumber(phone, provider) {
-  if (!phonePatterns[provider]) return true; // Skip validation if pattern not defined
-  return phonePatterns[provider].test(phone);
-}
-
-// Validate credit card details
-function validateCardDetails(card, expiry, cvv) {
-  const cardPattern = /^[0-9]{16}$/;
-  const expiryPattern = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
-  const cvvPattern = /^[0-9]{3,4}$/;
+// Sélection d'une méthode de paiement
+function selectPaymentMethod(methodId) {
+  selectedMethod = methodId;
   
-  return {
-    card: cardPattern.test(card.replace(/\s/g, '')),
-    expiry: expiryPattern.test(expiry),
-    cvv: cvvPattern.test(cvv)
-  };
+  // Mise à jour du titre
+  const methodConfig = paymentMethods[methodId];
+  document.getElementById('selected-method-title').textContent = methodConfig.name;
+  
+  // Génération du formulaire
+  generatePaymentForm(methodConfig);
+  
+  // Affichage du formulaire
+  const paymentForm = document.getElementById('payment-form');
+  paymentForm.classList.remove('hidden');
+  
+  // Scroll vers le formulaire
+  paymentForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// Show error
-function showError(input, message) {
-  input.classList.add('error');
-  const errorElement = input.nextElementSibling;
-  if (errorElement && errorElement.classList.contains('error-message')) {
-    errorElement.textContent = message;
-    errorElement.classList.add('visible');
+// Génération dynamique du formulaire
+function generatePaymentForm(methodConfig) {
+  const formContent = document.getElementById('form-content');
+  let formHTML = '';
+  
+  let isInRow = false;
+  
+  methodConfig.fields.forEach((field, index) => {
+      if (field.class === 'half') {
+          if (!isInRow) {
+              formHTML += '<div class="form-row">';
+              isInRow = true;
+          }
+          formHTML += generateFormField(field);
+          
+          // Fermer la row si c'est le dernier champ ou si le prochain n'est pas half
+          const nextField = methodConfig.fields[index + 1];
+          if (!nextField || nextField.class !== 'half') {
+              formHTML += '</div>';
+              isInRow = false;
+          }
+      } else {
+          if (isInRow) {
+              formHTML += '</div>';
+              isInRow = false;
+          }
+          formHTML += generateFormField(field);
+      }
+  });
+  
+  if (isInRow) {
+      formHTML += '</div>';
+  }
+  
+  formContent.innerHTML = formHTML;
+}
+
+// Génération d'un champ de formulaire
+function generateFormField(field) {
+  if (field.type === 'select') {
+      let optionsHTML = '<option value="">Sélectionnez...</option>';
+      field.options.forEach(option => {
+          optionsHTML += `<option value="${option}">${option}</option>`;
+      });
+      
+      return `
+          <div class="form-group">
+              <label class="form-label" for="${field.name}">${field.label}</label>
+              <select name="${field.name}" id="${field.name}" class="form-input" ${field.required ? 'required' : ''}>
+                  ${optionsHTML}
+              </select>
+          </div>
+      `;
+  } else {
+      return `
+          <div class="form-group">
+              <label class="form-label" for="${field.name}">${field.label}</label>
+              <input 
+                  type="${field.type}" 
+                  name="${field.name}" 
+                  id="${field.name}" 
+                  placeholder="${field.placeholder}" 
+                  class="form-input" 
+                  ${field.required ? 'required' : ''}
+              >
+          </div>
+      `;
   }
 }
 
-// Clear error
-function clearError(input) {
-  input.classList.remove('error');
-  const errorElement = input.nextElementSibling;
-  if (errorElement && errorElement.classList.contains('error-message')) {
-    errorElement.classList.remove('visible');
+// Formatage du numéro de téléphone
+function formatPhoneNumber(input) {
+  let value = input.value.replace(/\D/g, '');
+  if (value.length > 10) value = value.substring(0, 10);
+  
+  if (value.length >= 2) {
+      value = value.substring(0, 2) + ' ' + value.substring(2);
   }
-}
-
-// Process payment
-function processPayment(e) {
-  e.preventDefault();
-  
-  const form = e.target.closest('form');
-  if (!form) return;
-  
-  const paymentForm = form.closest('.payment-form');
-  const paymentMethod = paymentForm.id.replace('-form', '');
-  
-  let isValid = true;
-  
-  // Validate based on payment method
-  if (['mtn', 'moov', 'celtiis', 'orange', 'wave'].includes(paymentMethod)) {
-    const phoneInput = form.querySelector('input[type="tel"]');
-    const phoneNumber = phoneInput.value.trim();
-    
-    if (!validatePhoneNumber(phoneNumber, paymentMethod)) {
-      showError(phoneInput, 'Veuillez entrer un numéro de téléphone valide');
-      isValid = false;
-    } else {
-      clearError(phoneInput);
-    }
-  } else if (paymentMethod === 'fedapay') {
-    const cardInput = form.querySelector('#fedapay-card');
-    const expiryInput = form.querySelector('#fedapay-expiry');
-    const cvvInput = form.querySelector('#fedapay-cvv');
-    const nameInput = form.querySelector('#fedapay-name');
-    
-    const cardNumber = cardInput.value.trim().replace(/\s/g, '');
-    const expiry = expiryInput.value.trim();
-    const cvv = cvvInput.value.trim();
-    const name = nameInput.value.trim();
-    
-    const cardValidation = validateCardDetails(cardNumber, expiry, cvv);
-    
-    if (!cardValidation.card) {
-      showError(cardInput, 'Veuillez entrer un numéro de carte valide');
-      isValid = false;
-    } else {
-      clearError(cardInput);
-    }
-    
-    if (!cardValidation.expiry) {
-      showError(expiryInput, 'Veuillez entrer une date d\'expiration valide (MM/YY)');
-      isValid = false;
-    } else {
-      clearError(expiryInput);
-    }
-    
-    if (!cardValidation.cvv) {
-      showError(cvvInput, 'Veuillez entrer un code CVV valide');
-      isValid = false;
-    } else {
-      clearError(cvvInput);
-    }
-    
-    if (name.length < 3) {
-      showError(nameInput, 'Veuillez entrer le nom du titulaire de la carte');
-      isValid = false;
-    } else {
-      clearError(nameInput);
-    }
-  } else if (paymentMethod === 'bank') {
-    const bankSelect = form.querySelector('#bank-name');
-    const accountNumber = form.querySelector('#account-number');
-    const accountName = form.querySelector('#account-name');
-    
-    if (bankSelect.value === '') {
-      showError(bankSelect, 'Veuillez sélectionner votre banque');
-      isValid = false;
-    } else {
-      clearError(bankSelect);
-    }
-    
-    if (accountNumber.value.trim().length < 5) {
-      showError(accountNumber, 'Veuillez entrer un numéro de compte valide');
-      isValid = false;
-    } else {
-      clearError(accountNumber);
-    }
-    
-    if (accountName.value.trim().length < 3) {
-      showError(accountName, 'Veuillez entrer le nom du titulaire du compte');
-      isValid = false;
-    } else {
-      clearError(accountName);
-    }
+  if (value.length >= 6) {
+      value = value.substring(0, 6) + ' ' + value.substring(6);
+  }
+  if (value.length >= 9) {
+      value = value.substring(0, 9) + ' ' + value.substring(9);
   }
   
-  // If form is valid, show success modal
-  if (isValid) {
-    // Simulate processing
-    const button = form.querySelector('button[type="submit"]');
-    const originalText = button.textContent;
-    button.textContent = 'Traitement...';
-    button.disabled = true;
-    
-    setTimeout(() => {
-      button.textContent = originalText;
-      button.disabled = false;
-      showSuccessModal();
-    }, 1500);
-  }
+  input.value = value;
 }
 
-// Show success modal
-function showSuccessModal() {
-  modal.classList.add('active');
-  document.querySelector('.progress-step.active').classList.add('complete');
-  document.querySelector('.progress-step:last-child').classList.add('active');
-}
-
-// Close modal
-function closeModal() {
-  modal.classList.remove('active');
-}
-
-// Format card number with spaces
+// Formatage du numéro de carte
 function formatCardNumber(input) {
-  let value = input.value.replace(/\s/g, '');
-  value = value.replace(/[^0-9]/g, '');
+  let value = input.value.replace(/\D/g, '');
+  if (value.length > 16) value = value.substring(0, 16);
   
-  let formattedValue = '';
-  for (let i = 0; i < value.length; i++) {
-    if (i > 0 && i % 4 === 0) {
-      formattedValue += ' ';
-    }
-    formattedValue += value[i];
-  }
-  
-  input.value = formattedValue.substring(0, 19); // Limit to 16 digits + 3 spaces
+  value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+  input.value = value;
 }
 
-// Format expiry date
+// Formatage de la date d'expiration
 function formatExpiryDate(input) {
   let value = input.value.replace(/\D/g, '');
+  if (value.length > 4) value = value.substring(0, 4);
   
-  if (value.length > 2) {
-    input.value = value.substring(0, 2) + '/' + value.substring(2, 4);
-  } else {
-    input.value = value;
+  if (value.length >= 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2);
   }
+  
+  input.value = value;
 }
 
-// Event Listeners
-paymentMethods.forEach(method => {
-  method.addEventListener('click', () => {
-    selectPaymentMethod(method);
-  });
-});
-
-// Add input formatters
-if (document.getElementById('fedapay-card')) {
-  document.getElementById('fedapay-card').addEventListener('input', function() {
-    formatCardNumber(this);
-  });
+// Formatage du CVV
+function formatCVV(input) {
+  let value = input.value.replace(/\D/g, '');
+  if (value.length > 4) value = value.substring(0, 4);
+  input.value = value;
 }
 
-if (document.getElementById('fedapay-expiry')) {
-  document.getElementById('fedapay-expiry').addEventListener('input', function() {
-    formatExpiryDate(this);
-  });
-}
-
-// Form submissions
-submitButtons.forEach(button => {
-  button.addEventListener('click', processPayment);
-});
-
-// PayPal button
-if (paypalButton) {
-  paypalButton.addEventListener('click', () => {
-    // Simulate PayPal redirect
-    paypalButton.textContent = 'Redirecting to PayPal...';
-    paypalButton.disabled = true;
-    
-    setTimeout(() => {
-      paypalButton.textContent = 'Continue to PayPal';
-      paypalButton.disabled = false;
-      showSuccessModal();
-    }, 1500);
-  });
-}
-
-// Close modal
-if (closeModalButton) {
-  closeModalButton.addEventListener('click', closeModal);
-}
-
-// Initialize the page
-document.addEventListener('DOMContentLoaded', init);
-
-// Initialize the page gpt
-document.addEventListener('DOMContentLoaded', () => {
-  init();
-
-  const quartierSelect = document.getElementById("Quartier");
-  const fraisElement = document.getElementById("frais");
-  const deliveryForm = document.getElementById("delivery-form");
-  const paymentSection = document.querySelector(".payment-section");
-  const totalAmountDisplay = document.getElementById("total-amount");
-
-  const amountElements = document.querySelectorAll('.amount');
-
-  quartierSelect.addEventListener("change", function () {
-    const frais = parseInt(this.options[this.selectedIndex].getAttribute("data-frais")) || 0;
-    fraisElement.textContent = frais + " FCFA";
-
-    // Recalcul du total
-    const sousTotal = 299.99;  // Remplacer par valeur dynamique si possible
-    const taxe = 18.00;
-    const total = sousTotal + frais + taxe;
-
-    const totalFormatted = total.toLocaleString("fr-FR", {
-      style: "currency",
-      currency: "USD"
-    });
-
-    totalAmountDisplay.textContent = totalFormatted;
-
-    // Mettre à jour toutes les autres zones de montant
-    amountElements.forEach(el => {
-      el.textContent = totalFormatted;
-    });
-
-    // Met à jour la valeur utilisée pour crypto aussi
-    window.updatedTotal = total;
-  });
-
-  deliveryForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const requiredFields = deliveryForm.querySelectorAll("input[required], textarea[required], select[required]");
-    let allValid = true;
-
-    requiredFields.forEach(field => {
+// Validation du formulaire
+function validateForm() {
+  const requiredFields = document.querySelectorAll('#form-content [required]');
+  let isValid = true;
+  
+  requiredFields.forEach(field => {
+      field.classList.remove('error', 'success');
+      
       if (!field.value.trim()) {
-        field.classList.add("error");
-        allValid = false;
+          field.classList.add('error');
+          isValid = false;
       } else {
-        field.classList.remove("error");
+          field.classList.add('success');
       }
-    });
-
-    if (allValid) {
-      // Afficher la section Paiement
-      paymentSection.classList.remove("hidden");
-
-      // Activer l'étape 3
-      const step3 = document.querySelectorAll(".progress-step")[2];
-      const step2 = document.querySelectorAll(".progress-step")[1];
-      step2.classList.remove("active");
-      step2.classList.add("complete");
-      step3.classList.add("active");
-
-      // Scroll automatique vers la section paiement
-      paymentSection.scrollIntoView({ behavior: "smooth" });
-    }
   });
-});
+  
+  return isValid;
+}
+
+// Traitement du paiement
+function processPayment() {
+  if (!selectedMethod) {
+      showNotification('Veuillez sélectionner une méthode de paiement', 'error');
+      return;
+  }
+  
+  if (!validateForm()) {
+      showNotification('Veuillez remplir tous les champs obligatoires', 'error');
+      return;
+  }
+  
+  // Animation du bouton
+  const payButton = document.querySelector('.pay-button');
+  payButton.classList.add('loading');
+  payButton.textContent = 'Traitement en cours...';
+  payButton.disabled = true;
+  
+  // Simulation du traitement (3 secondes)
+  setTimeout(() => {
+      showPaymentSuccess();
+      payButton.classList.remove('loading');
+      payButton.textContent = 'Confirmer le paiement';
+      payButton.disabled = false;
+  }, 3000);
+}
+
+// Affichage du succès du paiement
+function showPaymentSuccess() {
+  const transactionRef = generateTransactionRef();
+  document.getElementById('transaction-ref').textContent = transactionRef;
+  document.getElementById('final-amount').textContent = `$${(totalAmount / 655.957).toFixed(2)}`;
+  document.getElementById('delivery-info').textContent = `${deliveryInfo.quartier} - ${deliveryInfo.jour} à ${deliveryInfo.heure}`;
+  
+  const modal = document.getElementById('success-modal');
+  modal.classList.remove('hidden');
+  
+  // Mise à jour de l'étape de progression
+  updateProgressStep(4);
+}
+
+// Téléchargement de la facture
+function downloadInvoice() {
+  // Simulation du téléchargement
+  showNotification('Facture téléchargée avec succès !', 'success');
+  
+  // Dans une vraie application, vous pourriez générer un PDF
+  // ou rediriger vers une URL de téléchargement
+}
+
+// Génération d'une référence de transaction
+function generateTransactionRef() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = 'TXN-';
+  for (let i = 0; i < 8; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+// Mise à jour de l'étape de progression
+function updateProgressStep(stepNumber) {
+  const steps = document.querySelectorAll('.step');
+  const lines = document.querySelectorAll('.step-line');
+  
+  steps.forEach((step, index) => {
+      step.classList.remove('active', 'completed');
+      if (index + 1 < stepNumber) {
+          step.classList.add('completed');
+      } else if (index + 1 === stepNumber) {
+          step.classList.add('active');
+      }
+  });
+  
+  lines.forEach((line, index) => {
+      if (index < stepNumber - 1) {
+          line.classList.add('completed');
+      } else {
+          line.classList.remove('completed');
+      }
+  });
+}
+
+// Fermeture du modal
+function closeModal() {
+  const modal = document.getElementById('success-modal');
+  modal.classList.add('hidden');
+  
+  // Redirection ou réinitialisation
+  window.location.href = '/boutique'; // Ou réinitialiser le formulaire
+}
+
+// Affichage des notifications
+function showNotification(message, type = 'info') {
+  // Supprimer les notifications existantes
+  const existingNotification = document.querySelector('.notification');
+  if (existingNotification) {
+      existingNotification.remove();
+  }
+  
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  
+  const colors = {
+    success: 'background: #c6f6d5; color: #22543d; border-left: 4px solid #38a169;',
+    error: 'background: #fed7d7; color: #c53030; border-left: 4px solid #e53e3e;',
+    info: 'background: #bee3f8; color: #2a69ac; border-left: 4px solid #3182ce;'
+  };
+  
+  notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      z-index: 1001;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      animation: slideIn 0.3s ease-out;
+      ${colors[type]}
+  `;
+  
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  // Supprimer après 5 secondes
+  setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease-in forwards';
+      setTimeout(() => notification.remove(), 300);
+  }, 5000);
+}
+
+// Ajout des styles d'animation pour les notifications
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+      from {
+          transform: translateX(100%);
+          opacity: 0;
+      }
+      to {
+          transform: translateX(0);
+          opacity: 1;
+      }
+  }
+  
+  @keyframes slideOut {
+      from {
+          transform: translateX(0);
+          opacity: 1;
+      }
+      to {
+          transform: translateX(100%);
+          opacity: 0;
+      }
+  }
+`;
+document.head.appendChild(style);

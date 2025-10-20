@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Paiement</title>
+        <title>Paiement - Smart & Co</title>
         <meta name="description" content="">
         <link rel="stylesheet" href="{% static 'css/Payments.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -90,91 +90,90 @@
             </div>
         </section>
 
-        <div class="containerP">
-
-            <!--Barre de progression-->
-            <header>
-                <div class="progress">
-                    <div class="progress-step complete">
+        <!--Progress steps-->
+        <div class="progress-container">
+            <div class="containerPro">
+                <div class="progress-steps">
+                    <div class="step completed">
                         <div class="step-number">1</div>
-                        <div class="step-text">Panier</div>
+                        <div class="step-label">Panier</div>
                     </div>
-                    <div class="progress-line"></div>
-                    <div class="progress-step active">
+                    <div class="step-line completed"></div>
+                    <div class="step active">
                         <div class="step-number">2</div>
-                        <div class="step-text">Livraison</div>
+                        <div class="step-label">Livraison</div>
                     </div>
-                    <div class="progress-line"></div>
-                    <div class="progress-step">
+                    <div class="step-line"></div>
+                    <div class="step">
                         <div class="step-number">3</div>
-                        <div class="step-text">Paiement</div>
+                        <div class="step-label">Paiement</div>
                     </div>
-                    <div class="progress-line"></div>
-                    <div class="progress-step">
+                    <div class="step-line"></div>
+                    <div class="step">
                         <div class="step-number">4</div>
-                        <div class="step-text">Confirmation</div>
+                        <div class="step-label">Confirmation</div>
                     </div>
                 </div>
-            </header>
+            </div>
+        </div>
 
-            <main>
-                <!-- Order summary -->
-                <section class="order-summary">
-                    <h2 class="HHH" class="h2P">Récapitulatif de la commande</h2>
-                    <div class="summary-card">
-                       <div class="summary-item">
-                            <div class="item-details">
-                                <img src="https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=100" alt="Smart Watch"></img>
-                                <div>
-                                    <h3>Montre connectée</h3>
-                                    <p>Quantité: 1</p>
-                                </div>
+        <!--Main Content-->
+        <main class="main-content">
+            <div class="containerPro">
+                <div class="payment-layout">
+                    <!-- Order Summary -->
+                    <div class="order-summary">
+                        <h2>Récapitulatif de la commande</h2>
+
+                        <div class="product-item">
+                            <div class="product-image">
+                                <img src="https://images.pexels.com/photos/393047/pexels-photo-393047.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Montre connectée">
                             </div>
-                            <div class="item-price">$299.99</div>
-                       </div> 
-                       <div class="summary-divider"></div>
-                       <div class="summary-totals">
-                            <div class="total-line">
+                            <div class="product-details">
+                                <h3>Montre connectée</h3>
+                                <p class="product-quantity">Quantité: 1</p>
+                            </div>
+                            <div class="product-price">$299.99</div>
+                        </div>
+
+                        <div class="order-totals">
+                            <div class="total-row">
                                 <span>Sous-total</span>
                                 <span>$299.99</span>
                             </div>
-                            <div class="total-line">
+                            <div class="total-row">
                                 <span>Livraison</span>
                                 <span>$9.99</span>
                             </div>
-                            <div class="total-line total">
+                            <div class="total-row total-final">
                                 <span>Total</span>
                                 <span id="total-amount">$327.98</span>
                             </div>
                         </div>
                     </div>
-                </section>
 
-                <!-- Livraison -->
-                <section class="delivery-section">
-                    <form id="delivery-form">
-                        <h2>Informations de livraison</h2>
+                    <!--Delivery Section-->
+                    <div class="delivery-section">
+                        <form id="livraison-form">
+                            <h2>Informations de livraison</h2>
 
-                        <!--Quartier-->
-                        <div class="form-group">
-                            <label for="Quartier">Choisissez votre zone de livraison :</label>
-                            <select id="Quartier" name="Quartier" required>
-                                <option value="" selected disabled>Choisissez votre zone de livraison</option>
-                                <option value="Quartier 1" data-frais="700">Agla/Fidjrossè/Aïbatin/Houéyiho/Vèdoko/Vodjè/Gbégamey/Etoile Rouge</option>
-                                <option value="Quartier 2" data-frais="700">Kindonou/Ménontin/Stade de l'Amitié/Zogbo/Ste Rita/Gbèdjromédé</option>
-                                <option value="Quartier 3" data-frais="1000">Jéricho/Aidjèdo/St Michel/St Jean/Yokpa/Avenue Steinmez/Ganhi</option>
-                                <option value="Quartier 4" data-frais="1000">Route des pêches/Aéroport/Cadjèhoun/Haie Vive/CNHU/Camp Guézo/Zongo</option>
-                                <option value="Quartier 5" data-frais="1500">Sacré Cœur/Sègbéya/Sènandé 1 & 2/Carrefour La Roche/Carrefour La Béninoise</option>
-                                <option value="Quartier 6" data-frais="1500">Abattoir/Yénawa/Lom'nava/Minontchou/Ayélawadjè/Sodjatimé/Gbèdokpo/Avotrou/Dédokpo</option>
-                                <option value="Quartier 7" data-frais="1000">Cococodji/Cocotomey/Hèvié/Womey/Gbôdjè/Marché de Pahou</option>
-                                <option value="Quartier 8" data-frais="1500">Abattoir/Carrefour Le Bélier / Agblangandan / PK10 / PK11</option>
-                                <option value="Quartier 9" data-frais="2000">Sèmè-kpodji/Djeffa</option>
-                                <option value="Quartier 10" data-frais="2500">Houézoumè/Attakê/Djassin/Houinmè/Ouando et autres</option>
-                                <option value="Quartier 11" data-frais="600">CEG Godomey/Godomey Gare/Akogbato/Dèkoungbé/PK14/Atrokpocodji/Carrefor IITA</option>
-                                <option value="Quartier 12" data-frais="700">Tankpè/UAC-Campus/Bidossessi/Kpota/Arconville/Hôpital de Zone/SOS Village d'Enfants</option>
-                                <option value="Quartier 13" data-frais="1000">Akassato/Missessinto/Ouèdo</option>
-                                <option value="Quartier 14" data-frais="2500">Parakou/Natitingou</option>
-                            </select>
+                            <!-- Quartier -->
+                            <div class="form-group">
+                                <label for="quartier">Choisissez votre quartier :</label>
+                                <select id="quartier" name="quartier" required>
+                                    <option value="">-- Sélectionner un quartier --</option>
+                                    <option value="Fidjrossè" data-frais="1000">Fidjrossè</option>
+                                    <option value="Tankpè" data-frais="1500">Tankpè</option>
+                                    <option value="Akpakpa" data-frais="1200">Akpakpa</option>
+                                    <option value="Godomey" data-frais="2000">Godomey</option>
+                                    <option value="Calavi" data-frais="2500">Calavi</option>
+                                    <option value="Dantokpa" data-frais="800">Dantokpa</option>
+                                    <option value="Ganhi" data-frais="1800">Ganhi</option>
+                                    <option value="Vedoko" data-frais="2200">Vedoko</option>
+                                    <option value="Agla" data-frais="1600">Agla</option>
+                                    <option value="Zongo" data-frais="1300">Zongo</option>
+                                </select>
+                            </div>
 
                             <!-- Montant de la livraison -->
                             <div class="delivery-cost">
@@ -185,12 +184,12 @@
                             <div class="form-group">
                                 <label for="details">Détails sur le lieu exact :</label>
                                 <textarea id="details" name="details" required placeholder="Ex : Maison verte près du marché..."></textarea>
-                            </div>  
+                            </div>
 
                             <!-- Numéro de téléphone -->
                             <div class="form-group">
                                 <label for="phone">Numéro de téléphone à contacter :</label>
-                                <input type="tel" id="phone" name="phone" required placeholder="Ex : 01XXXXXXXX">
+                                <input type="tel" id="phone" name="phone" required placeholder="Ex : 01 23 45 67 89">
                             </div>
 
                             <!-- Jour de livraison -->
@@ -227,354 +226,193 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
-
-                        <button type="submit" class="continue-button">Continuer vers le paiement</button>
-                    </form>
-                </section>    
-
-                <!-- Payment Method -->
-                <section class="payment-section hidden">
-                    <h2>Méthode de paiement</h2>
-                    <div id="payment-methods" class="payment-methods">
-
-                        <!--MTN Mobile Money-->
-                        <div class="payment-method" data-method="mtn">
-                            <div class="method-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone">
-                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-                                <path d="M12 18h.01" />
-                            </svg>
-                            </div>
-                            <div class="method-name">MTN Mobile Money</div>
-                        </div>
-
-                        <!--Moov-->
-                        <div class="payment-method" data-method="moov">
-                            <div class="method-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone">
-                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-                                <path d="M12 18h.01" />
-                            </svg>
-                            </div>
-                            <div class="method-name">Moov</div>
-                        </div>
-
-                        <!--Celtiis Cash-->
-                        <div class="payment-method" data-method="celtiis">
-                            <div class="method-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone">
-                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-                                <path d="M12 18h.01" />
-                            </svg>
-                            </div>
-                            <div class="method-name">Celtiis Cash</div>
-                        </div>
-
-                        <!--Orange Money-->
-                        <div class="payment-method" data-method="orange">
-                            <div class="method-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone">
-                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-                                <path d="M12 18h.01" />
-                            </svg>
-                            </div>
-                            <div class="method-name">Orange Money</div>
-                        </div>
-
-                        <!--Wave-->
-                        <div class="payment-method" data-method="wave">
-                            <div class="method-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-waves">
-                                <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-                                <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-                                <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-                            </svg>
-                            </div>
-                            <div class="method-name">Wave</div>
-                        </div>
-
-                        <!--Cryptocurrency-->
-                        <div class="payment-method" data-method="crypto">
-                            <div class="method-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bitcoin">
-                                <path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m3.94.694-.347 1.969" />
-                                <path d="M7.116 7.229c3.767-4.082 12.293-4.229 17.277-1.768" />
-                            </svg>
-                            </div>
-                            <div class="method-name">Crypto-monnaie</div>
-                        </div>
-
-                        <!--Fedapay-->
-                        <div class="payment-method" data-method="fedapay">
-                            <div class="method-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card">
-                                <rect width="20" height="14" x="2" y="5" rx="2" />
-                                <line x1="2" x2="22" y1="10" y2="10" />
-                            </svg>
-                            </div>
-                            <div class="method-name">Fedapay</div>
-                        </div>
-
-                        <!--Paypal-->
-                        <div class="payment-method" data-method="paypal">
-                            <div class="method-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card">
-                                <rect width="20" height="14" x="2" y="5" rx="2" />
-                                <line x1="2" x2="22" y1="10" y2="10" />
-                            </svg>
-                            </div>
-                            <div class="method-name">PayPal</div>
-                        </div>
-
-                        <!--Bank Account-->
-                        <div class="payment-method" data-method="bank">
-                            <div class="method-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building">
-                                    <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
-                                    <path d="M9 22v-4h6v4" />
-                                    <path d="M8 6h.01" />
-                                    <path d="M16 6h.01" />
-                                    <path d="M12 6h.01" />
-                                    <path d="M12 10h.01" />
-                                    <path d="M12 14h.01" />
-                                    <path d="M16 10h.01" />
-                                    <path d="M16 14h.01" />
-                                    <path d="M8 10h.01" />
-                                    <path d="M8 14h.01" />
-                                </svg>
-                            </div>
-                            <div class="method-name">Compte bancaire</div>
-                        </div>
+                            <button type="submit" class="continue-button">Continuer vers le paiement</button>
+                        </form>
                     </div>
 
-                    <!--Payment Forms-->
-                    <div id="payment-forms" class="payment-forms hidden">
+                    <!-- Payment Methods (Hidden initially) -->
+                    <div class="payment-section hidden">
+                        <h2>Méthode de paiement</h2>
 
-                        <!-- MTN Mobile Money Form -->
-                        <div id="mtn-form" class="payment-form">
-                            <h3>MTN Mobile Money</h3>
-                            <form>
-                                <div class="form-group">
-                                    <label for="mtn-phone">Numéro de téléphone</label>
-                                    <input type="tel" id="mtn-phone" placeholder="01XXXXXXXX" required></input>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="form-info">
-                                    <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
-                                </div>
-                                <button type="submit" class="btn-primary">Payer maintenant</button>
-                            </form>
-                        </div>
-
-                        <!-- Moov Form -->
-                        <div id="moov-form" class="payment-form">
-                            <h3>Moov</h3>
-                            <form>
-                                <div class="form-group">
-                                    <label for="moov-phone">Numéro de téléphone</label>
-                                    <input type="tel" id="moov-phone" placeholder="01XXXXXXXX" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="form-info">
-                                    <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
-                                </div>
-                                <button type="submit" class="btn-primary">Payer maintenant</button>
-                            </form>
-                        </div>
-
-                        <!-- Celtiis Cash Form -->
-                        <div id="celtiis-form" class="payment-form">
-                            <h3>Celtiis Cash</h3>
-                            <form>
-                                <div class="form-group">
-                                    <label for="celtiis-phone">Numéro de téléphone</label>
-                                    <input type="tel" id="celtiis-phone" placeholder="01XXXXXXXX" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="form-info">
-                                    <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
-                                </div>
-                                <button type="submit" class="btn-primary">Payer maintenant</button>
-                            </form>
-                        </div>
-
-                        <!-- Orange Money Form -->
-                        <div id="orange-form" class="payment-form">
-                            <h3>Orange Money</h3>
-                            <form>
-                                <div class="form-group">
-                                    <label for="orange-phone">Numéro de téléphone</label>
-                                    <input type="tel" id="orange-phone" placeholder="e.g., 0779876543" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="form-info">
-                                    <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
-                                </div>
-                                <button type="submit" class="btn-primary">Payer maintenant</button>
-                            </form>
-                        </div>
-
-                        <!-- Wave Form -->
-                        <div id="wave-form" class="payment-form">
-                            <h3>Wave</h3>
-                            <form>
-                            <div class="form-group">
-                                <label for="wave-phone">Numéro de téléphone</label>
-                                <input type="tel" id="wave-phone" placeholder="e.g., 0789876543" required>
-                                <span class="error-message"></span>
+                        <div class="payment-methods-grid">
+                            <div class="payment-method" data-method="mtn">
+                                <div class="method-icon">📱</div>
+                                <div class="method-name">MTN Mobile Money</div>
                             </div>
-                            <div class="form-info">
-                                <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <span class="amount">$327.98</span></p>
+                            
+                            <div class="payment-method" data-method="moov">
+                                <div class="method-icon">💳</div>
+                                <div class="method-name">Moov</div>
                             </div>
-                            <button type="submit" class="btn-primary">Payer maintenant</button>
-                            </form>
-                        </div>
-
-                        <!-- Cryptocurrency Form -->
-                        <div id="crypto-form" class="payment-form">
-                            <h3>Paiement en Cryptomonnaie</h3>
-                            <div class="crypto-options">
-                                <div class="form-group">
-                                    <label for="crypto-currency">Sélectionner la Cryptomonnaie</label>
-                                    <select id="crypto-currency" required>
-                                        <option value="" selected disabled>Choisir la Cryptomonnaie</option>
-                                        <option value="btc">Bitcoin (BTC)</option>
-                                        <option value="eth">Ethereum (ETH)</option>
-                                        <option value="usdt">Tether (USDT)</option>
-                                        <option value="bnb">Binance Coin (BNB)</option>
-                                    </select>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="crypto-address">
-                                    <p class="crypto-instruction">Envoyer exactement <span class="crypto-amount">0.0123 BTC</span> à:</p>
-                                    <div class="wallet-address">
-                                        <code id="wallet-address">bc1p9r4s9uqfhwthpclga3t33xwjx8hqeemfvdc7uvlrk56v956py4vqzl4u5j</code>
-                                        <button type="button" class="btn-copy" onclick="copyWalletAddress()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy">
-                                                <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-                                                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <div class="qr-code">
-                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=bc1p9r4s9uqfhwthpclga3t33xwjx8hqeemfvdc7uvlrk56v956py4vqzl4u5j" alt="Wallet QR Code">
-                                    </div>
-                                </div>
-                                <div class="form-info crypto-info">
-                                    <p>Après avoir envoyé le paiement, cliquez sur le bouton ci-dessous pour vérifier la transaction</p>
-                                </div>
-                                <button type="button" class="btn-primary" onclick="verifyTransaction()">Vérifier le paiement</button>
+                            
+                            <div class="payment-method" data-method="celtiis">
+                                <div class="method-icon">💰</div>
+                                <div class="method-name">Celtiis Cash</div>
+                            </div>
+                            
+                            <div class="payment-method" data-method="orange">
+                                <div class="method-icon">🍊</div>
+                                <div class="method-name">Orange Money</div>
+                            </div>
+                            
+                            <div class="payment-method" data-method="wave">
+                                <div class="method-icon">🌊</div>
+                                <div class="method-name">Wave</div>
+                            </div>
+                            
+                            <div class="payment-method" data-method="crypto">
+                                <div class="method-icon">₿</div>
+                                <div class="method-name">Crypto-monnaie</div>
+                            </div>
+                            
+                            <div class="payment-method" data-method="fedapay">
+                                <div class="method-icon">🛡️</div>
+                                <div class="method-name">Fedapay</div>
+                            </div>
+                            
+                            <div class="payment-method" data-method="paypal">
+                                <div class="method-icon">💙</div>
+                                <div class="method-name">PayPal</div>
+                            </div>
+                            
+                            <div class="payment-method full-width" data-method="card">
+                                <div class="method-icon">💳</div>
+                                <div class="method-name">Compte bancaire</div>
                             </div>
                         </div>
 
-                        <!-- Fedapay Form -->
-                        <div id="fedapay-form" class="payment-form">
-                            <h3>Fedapay</h3>
-                            <form>
-                                <div class="form-group">
-                                    <label for="fedapay-card">Numéro de carte</label>
-                                    <input type="text" id="fedapay-card" placeholder="XXXX XXXX XXXX XXXX" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                    <label for="fedapay-expiry">Date d'expiration</label>
-                                    <input type="text" id="fedapay-expiry" placeholder="MM/YY" required>
-                                    <span class="error-message"></span>
-                                    </div>
-                                    <div class="form-group">
-                                    <label for="fedapay-cvv">Code de sécurité</label>
-                                    <input type="text" id="fedapay-cvv" placeholder="XXX" required>
-                                    <span class="error-message"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="fedapay-name">Nom du titulaire de la carte</label>
-                                    <input type="text" id="fedapay-name" placeholder="As shown on card" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <button type="submit" class="btn-primary">Pay $327.98</button>
-                            </form>
-                        </div>
-
-                        <!-- PayPal Form -->
-                        <div id="paypal-form" class="payment-form">
-                            <h3>PayPal</h3>
-                            <div class="paypal-info">
-                                <p>Vous serez redirigé vers PayPal pour compléter votre paiement de <span class="amount">$327.98</span></p>
-                                <button type="button" class="btn-paypal">Continuer vers PayPal</button>
+                        <!-- Payment Form -->
+                        <div id="payment-form" class="payment-form hidden">
+                            {% csrf_token %}
+                            <h3 id="selected-method-title">MTN Mobile Money</h3>
+                            
+                            <div id="form-content">
+                                <!-- Le contenu sera généré dynamiquement -->
                             </div>
-                        </div>
 
-                        <!-- Bank Account Form -->
-                        <div id="bank-form" class="payment-form">
-                            <h3>Compte Bancaire</h3>
-                            <form>
-                                <div class="form-group">
-                                    <label for="bank-name">Nom de la banque</label>
-                                    <select id="bank-name" required>
-                                    <option value="" selected disabled>Choisir votre banque</option>
-                                    <option value="ecobank">Ecobank</option>
-                                    <option value="boa">Bank of Africa</option>
-                                    <option value="sgbci">Société Générale</option>
-                                    <option value="other">Autre</option>
-                                    </select>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="account-number">Numéro de compte</label>
-                                    <input type="text" id="account-number" placeholder="Your account number" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="account-name">Nom du titulaire du compte</label>
-                                    <input type="text" id="account-name" placeholder="Name on account" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <button type="submit" class="btn-primary">Confirmer le paiement de $327.98</button>
-                            </form>
+                            <div class="payment-info">
+                                <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <strong id="payment-amount">$327.98</strong></p>
+                            </div>
+
+                            <button type="button" class="pay-button" onclick="processPayment()">
+                                Confirmer le paiement
+                            </button>
                         </div>
                     </div>
-                </section>
-            </main>
-
-            <!-- Footer -->
-            <footer>
-                <div class="secure-payment">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock">
-                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                    <span>Paiement sécurié</span>
                 </div>
-                <p>&copy; SMART & Co. Tous droits réservés.</p>
-            </footer>
+            </div>
+        </main>
+
+        <!-- Invoice Modal -->
+        <div id="invoice-modal" class="modal hidden">
+            <div class="modal-content invoice-modal">
+                <div class="invoice-header">
+                    <h2>Facture de commande</h2>
+                    <div class="invoice-number">Facture #<span id="invoice-number"></span></div>
+                </div>
+                
+                <div class="invoice-details">
+                    <div class="invoice-section">
+                        <h3>Informations client</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">Téléphone :</span>
+                                <span id="client-phone">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Quartier :</span>
+                                <span id="client-quartier">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Adresse :</span>
+                                <span id="client-address">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Livraison :</span>
+                                <span id="client-delivery-time">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="invoice-section">
+                        <h3>Détails de la commande</h3>
+                        <div class="invoice-product">
+                            <div class="product-info">
+                                <img src="https://images.pexels.com/photos/393047/pexels-photo-393047.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop" alt="Montre connectée">
+                                <div>
+                                    <strong>Montre connectée</strong>
+                                    <div class="quantity">Quantité: 1</div>
+                                </div>
+                            </div>
+                            <div class="product-price">$299.99</div>
+                        </div>
+                    </div>
+
+                    <div class="invoice-totals">
+                        <div class="total-row">
+                            <span>Sous-total</span>
+                            <span>$299.99</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Frais de livraison</span>
+                            <span id="invoice-delivery-fee">$0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Taxe</span>
+                            <span>$18.00</span>
+                        </div>
+                        <div class="total-row total-final">
+                            <span>Total à payer à la livraison</span>
+                            <span id="invoice-total">$327.98</span>
+                        </div>
+                    </div>
+
+                    <div class="payment-instructions">
+                        <h3>Instructions de paiement</h3>
+                        <p>Veuillez avoir le montant exact prêt lors de la livraison. Le livreur accepte :</p>
+                        <ul>
+                            <li>Espèces (FCFA)</li>
+                            <li>MTN Mobile Money</li>
+                            <li>Moov Money</li>
+                            <li>Orange Money</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="invoice-actions">
+                    <button class="download-button" onclick="downloadInvoice()">
+                        📄 Télécharger la facture
+                    </button>
+                    <button class="continue-button" onclick="closeInvoiceModal()">
+                        Fermer
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- Payment Success Modal -->
-        <div id="payment-success" class="modal">
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal hidden">
             <div class="modal-content">
-                <div class="success-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="m9 12 2 2 4-4" />
-                    </svg>
-                </div>
-                <h2>Paiement réussi!</h2>
-                <p>Votre paiement de <span id="success-amount">$327.98</span> a été traité avec succès.</p>
-                <p>Commande #<span id="order-number">TG-2025042</span></p>
-                <div class="confirmation-details">
-                    <p>Un e-mail de confirmation a été envoyé à votre adresse e-mail enregistrée.</p>
-                    <div class="delivery-info">
-                        <h3>Livraison estimée</h3>
-                        <p id="delivery-date">March 15, 2025</p>
+                <div class="success-icon">✓</div>
+                <h2>Paiement réussi !</h2>
+                <p>Votre commande a été confirmée avec succès.</p>
+                <div class="transaction-details">
+                    <div class="detail-row">
+                        <span>Montant:</span>
+                        <span id="final-amount">$327.98</span>
                     </div>
-                    <div class="tracking-info">
-                        <p>Vous recevrez des informations de suivi une fois votre commande expédiée.</p>
+                    <div class="detail-row">
+                        <span>Référence:</span>
+                        <span id="transaction-ref">TXN-ABC123</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Livraison:</span>
+                        <span id="delivery-info">-</span>
                     </div>
                 </div>
-                <button id="close-modal" class="btn-primary">Continuer vos achats</button>
+                <button class="continue-button" onclick="closeModal()">
+                    Continuer mes achats
+                </button>
             </div>
         </div>
         
