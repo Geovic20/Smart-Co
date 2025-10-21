@@ -258,7 +258,7 @@ body {
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 .payment-method.selected {
-  border-color: #667eea;
+  border-color: #007bff;
   background: #eef2ff;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
@@ -281,7 +281,7 @@ body {
   color: #4a5568;
 }
 .payment-method.selected .method-name {
-  color: #667eea;
+  color: #007bff;
   font-weight: 600;
 }
 
@@ -651,9 +651,9 @@ input[type="time"] {
   margin-bottom: 0;
 }
 .continue-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
+  background: #fff;
+  color: #007bff;
+  border: 1px solid #007bff;
   padding: 0.875rem 2rem;
   border-radius: 8px;
   font-size: 1rem;

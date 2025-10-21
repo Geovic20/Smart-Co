@@ -440,29 +440,73 @@ function validateForm() {
 
 // Traitement du paiement
 function processPayment() {
-  if (!selectedMethod) {
-      showNotification('Veuillez sélectionner une méthode de paiement', 'error');
-      return;
-  }
-  
-  if (!validateForm()) {
-      showNotification('Veuillez remplir tous les champs obligatoires', 'error');
-      return;
-  }
-  
-  // Animation du bouton
-  const payButton = document.querySelector('.pay-button');
-  payButton.classList.add('loading');
-  payButton.textContent = 'Traitement en cours...';
-  payButton.disabled = true;
-  
-  // Simulation du traitement (3 secondes)
-  setTimeout(() => {
-      showPaymentSuccess();
-      payButton.classList.remove('loading');
-      payButton.textContent = 'Confirmer le paiement';
-      payButton.disabled = false;
-  }, 3000);
+    // Validation initiale
+    if (!selectedMethod) {
+        showNotification('Veuillez sélectionner une méthode de paiement', 'error');
+        return;
+    }
+    
+    if (!validateForm()) {
+        showNotification('Veuillez remplir tous les champs obligatoires', 'error');
+        return;
+    }
+    
+    // Animation du bouton
+    const payButton = document.querySelector('.pay-button');
+    payButton.classList.add('loading');
+    payButton.textContent = 'Traitement en cours...';
+    payButton.disabled = true;
+    
+    // Préparer les données du formulaire
+    const formData = new FormData(document.getElementById('payment-form'));
+    formData.append('payment-method', selectedMethod); // Ajouter la méthode sélectionnée
+
+    // Envoyer la requête au backend
+    fetch('/payments/process/', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-CSRFToken': getCookie('csrftoken') }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erreur réseau ou serveur');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Réponse du serveur
+        if (data.status === 'success') {
+            showPaymentSuccess(data.transaction_id, data.total_amount); // Ajuste si besoin
+            updateProgressStep(3); // Passe à l'étape confirmation
+        } else {
+            throw new Error(data.message || 'Paiement échoué');
+        }
+    })
+    .catch(error => {
+        showNotification(error.message || 'Erreur lors du traitement du paiement.', 'error');
+    })
+    .finally(() => {
+        // Restaurer le bouton
+        payButton.classList.remove('loading');
+        payButton.textContent = 'Confirmer le paiement';
+        payButton.disabled = false;
+    });
+}
+
+// Fonction utilitaire pour CSRF (si non présente)
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
 // Affichage du succès du paiement

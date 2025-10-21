@@ -5,9 +5,7 @@ from django.views.decorators.http import require_POST
 from Cart.models import Cart, CartItem
 from Products.models import Products
 from django.db import transaction
-from django.db.models import Sum
 import logging
-from decimal import Decimal
 
 logger = logging.getLogger(__name__)
 
@@ -288,3 +286,5 @@ def get_cart_summary(request):
 def Guest(request):
     """Page pour les utilisateurs non connectés"""
     return render(request, 'Guest.html')
+
+
