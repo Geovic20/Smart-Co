@@ -434,7 +434,6 @@ function validateForm() {
           field.classList.add('success');
       }
   });
-  
   return isValid;
 }
 

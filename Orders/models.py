@@ -22,11 +22,11 @@ class Commandes(models.Model):
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(Order_status, on_delete=models.CASCADE)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Calculé dynamiquement
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    address = models.CharField(max_length=200)
-    city = models.CharField(max_length=100)
-    phone = models.CharField(max_length=15)
+    first_name = models.CharField(max_length=50, default="John")
+    last_name = models.CharField(max_length=50 , default="Doe")
+    address = models.CharField(max_length=200, default="Godomey")
+    city = models.CharField(max_length=100, default="Cotonou")
+    phone = models.CharField(max_length=15, default="0190835005")
     shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
