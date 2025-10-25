@@ -51,14 +51,16 @@
                         <li><a href="{% url 'login_signup' %}">Authentification</a></li>
                     {% endif %}
 
-                    <li id="lg-bag"><a href="{% url 'Chariot' %}">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        {% if user.is_authenticated %}
-                            <span id="cart-count">{{ cart_items.count }}</span>
-                        {% else %}
-                            <span id="cart-count">0</span>
-                        {% endif %}
-                    </a></li>
+                    <li id="lg-bag" >
+                        <a href="{% url 'Chariot' %}">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            {% if user.is_authenticated %}
+                                <span id="cart-count">{{ items.count }}</span>
+                            {% else %}
+                                <span id="cart-count">0</span>
+                            {% endif %}
+                        </a>
+                    </li>
                     <a href="#" id="close"><i class="fa-solid fa-x"></i></a>
                 </ul>
             </div>

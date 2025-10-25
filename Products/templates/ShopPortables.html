@@ -61,10 +61,10 @@
                     {% endif %}
 
                     <li id="lg-bag" >
-                        <a class="active" href="{% url 'Chariot' %}">
+                        <a href="{% url 'Chariot' %}">
                             <i class="fa-solid fa-cart-shopping"></i>
                             {% if user.is_authenticated %}
-                                <span id="cart-count">{{ cart_items.count }}</span>
+                                <span id="cart-count">{{ items.count }}</span>
                             {% else %}
                                 <span id="cart-count">0</span>
                             {% endif %}
