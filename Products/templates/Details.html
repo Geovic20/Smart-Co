@@ -181,7 +181,7 @@
                     <span>📝 {{ product.description }}</span>
                 </div>
             {% else %}
-              <!--<p>🚫 Aucun détail spécifique pour ce smartphone.</p>-->
+              <p>🚫 Aucun détail spécifique pour ce smartphone.</p>
             {% endif %}
         </section>
           
@@ -275,7 +275,7 @@
                 <a href="index.html"><img class="logo" src="{% static 'images/logo3.png' %}" alt=""></a>
                 <h4>Contact</h4>
                 <p><strong>Adresse:</strong> Godomey Togoude, Rue de la Pharmacie Le Jourdain</p>
-                <p><strong>Numéro:</strong> +229 90835005/ +229 40543686</p>
+                <p><strong>Numéro:</strong> +229 0190835005/ +229 0140543686</p>
                 <p><strong>Horaire:</strong> Du lundi au Samedi de 10h à 19h</p>
                 <div class="follow">
                     <h4>Suivez-nous</h4>
@@ -474,8 +474,19 @@
                     box-shawdow: 0 0 0 2px  rgba(8, 129, 120, 0.1);
                 }
             `;
-            document.head.appendChild(style);
-                
+            document.head.appendChild(style);        
+        </script>
+        <script src="{% static 'js/Panier.js' %}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                updateCartCount();  // Initialise le compteur
+
+                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        setTimeout(updateCartCount, 500);
+                    });
+                });
+            });
         </script>
     </body>
 </html>

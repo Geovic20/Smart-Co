@@ -142,5 +142,17 @@
             window.LOGIN_URL = "{% url 'login_signup' %}";
         </script>
         <script src="{% static 'js/Favoris.js' %}"></script>
+        <script src="{% static 'js/Panier.js' %}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                updateCartCount();  // Initialise le compteur
+
+                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        setTimeout(updateCartCount, 500);
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

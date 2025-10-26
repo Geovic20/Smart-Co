@@ -11,7 +11,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Playwrite+NZ:wght@100..400&display=swap" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/> <!--Intégration de AOS-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/> 
         <!-- 🔌 Icône du site -->
         <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/icons8-gadgets-32.png' %}">
         <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/icons8-gadgets-32.png' %}">
@@ -453,6 +453,18 @@
             const TOGGLE_FAVORI_URL = "{% url 'toggle_favori' %}";
             const CSRF_TOKEN = "{{ csrf_token }}";
             const Login = "{% url 'login_signup' %}";
-        </script>         
+        </script>    
+        <script src="{% static 'js/Panier.js' %}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                updateCartCount();  // Initialise le compteur
+
+                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        setTimeout(updateCartCount, 500);
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

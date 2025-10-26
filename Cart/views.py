@@ -228,17 +228,17 @@ def get_cart_count(request):
     try:
         cart = Cart.objects.get(user=request.user)
         total_items = cart.total_items()
-        
+        print(f"Debug: Total items = {total_items}")  # Ajout pour débogage
         return JsonResponse({
             'status': 'success',
             'total_items': total_items
         })
     except Cart.DoesNotExist:
+        print("Debug: Cart not found for user")
         return JsonResponse({
             'status': 'success',
             'total_items': 0
         })
-
 
 @login_required
 def get_cart_summary(request):

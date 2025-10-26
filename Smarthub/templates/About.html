@@ -390,6 +390,18 @@
 
         <script src="{% static 'js/About.js' %}"></script>
         <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/Panier.js' %}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                updateCartCount();  // Initialise le compteur
+
+                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        setTimeout(updateCartCount, 500);
+                    });
+                });
+            });
+        </script>
     </body>
 
 </html>

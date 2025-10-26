@@ -90,7 +90,6 @@
         </section>
          
         <div id="product-page-body">
-
             <!--TOP SECTION-->
             <div id="product-top-container">
                 <div id="product-top-wrapper">
@@ -259,6 +258,18 @@
         <script src="{% static 'js/Favoris.js' %}"></script>
         <script>
             const Login = "{% url 'login_signup' %}";
+        </script>
+        <script src="{% static 'js/Panier.js' %}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                updateCartCount();  // Initialise le compteur
+
+                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        setTimeout(updateCartCount, 500);
+                    });
+                });
+            });
         </script>
     </body>
 

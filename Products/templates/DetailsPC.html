@@ -16,7 +16,6 @@
     </head>
 
     <body>
-
         <!--Header-->
         <section id="header">
             <a id="logo" href="{% url 'index' %}"><span>S.M.A.R.T.  & Co</span> </a>
@@ -227,6 +226,18 @@
             smallimg[3].onclick = function(){
                 MainImg.src = smallimg[3].src;
             }
+        </script>
+        <script src="{% static 'js/Panier.js' %}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                updateCartCount();  // Initialise le compteur
+
+                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        setTimeout(updateCartCount, 500);
+                    });
+                });
+            });
         </script>
     </body>
 </html>

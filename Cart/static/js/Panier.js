@@ -128,20 +128,54 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==================== UPDATE CART COUNT ====================
     function updateCartCount() {
         const items = document.querySelectorAll('.cart-item');
-        const totalQuantity = Array.from(items).reduce((sum, item) => {
-            const quantity = parseInt(item.querySelector('.quantity-input').value) || 0;
-            return sum + quantity;
-        }, 0);
+        let totalQuantity = 0;
 
+        if (items.length > 0) {
+            // Sur Chariot.html : calculer à partir du DOM
+            totalQuantity = Array.from(items).reduce((sum, item) => {
+                const quantity = parseInt(item.querySelector('.quantity-input').value) || 0;
+                return sum + quantity;
+            }, 0);
+        } else {
+            // Sur autres pages : appel AJAX
+            fetch('/Cart/get_cart_count/', {
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur serveur: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    totalQuantity = data.total_items || 0;
+                } else {
+                    console.error('Erreur AJAX:', data.message);
+                }
+                updateDisplay(totalQuantity);
+            })
+            .catch(error => {
+                console.error('Erreur réseau:', error);
+                updateDisplay(0);
+            });
+            return;  // Asynchrone, sortie anticipée
+        }
+
+        updateDisplay(totalQuantity);
+    }
+
+    // Met à jour l'affichage du nombre d'articles dans le panier
+    function updateDisplay(totalQuantity) {
         const cartCountElement = document.getElementById('cart-count');
         if (cartCountElement) {
             cartCountElement.textContent = totalQuantity;
         }
 
-        // Update header
         const cartHeader = document.querySelector('.cart-header h2');
         if (cartHeader) {
-            cartHeader.textContent = `Panier de Géovic (${items.length} articles)`;
+            cartHeader.textContent = `Panier de Géovic (${totalQuantity} articles)`;
         }
     }
 
