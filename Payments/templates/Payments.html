@@ -123,19 +123,19 @@
                 <div class="payment-layout">
                     <!-- Order Summary -->
                     <div class="order-summary">
-                        <h2>Récapitulatif de la commande de {{ user.username }} ({{ items_count }} article{{ items_count|pluralize }})</h2>
+                        <h2>Récapitulatif de la commande</h2>
                         <div class="order-totals">
                             <div class="total-row">
-                                <span>Sous-total</span>
-                                <span>150 000 f cfa</span>
+                                <span>Montant de la commande</span>
+                                <span id="subtotal">{{ subtotal|floatformat:0 }} F CFA</span>
                             </div>
                             <div class="total-row">
                                 <span>Livraison</span>
-                                <span>60 000 f cfa</span>
+                                <span id="shipping">0 F CFA</span>
                             </div>
                             <div class="total-row total-final">
-                                <span>Total</span>
-                                <span id="total-amount">80 000 f cfa</span>
+                                <span>TOTAL GENERAL</span>
+                                <span id="total-amount">{{ subtotal|floatformat:0 }} F CFA</span>
                             </div>
                         </div>
                     </div>

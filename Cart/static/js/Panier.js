@@ -57,30 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
 
-    // ==================== SHIPPING PROGRESS ====================
-    function updateShippingProgress() {
-        const subtotalElement = document.getElementById('subtotal');
-        if (!subtotalElement) return;
-
-        const subtotalText = subtotalElement.textContent.replace(/[^\d]/g, '');
-        const subtotal = parseFloat(subtotalText) || 0;
-        const progressBar = document.querySelector('.progress-fill');
-        const progressText = document.getElementById('progress-text');
-        
-        if (!progressBar || !progressText) return;
-
-        const freeShippingThreshold = 75000; // 75 000 F CFA
-        const progress = (subtotal / freeShippingThreshold) * 100;
-        progressBar.style.width = Math.min(progress, 100) + '%';
-        
-        const remaining = Math.max(0, freeShippingThreshold - subtotal);
-        if (remaining > 0) {
-            progressText.textContent = `Plus que ${remaining.toLocaleString()} F CFA pour la livraison gratuite !`;
-        } else {
-            progressText.textContent = 'Félicitations ! Vous bénéficiez de la livraison gratuite.';
-        }
-    }
-
     // ==================== UPDATE TOTALS ====================
     function updateTotals() {
         let subtotal = 0;
@@ -106,22 +82,15 @@ document.addEventListener('DOMContentLoaded', function() {
             subtotal += itemTotal;
         });
 
-        const shipping = subtotal > 75000 ? 0 : 5000; // 5000 F CFA frais de livraison
-        const tax = subtotal * 0.20; // TVA 20%
-        const total = subtotal + shipping + tax;
+        const total = subtotal;
 
         // Update DOM
         const subtotalElement = document.getElementById('subtotal');
-        const shippingElement = document.getElementById('shipping');
-        const taxElement = document.getElementById('tax');
         const totalElement = document.getElementById('total');
 
-        if (subtotalElement) subtotalElement.textContent = `${subtotal.toLocaleString()} F CFA`;
-        if (shippingElement) shippingElement.textContent = shipping === 0 ? 'Gratuite' : `${shipping.toLocaleString()} F CFA`;
-        if (taxElement) taxElement.textContent = `${Math.round(tax).toLocaleString()} F CFA`;
+        if (subtotalElement) subtotalElement.textContent = `${Math.round(subtotal).toLocaleString()} F CFA`;
         if (totalElement) totalElement.textContent = `${Math.round(total).toLocaleString()} F CFA`;
 
-        updateShippingProgress();
         updateCartCount();
     }
 
@@ -162,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             return;  // Asynchrone, sortie anticipée
         }
-
         updateDisplay(totalQuantity);
     }
 

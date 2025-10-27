@@ -91,15 +91,6 @@
                 <a href="{% url 'SHOP' %}" ><button class="continue-shopping">Continuer mes achats</button></a>
             </div>
 
-            <!-- Free Shipping Progress -->
-            <div class="shipping-progress" data-aos="fade-up" data-aos-delay="100">
-                <h3>Livraison gratuite</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 80%"></div>
-                </div>
-                <p id="progress-text">Plus que 15 000f pour la livraison gratuite !</p>
-            </div>
-
             <!--Contenu du panier-->
             <div class="cart-container" data-aos="fade-up" data-aos-delay="100">
                 <div class="cart-items">
@@ -143,10 +134,6 @@
                     <div class="summary-item">
                         <span>Sous-total</span>
                         <span id="subtotal">{{ total|floatformat:"0" }} F CFA</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>Livraison</span>
-                        <span id="shipping">Gratuite</span>
                     </div>
                     <div class="promo-code">
                         <input type="text" id="promo" placeholder="Code promo">
