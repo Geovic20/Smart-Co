@@ -1,4 +1,5 @@
 {% load static %}
+{% load cart_extras %}
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -23,14 +24,6 @@
         <!--Section header-->
         <section id="header">
             <a id="logo" href="{% url 'index' %}"><span>S.M.A.R.T.  & Co</span> </a>
-
-            <!--Barre de recherche-->
-            <div id="search-container">
-                <div id="search-bar">
-                    <input type="text" placeholder="Recherchez un produit">
-                    <button><i class="fas fa-search"></i></button>
-                </div>   
-            </div>
             <div>
                 <ul id="navbar">
                     <li><a class="active" href="{% url 'index' %}">Accueil</a></li>
@@ -73,7 +66,14 @@
                 <button id="mobile-search-toggle" aria-label="Rechercher">
                     <i class="fas fa-search"></i>
                 </button>
-                <a href="{% url 'Chariot' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                <a href="{% url 'Chariot' %}">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    {% if user.is_authenticated %}
+                        <span id="cart-count">{{ cart_items.count }}</span>
+                    {% else %}
+                        <span id="cart-count">0</span>
+                    {% endif %}
+                </a>
                 <i id="bar" class="fa-solid fa-bars"></i> 
             </div>
         </section>

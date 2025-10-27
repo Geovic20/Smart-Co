@@ -123,31 +123,19 @@
                 <div class="payment-layout">
                     <!-- Order Summary -->
                     <div class="order-summary">
-                        <h2>Récapitulatif de la commande</h2>
-
-                        <div class="product-item">
-                            <div class="product-image">
-                                <img src="https://images.pexels.com/photos/393047/pexels-photo-393047.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Montre connectée">
-                            </div>
-                            <div class="product-details">
-                                <h3>Montre connectée</h3>
-                                <p class="product-quantity">Quantité: 1</p>
-                            </div>
-                            <div class="product-price">$299.99</div>
-                        </div>
-
+                        <h2>Récapitulatif de la commande de {{ user.username }} ({{ items_count }} article{{ items_count|pluralize }})</h2>
                         <div class="order-totals">
                             <div class="total-row">
                                 <span>Sous-total</span>
-                                <span>$299.99</span>
+                                <span>150 000 f cfa</span>
                             </div>
                             <div class="total-row">
                                 <span>Livraison</span>
-                                <span>$9.99</span>
+                                <span>60 000 f cfa</span>
                             </div>
                             <div class="total-row total-final">
                                 <span>Total</span>
-                                <span id="total-amount">$327.98</span>
+                                <span id="total-amount">80 000 f cfa</span>
                             </div>
                         </div>
                     </div>
@@ -162,16 +150,20 @@
                                 <label for="quartier">Choisissez votre quartier :</label>
                                 <select id="quartier" name="quartier" required>
                                     <option value="">-- Sélectionner un quartier --</option>
-                                    <option value="Fidjrossè" data-frais="1000">Fidjrossè</option>
-                                    <option value="Tankpè" data-frais="1500">Tankpè</option>
-                                    <option value="Akpakpa" data-frais="1200">Akpakpa</option>
-                                    <option value="Godomey" data-frais="2000">Godomey</option>
-                                    <option value="Calavi" data-frais="2500">Calavi</option>
-                                    <option value="Dantokpa" data-frais="800">Dantokpa</option>
-                                    <option value="Ganhi" data-frais="1800">Ganhi</option>
-                                    <option value="Vedoko" data-frais="2200">Vedoko</option>
-                                    <option value="Agla" data-frais="1600">Agla</option>
-                                    <option value="Zongo" data-frais="1300">Zongo</option>
+                                    <option value="Agla/Fidjrossè/Aïbatin/Houéyiho/Vèdoko/Vodjè/Gbégamey/Etoile Rouge" data-frais="1000">Agla/Fidjrossè/Aïbatin/Houéyiho/Vèdoko/Vodjè/Gbégamey/Etoile Rouge</option>
+                                    <option value="Kindonou/Ménontin/Stade de l'Amitié/Zogbo/Ste Rita/Gbèdjromédé" data-frais="600">Kindonou/Ménontin/Stade de l'Amitié/Zogbo/Ste Rita/Gbèdjromédé</option>
+                                    <option value="Jéricho/Aidjèdo/St Michel/St Jean/Yokpa/Avenue Steinmez/Ganhi" data-frais="1200">Jéricho/Aidjèdo/St Michel/St Jean/Yokpa/Avenue Steinmez/Ganhi</option>
+                                    <option value="Route des pêches/Aéroport/Cadjèhoun/Haie Vive/CNHU/Camp Guézo/Zong" data-frais="1500">Route des pêches/Aéroport/Cadjèhoun/Haie Vive/CNHU/Camp Guézo/Zong</option>
+                                    <option value="Sacré Cœur/Sègbéya/Sènandé 1 & 2/Carrefour La Roche/Carrefour La Béninoise" data-frais="1500">Sacré Cœur/Sègbéya/Sènandé 1 & 2/Carrefour La Roche/Carrefour La Béninoise</option>
+                                    <option value="Abattoir/Yénawa/Lom'nava/Minontchou/Ayélawadjè/Sodjatimé/Gbèdokpo/Avotrou/Dédokpo" data-frais="1500">Dantokpa</option>
+                                    <option value="Cococodji/Cocotomey/Hèvié/Womey/Gbôdjè/Marché de Pahou" data-frais="100">Cococodji/Cocotomey/Hèvié/Womey/Gbôdjè/Marché de Pahou</option>
+                                    <option value="Abattoir/Carrefour Le Bélier / Agblangandan / PK10 / PK11" data-frais="1700">Abattoir/Carrefour Le Bélier / Agblangandan / PK10 / PK11</option>
+                                    <option value="Sèmè-kpodji/Djeffa" data-frais="1700">Sèmè-kpodji/Djeffa</option>
+                                    <option value="Houézoumè/Attakê/Djassin/Houinmè/Ouando et autres" data-frais="1500">Houézoumè/Attakê/Djassin/Houinmè/Ouando et autres</option>
+                                    <option value="CEG Godomey/Godomey Gare/Akogbato/Dèkoungbé/PK14/Atrokpocodji/Carrefor IITA" data-frais="600">CEG Godomey/Godomey Gare/Akogbato/Dèkoungbé/PK14/Atrokpocodji/Carrefor IITA</option>
+                                    <option value="Tankpè/UAC-Campus/Bidossessi/Kpota/Arconville/Hôpital de Zone/SOS Village d'Enfants" data-frais="600">Tankpè/UAC-Campus/Bidossessi/Kpota/Arconville/Hôpital de Zone/SOS Village d'Enfants</option>
+                                    <option value="Akassato/Missessinto/Ouèdo" data-frais="800">Akassato/Missessinto/Ouèdo</option>
+                                    <option value="Ouidah/Porto-Novo/Parakou/Natitingou" data-frais="2000">Ouidah/Porto-Novo/Parakou/Natitingou</option>
                                 </select>
                             </div>
 

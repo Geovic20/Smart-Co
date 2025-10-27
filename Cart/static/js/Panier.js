@@ -193,10 +193,10 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             const input = this.closest('.quantity-controls').querySelector('.quantity-input');
             let value = parseInt(input.value) || 1;
-            const maxStock = parseInt(input.dataset.maxStock) || Infinity;  // Assume tu ajoutes data-max-stock="{{ item.product.stock_quantity }}" dans le template Chariot.html
+            const maxStock = parseInt(input.max) || Infinity; // Utilisez input.max au lieu de dataset.maxStock
             if (value < maxStock) {
                 input.value = ++value;
-                updateQuantityAjax(input);  // Ta fonction pour envoyer AJAX
+                updateCartItemQuantity(input.dataset.id, value); // Corrigez ici
             } else {
                 showMessage('Stock maximum atteint', 'error');
             }
@@ -229,10 +229,18 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
+                // Mettre à jour l'élément spécifique
+                const item = document.querySelector(`.cart-item .quantity-input[data-id="${itemId}"]`);
+                if (item) {
+                    const itemTotalElement = item.closest('.cart-item').querySelector('.item-total');
+                    if (itemTotalElement) {
+                        itemTotalElement.textContent = `${data.item_total.toLocaleString()} F CFA`;
+                    }
+                }
                 updateTotals();
                 showMessage('Panier mis à jour', 'success');
             } else {
-                showMessage('Erreur lors de la mise à jour', 'error');
+                showMessage('Erreur lors de la mise à jour: ' + data.message, 'error');
             }
         })
         .catch(error => {

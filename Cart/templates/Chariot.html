@@ -6,10 +6,10 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Panier</title>
+        <title>Mon Panier</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/> <!--Intégration de AOS-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/>
         <!-- 🔌 Icône du site -->
         <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/icons8-caddie-94.png' %}">
         <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/icons8-caddie-94.png' %}">
@@ -111,26 +111,13 @@
                                 <div class="item-details">
                                     <h3>{{ item.product.name }}</h3>
                                     <p class="category">{{ item.product.category }}</p>
-                                    <p class="price">{{ item.product.price }} F CFA</p>
+                                    <p class="price">{{ item.product.price|floatformat:0|add:""|floatformat:0|floatformat }} F CFA</p>
                                     <p class="stock-status in-stock">En stock</p>
-
-                                    <!-- Options de garantie (facultatif ou dynamique à implémenter plus tard) -->
-                                    <div class="warranty-options">
-                                        <label class="warranty-option">
-                                            <input type="radio" name="warranty-1" value="none" checked> Pas de garantie supplémentaire
-                                        </label>
-                                        <label class="warranty-option">
-                                            <input type="radio" name="warranty-1" value="1year" data-cost="99.99"> Garantie 1 an (+99.99 €)
-                                        </label>
-                                        <label class="warranty-option">
-                                            <input type="radio" name="warranty-1" value="2year" data-cost="179.99"> Garantie 2 ans (+179.99 €)
-                                        </label>
-                                    </div>
                                 </div>
                                 <div class="quantity-controls">
                                     <button class="quantity-btn minus" data-id="{{ item.id }}">-</button>
                                     <input type="number" value="{{ item.quantity }}" min="1" 
-                                    max="{{ item.product.stock_quantity }}" class="quantity-input" data-id="{{ item.id }}">
+                                    max="{{ item.product.stock_quantity|default:'999' }}" class="quantity-input" data-id="{{ item.id }}">
                                     <button class="quantity-btn plus" data-id="{{ item.id }}">+</button>
                                 </div>
 
@@ -287,6 +274,7 @@
         </footer>
         
         <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/Panier.js' %}"></script> 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
         <script>
             AOS.init({
@@ -296,11 +284,10 @@
         </script>
         <script>
             window.URLS = {
-              add_to_cart: "{% url 'add_to_cart' %}",
-              update_cart: "{% url 'update_cart_quantity' item_id=0 %}".replace(/0$/, ''), // base /panier/modifier/
-              remove_cart: "{% url 'remove_cart_item' item_id=0 %}".replace(/0$/, '')     // base /panier/supprimer/
-            };
-        </script>
-        <script src="{% static 'js/Panier.js' %}"></script>     
+            add_to_cart: "{% url 'add_to_cart' %}",
+            update_cart: "{% url 'update_cart_quantity' item_id=0 %}".replace('0/', ''), 
+            remove_cart: "{% url 'remove_cart_item' item_id=0 %}".replace('0/', '')
+        }
+        </script>    
     </body>
 </html>

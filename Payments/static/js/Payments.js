@@ -156,28 +156,28 @@ function validateDeliveryForm() {
   const heure = document.getElementById('heure').value;
   
   if (!quartier) {
-      showNotification('Veuillez sélectionner un quartier', 'error');
-      return false;
+    showNotification('Veuillez sélectionner un quartier', 'error');
+    return false;
   }
   
   if (!details.trim()) {
-      showNotification('Veuillez fournir les détails du lieu', 'error');
-      return false;
+    showNotification('Veuillez fournir les détails du lieu', 'error');
+    return false;
   }
   
   if (!phone.trim()) {
-      showNotification('Veuillez fournir un numéro de téléphone', 'error');
-      return false;
+    showNotification('Veuillez fournir un numéro de téléphone', 'error');
+    return false;
   }
   
   if (!jour) {
-      showNotification('Veuillez sélectionner un jour de livraison', 'error');
-      return false;
+    showNotification('Veuillez sélectionner un jour de livraison', 'error');
+    return false;
   }
   
   if (!heure) {
-      showNotification('Veuillez sélectionner une heure de livraison', 'error');
-      return false;
+    showNotification('Veuillez sélectionner une heure de livraison', 'error');
+    return false;
   }
   return true;
 }
@@ -334,7 +334,7 @@ function generatePaymentForm(methodConfig) {
   });
   
   if (isInRow) {
-      formHTML += '</div>';
+    formHTML += '</div>';
   }
   
   formContent.innerHTML = formHTML;
@@ -379,13 +379,13 @@ function formatPhoneNumber(input) {
   if (value.length > 10) value = value.substring(0, 10);
   
   if (value.length >= 2) {
-      value = value.substring(0, 2) + ' ' + value.substring(2);
+    value = value.substring(0, 2) + ' ' + value.substring(2);
   }
   if (value.length >= 6) {
-      value = value.substring(0, 6) + ' ' + value.substring(6);
+    value = value.substring(0, 6) + ' ' + value.substring(6);
   }
   if (value.length >= 9) {
-      value = value.substring(0, 9) + ' ' + value.substring(9);
+    value = value.substring(0, 9) + ' ' + value.substring(9);
   }
   
   input.value = value;
@@ -408,7 +408,6 @@ function formatExpiryDate(input) {
   if (value.length >= 2) {
       value = value.substring(0, 2) + '/' + value.substring(2);
   }
-  
   input.value = value;
 }
 
@@ -591,16 +590,16 @@ function showNotification(message, type = 'info') {
   };
   
   notification.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 500;
-      z-index: 1001;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      animation: slideIn 0.3s ease-out;
-      ${colors[type]}
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease-out;
+    ${colors[type]}
   `;
   
   notification.textContent = message;
@@ -608,8 +607,8 @@ function showNotification(message, type = 'info') {
   
   // Supprimer après 5 secondes
   setTimeout(() => {
-      notification.style.animation = 'slideOut 0.3s ease-in forwards';
-      setTimeout(() => notification.remove(), 300);
+    notification.style.animation = 'slideOut 0.3s ease-in forwards';
+    setTimeout(() => notification.remove(), 300);
   }, 5000);
 }
 
@@ -618,12 +617,12 @@ const style = document.createElement('style');
 style.textContent = `
   @keyframes slideIn {
       from {
-          transform: translateX(100%);
-          opacity: 0;
+        transform: translateX(100%);
+        opacity: 0;
       }
       to {
-          transform: translateX(0);
-          opacity: 1;
+        transform: translateX(0);
+        opacity: 1;
       }
   }
   

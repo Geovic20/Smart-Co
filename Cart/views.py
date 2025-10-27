@@ -82,7 +82,6 @@ def add_to_cart(request):
         logger.exception("Erreur add_to_cart: %s", e)
         return JsonResponse({'status': 'error', 'message': 'Erreur serveur'}, status=500)
 
-
 @require_POST
 @login_required
 def update_cart_quantity(request, item_id):

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
@@ -13,7 +13,26 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 def Payments(request):
-    return render(request, 'Payments.html')
+    """Affiche la page de paiement avec les détails du panier"""
+    
+    # Récupérer le panier de l'utilisateur
+    cart = Cart.objects.filter(user=request.user).prefetch_related('cartitem_set__product').first()
+    
+    if not cart or cart.total_items() == 0:
+        # Rediriger vers le panier si vide
+        return redirect('Chariot')
+    
+    cart_items = cart.cartitem_set.select_related('product').all()
+    subtotal = sum(item.product.price * item.quantity for item in cart_items)
+    
+    # Logs pour le débogage
+    logger.debug(f"Cart Items: {cart_items}")
+    logger.debug(f"Subtotal: {subtotal}")
+    
+    return render(request, 'Payments.html', {
+        'subtotal': subtotal,
+        'cart_items': cart_items,
+    })
 
 @csrf_protect
 @login_required
