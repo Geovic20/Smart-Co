@@ -147,9 +147,9 @@
 
                             <!-- Quartier -->
                             <div class="form-group">
-                                <label for="quartier">Choisissez votre quartier :</label>
+                                <label for="quartier">Choisissez votre zone géographique :</label>
                                 <select id="quartier" name="quartier" required>
-                                    <option value="">-- Sélectionner un quartier --</option>
+                                    <option value="">-- Sélectionner une zone --</option>
                                     <option value="Agla/Fidjrossè/Aïbatin/Houéyiho/Vèdoko/Vodjè/Gbégamey/Etoile Rouge" data-frais="1000">Agla/Fidjrossè/Aïbatin/Houéyiho/Vèdoko/Vodjè/Gbégamey/Etoile Rouge</option>
                                     <option value="Kindonou/Ménontin/Stade de l'Amitié/Zogbo/Ste Rita/Gbèdjromédé" data-frais="600">Kindonou/Ménontin/Stade de l'Amitié/Zogbo/Ste Rita/Gbèdjromédé</option>
                                     <option value="Jéricho/Aidjèdo/St Michel/St Jean/Yokpa/Avenue Steinmez/Ganhi" data-frais="1200">Jéricho/Aidjèdo/St Michel/St Jean/Yokpa/Avenue Steinmez/Ganhi</option>
@@ -181,7 +181,7 @@
                             <!-- Numéro de téléphone -->
                             <div class="form-group">
                                 <label for="phone">Numéro de téléphone à contacter :</label>
-                                <input type="tel" id="phone" name="phone" required placeholder="Ex : 01 23 45 67 89">
+                                <input type="tel" id="phone" name="phone" required placeholder="Ex : 01 XX XX XX XX">
                             </div>
 
                             <!-- Jour de livraison -->
@@ -283,7 +283,7 @@
                             </div>
 
                             <div class="payment-info">
-                                <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <strong id="payment-amount">$327.98</strong></p>
+                                <p>Vous recevrez un prompt sur votre téléphone pour confirmer le paiement de <strong id="payment-amount">{{ grand_total|floatformat:0 }} F CFA</strong></p>
                             </div>
 
                             <button type="button" class="pay-button" onclick="processPayment()">

@@ -7,7 +7,7 @@ from Cart.models import Cart
 from Orders.models import Commandes, Order_status, Commande_items
 from Payments.models import Payments, PaymentMethod
 from decimal import Decimal
-import logging
+import logging, re
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +48,19 @@ def Payments(request):
         'user_name': user_name,
     })
 
+def validate_benin_phone(phone_number: str):
+    """Valide un numéro MTN, Moov ou Celtiis selon le format actuel."""
+    cleaned = phone_number.replace(" ", "").replace("+229", "").replace("229", "")
+    patterns = {
+        "MTN": re.compile(r"^01(42|46|50|51|52|53|54|56|57|59|61|62|66|67|69|90|91|96|97)\d{6}$"),
+        "Moov": re.compile(r"^01(58|692|65|94|95|98|99)\d{6}$"),
+        "Celtiis": re.compile(r"^01(40|41|43|44|48|49|92|93)\d{6}$")
+    }
+    for provider, regex in patterns.items():
+        if regex.match(cleaned):
+            return True, provider
+    return False, None
+
 @csrf_protect
 @login_required
 @require_POST
@@ -86,6 +99,13 @@ def process_payment(request):
         status, _ = Order_status.objects.get_or_create(status='pending')
         payment_method, _ = PaymentMethod.objects.get_or_create(method=payment_method_name)
 
+        is_valid, provider = validate_benin_phone(delivery_data['phone'])
+        if not is_valid:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Numéro de téléphone invalide. Veuillez entrer un numéro MTN, Moov ou Celtiis valide.'
+            }, status)
+            
         # Créer la commande
         order = Commandes.objects.create(
             customer=request.user.customer,

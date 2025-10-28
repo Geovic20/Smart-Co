@@ -1,34 +1,34 @@
 // Configuration des méthodes de paiement
 const paymentMethods = {
   mtn: {
-      name: 'MTN Mobile Money',
-      fields: [
-        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
-      ]
+    name: 'MTN Mobile Money',
+    fields: [
+      { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+    ]
   },
   moov: {
-      name: 'Moov Money',
-      fields: [
-        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
-      ]
+    name: 'Moov Money',
+    fields: [
+      { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+    ]
   },
   celtiis: {
-      name: 'Celtiis Cash',
-      fields: [
-        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
-      ]
+    name: 'Celtiis Cash',
+    fields: [
+      { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+    ]
   },
   orange: {
-      name: 'Orange Money',
-      fields: [
-        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
-      ]
+    name: 'Orange Money',
+    fields: [
+      { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+    ]
   },
   wave: {
-      name: 'Wave',
-      fields: [
-        { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
-      ]
+    name: 'Wave',
+    fields: [
+      { type: 'tel', name: 'phone', label: 'Numéro de téléphone', placeholder: '01XXXXXXXX', required: true }
+    ]
   },
   crypto: {
       name: 'Crypto-monnaie',
@@ -260,12 +260,6 @@ function updateOrderTotal() {
   if (paymentAmountElement) {
     paymentAmountElement.textContent = `${totalAmount.toLocaleString()} F CFA`;
   }
-  
-  console.log('Totaux mis à jour:', {
-    baseAmount,
-    deliveryFee,
-    totalAmount
-  });
 }
 
 // Configuration des méthodes de paiement
@@ -455,8 +449,8 @@ function validateForm() {
 }
 
 // Traitement du paiement
-function processPayment() {
-  // Validation initiale
+async function processPayment() {
+  // Validation de la méthode de paiement et du formulaire
   if (!selectedMethod) {
     showNotification('Veuillez sélectionner une méthode de paiement', 'error');
     return;
@@ -466,6 +460,32 @@ function processPayment() {
     showNotification('Veuillez remplir tous les champs obligatoires', 'error');
     return;
   }
+
+  //--VALIDATION DU NUMERO DE TELEPHONE --//
+  const phone = deliveryInfo.phone ? deliveryInfo.phone.trim() : "";
+
+  constphonePatterns = {
+    mtn: /^01(42|46|50|51|52|53|54|56|57|59|61|62|66|67|69|90|91|96|97)\d{6}$/,
+    moov: /^01(58|692|65|94|95|98|99)\d{6}$/,
+    celtiis: /^01(40|41|43|44|48|49|92|93)\d{6}$/
+  };
+
+  function detectProvider(phoneNumber) {
+    const cleaned = phoneNumber.replace(/\s+/g, '').replace(/^(\+229|00229|229)/, '');
+    for (const [provider, regex] of Object.entries(phonePatterns)) {
+      if (regex.test(cleaned)) return { valid: true, provider };
+    }
+    return { valid: false, provider: null };
+  }
+
+  const { valid, provider } = detectProvider(phone);
+
+  if (!valid) {
+    showNotification('Le numéro de téléphone fourni est invalide.', 'error');
+    return;
+  }
+
+  console.log(`✅ Numéro valide - Opérateur : ${provider}`);
   
   // Animation du bouton
   const payButton = document.querySelector('.pay-button');
