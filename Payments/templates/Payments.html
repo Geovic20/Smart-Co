@@ -123,7 +123,7 @@
                 <div class="payment-layout">
                     <!-- Order Summary -->
                     <div class="order-summary">
-                        <h2>Récapitulatif de la commande</h2>
+                        <h2>Récapitulatif de la commande de {{user_name}}</h2>
                         <div class="order-totals">
                             <div class="total-row">
                                 <span>Montant de la commande</span>
@@ -135,7 +135,7 @@
                             </div>
                             <div class="total-row total-final">
                                 <span>TOTAL GENERAL</span>
-                                <span id="total-amount">{{ subtotal|floatformat:0 }} F CFA</span>
+                                <span id="total-amount">{{ grand_total|floatformat:0 }} F CFA</span>
                             </div>
                         </div>
                     </div>
@@ -409,17 +409,5 @@
         </div>
         
         <script src="{% static 'js/Payments.js' %}"></script>  
-        <script src="{% static 'js/Panier.js' %}"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                updateCartCount();  // Initialise le compteur
-
-                document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        setTimeout(updateCartCount, 500);
-                    });
-                });
-            });
-        </script>  
     </body>
 </html>

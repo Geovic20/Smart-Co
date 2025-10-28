@@ -23,15 +23,29 @@ def Payments(request):
         return redirect('Chariot')
     
     cart_items = cart.cartitem_set.select_related('product').all()
+    
+    # Calculer le sous-total (montant de la commande sans frais de livraison)
     subtotal = sum(item.product.price * item.quantity for item in cart_items)
     
+    # Les frais de livraison seront calculés dynamiquement en JS selon le quartier
+    # On envoie juste le subtotal initial
+    shipping_cost = 0
+    
+    # Grand total initial (sera mis à jour en JS)
+    grand_total = subtotal + shipping_cost
+    
     # Logs pour le débogage
-    logger.debug(f"Cart Items: {cart_items}")
-    logger.debug(f"Subtotal: {subtotal}")
+    logger.debug(f"Subtotal (montant commande): {subtotal}")
+    logger.debug(f"Grand total initial: {grand_total}")
+    
+    # Passer le nom de l'utilisateur
+    user_name = f"{request.user.first_name} {request.user.last_name}" if request.user.first_name or request.user.last_name else request.user.username 
     
     return render(request, 'Payments.html', {
-        'subtotal': subtotal,
-        'cart_items': cart_items,
+        'subtotal': subtotal,  # Montant de la commande (sans livraison)
+        'shipping_cost': shipping_cost,  # Frais de livraison initiaux
+        'grand_total': grand_total,  # Total général initial
+        'user_name': user_name,
     })
 
 @csrf_protect
@@ -43,25 +57,30 @@ def process_payment(request):
         # Récupérer le panier
         cart = Cart.objects.get(user=request.user)
         cart_items = cart.cartitem_set.all()
-        total = sum(item.product.price * item.quantity for item in cart_items)
-        shipping_cost = Decimal('0.00') if total > Decimal('75000') else Decimal('5000')
-        grand_total = total + shipping_cost
+        
+        # Calculer le sous-total
+        subtotal = sum(item.product.price * item.quantity for item in cart_items)
+        
+        # Récupérer les frais de livraison du formulaire
+        quartier = request.POST.get('quartier')
+        # Vous devrez mapper les quartiers aux frais, ou les envoyer depuis le JS
+        shipping_cost = Decimal(request.POST.get('shipping_cost', '0'))
+        
+        # Calculer le total général
+        grand_total = subtotal + shipping_cost
 
         # Valider les données de livraison
         delivery_data = {
-            'first_name': request.POST.get('firstName'),
-            'last_name': request.POST.get('lastName'),
-            'address': request.POST.get('address'),
-            'city': request.POST.get('city'),
+            'quartier': quartier,
+            'details': request.POST.get('details'),
             'phone': request.POST.get('phone'),
+            'jour': request.POST.get('jour'),
+            'heure': request.POST.get('heure'),
         }
         payment_method_name = request.POST.get('payment-method')
 
         if not all(delivery_data.values()) or not payment_method_name:
             return JsonResponse({'status': 'error', 'message': 'Tous les champs sont obligatoires.'}, status=400)
-
-        if not request.POST.get('phone').startswith('01') or len(request.POST.get('phone')) != 10:
-            return JsonResponse({'status': 'error', 'message': 'Numéro de téléphone invalide.'}, status=400)
 
         # Récupérer ou créer le statut et la méthode de paiement
         status, _ = Order_status.objects.get_or_create(status='pending')
@@ -69,7 +88,7 @@ def process_payment(request):
 
         # Créer la commande
         order = Commandes.objects.create(
-            customer=request.user.customer,  # Assumer lien via Customer
+            customer=request.user.customer,
             status=status,
             shipping_cost=shipping_cost,
             **delivery_data
@@ -97,7 +116,7 @@ def process_payment(request):
         # Simuler un paiement
         transaction_id = f"TXN-{order.id}-SIM"
         payment.transaction_id = transaction_id
-        payment.status = 'completed'  # Simulé
+        payment.status = 'completed'
         payment.save()
         order.status = Order_status.objects.get(status='completed')
         order.save()

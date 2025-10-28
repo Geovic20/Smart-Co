@@ -69,43 +69,54 @@ const paymentMethods = {
 
 // Variables globales
 let selectedMethod = '';
-let baseAmount = 299.99;
+let baseAmount = 0;  // Sera initialisé depuis le DOM
 let deliveryFee = 0;
-let totalAmount = baseAmount;
+let totalAmount = 0;
 let deliveryInfo = {};
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
+  // Récupérer le montant de base depuis le DOM (subtotal du backend)
+  const subtotalElement = document.getElementById('subtotal');
+  if (subtotalElement) {
+    // Extraire le nombre du texte "123456 F CFA"
+    baseAmount = parseFloat(subtotalElement.textContent.replace(/[^\d]/g, '')) || 0;
+    console.log('Montant de base (subtotal) chargé:', baseAmount);
+    
+    // Réafficher le subtotal correctement formaté (au cas où)
+    subtotalElement.textContent = `${baseAmount.toLocaleString()} F CFA`;
+  }
+  
   initializeDeliveryForm();
   setupEventListeners();
-  updateOrderTotal();
-  console.log('DOM chargé, écouteurs configurés'); 
+  updateOrderTotal();  // Mise à jour initiale avec deliveryFee = 0
 });
 
 // Configuration du formulaire de livraison
 function initializeDeliveryForm() {
   const deliveryForm = document.getElementById('livraison-form');
   if (!deliveryForm) {
-        console.error('Formulaire de livraison non trouvé');
-        return;
-    }
+    console.error('Formulaire de livraison non trouvé');
+    return;
+  }
+  
   const quartierSelect = document.getElementById('quartier');
   const phoneInput = document.getElementById('phone');
   
   // Écouteur pour le changement de quartier
   quartierSelect.addEventListener('change', function() {
-      const selectedOption = this.options[this.selectedIndex];
-      const frais = selectedOption.getAttribute('data-frais');
-      
-      if (frais) {
-        deliveryFee = parseInt(frais);
-        document.getElementById('frais').textContent = deliveryFee;
-        updateOrderTotal();
-      } else {
-        deliveryFee = 0;
-        document.getElementById('frais').textContent = '0';
-        updateOrderTotal();
-      }
+    const selectedOption = this.options[this.selectedIndex];
+    const frais = selectedOption.getAttribute('data-frais');
+    
+    if (frais) {
+      deliveryFee = parseInt(frais);
+      document.getElementById('frais').textContent = deliveryFee;
+      updateOrderTotal();
+    } else {
+      deliveryFee = 0;
+      document.getElementById('frais').textContent = '0';
+      updateOrderTotal();
+    }
   });
   
   // Formatage du numéro de téléphone
@@ -115,31 +126,31 @@ function initializeDeliveryForm() {
   
   // Soumission du formulaire de livraison
   deliveryForm.addEventListener('submit', function(e) {
-      e.preventDefault();
+    e.preventDefault();
+    
+    if (validateDeliveryForm()) {
+      const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
       
-      if (validateDeliveryForm()) {
-          const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
-          
-          // Sauvegarder les informations de livraison
-          deliveryInfo = {
-              quartier: document.getElementById('quartier').value,
-              details: document.getElementById('details').value,
-              phone: document.getElementById('phone').value,
-              jour: document.getElementById('jour').value,
-              heure: document.getElementById('heure').value,
-              frais: deliveryFee,
-              paymentMode: paymentMode
-          };
-          
-          if (paymentMode === 'delivery') {
-              // Paiement à la livraison - générer la facture
-              generateInvoice();
-          } else {
-              // Passer à l'étape paiement en ligne
-              showPaymentSection();
-              updateProgressStep(3);
-          }
+      // Sauvegarder les informations de livraison
+      deliveryInfo = {
+        quartier: document.getElementById('quartier').value,
+        details: document.getElementById('details').value,
+        phone: document.getElementById('phone').value,
+        jour: document.getElementById('jour').value,
+        heure: document.getElementById('heure').value,
+        frais: deliveryFee,
+        paymentMode: paymentMode
+      };
+      
+      if (paymentMode === 'delivery') {
+        // Paiement à la livraison - générer la facture
+        generateInvoice();
+      } else {
+        // Passer à l'étape paiement en ligne
+        showPaymentSection();
+        updateProgressStep(3);
       }
+    }
   });
   
   // Définir la date minimum à aujourd'hui
@@ -192,8 +203,8 @@ function generateInvoice() {
   document.getElementById('client-quartier').textContent = deliveryInfo.quartier;
   document.getElementById('client-address').textContent = deliveryInfo.details;
   document.getElementById('client-delivery-time').textContent = `${deliveryInfo.jour} à ${deliveryInfo.heure}`;
-  document.getElementById('invoice-delivery-fee').textContent = `$${(deliveryFee / 655.957).toFixed(2)}`;
-  document.getElementById('invoice-total').textContent = `$${(totalAmount / 655.957).toFixed(2)}`;
+  document.getElementById('invoice-delivery-fee').textContent = `${deliveryFee.toLocaleString()} F CFA`;
+  document.getElementById('invoice-total').textContent = `${totalAmount.toLocaleString()} F CFA`;
   
   // Afficher le modal de facture
   const invoiceModal = document.getElementById('invoice-modal');
@@ -229,25 +240,32 @@ function showPaymentSection() {
 
 // Mise à jour du total de la commande
 function updateOrderTotal() {
-  totalAmount = baseAmount + deliveryFee + tax;
+  // Calculer le total général = montant commande (baseAmount) + frais de livraison
+  totalAmount = baseAmount + deliveryFee;
   
   // Mettre à jour l'affichage de la livraison
-  const deliveryRow = document.querySelector('.total-row:nth-child(2) span:last-child');
-  if (deliveryRow) {
-      deliveryRow.textContent = `$${(deliveryFee / 655.957).toFixed(2)}`;
+  const shippingElement = document.getElementById('shipping');
+  if (shippingElement) {
+    shippingElement.textContent = `${deliveryFee.toLocaleString()} F CFA`;
   }
   
-  // Mettre à jour le total
+  // Mettre à jour le total général
   const totalElement = document.getElementById('total-amount');
   if (totalElement) {
-      totalElement.textContent = `$${(totalAmount / 655.957).toFixed(2)}`;
+    totalElement.textContent = `${totalAmount.toLocaleString()} F CFA`;
   }
   
-  // Mettre à jour le montant de paiement
-  const paymentAmount = document.getElementById('payment-amount');
-  if (paymentAmount) {
-      paymentAmount.textContent = `$${(totalAmount / 655.957).toFixed(2)}`;
+  // Mettre à jour le montant de paiement (si présent)
+  const paymentAmountElement = document.getElementById('payment-amount');
+  if (paymentAmountElement) {
+    paymentAmountElement.textContent = `${totalAmount.toLocaleString()} F CFA`;
   }
+  
+  console.log('Totaux mis à jour:', {
+    baseAmount,
+    deliveryFee,
+    totalAmount
+  });
 }
 
 // Configuration des méthodes de paiement
@@ -255,16 +273,16 @@ function initializePaymentMethods() {
   const methods = document.querySelectorAll('.payment-method');
   
   methods.forEach(method => {
-      method.addEventListener('click', function() {
-          // Retirer la sélection précédente
-          methods.forEach(m => m.classList.remove('selected'));
-          
-          // Ajouter la sélection actuelle
-          this.classList.add('selected');
-          
-          const methodId = this.getAttribute('data-method');
-          selectPaymentMethod(methodId);
-      });
+    method.addEventListener('click', function() {
+      // Retirer la sélection précédente
+      methods.forEach(m => m.classList.remove('selected'));
+      
+      // Ajouter la sélection actuelle
+      this.classList.add('selected');
+      
+      const methodId = this.getAttribute('data-method');
+      selectPaymentMethod(methodId);
+    });
   });
 }
 
@@ -272,15 +290,15 @@ function initializePaymentMethods() {
 function setupEventListeners() {
   // Formatage automatique pour les champs
   document.addEventListener('input', function(e) {
-      if (e.target.name === 'phone') {
-          formatPhoneNumber(e.target);
-      } else if (e.target.name === 'cardNumber') {
-          formatCardNumber(e.target);
-      } else if (e.target.name === 'expiryDate') {
-          formatExpiryDate(e.target);
-      } else if (e.target.name === 'cvv') {
-          formatCVV(e.target);
-      }
+    if (e.target.name === 'phone') {
+      formatPhoneNumber(e.target);
+    } else if (e.target.name === 'cardNumber') {
+      formatCardNumber(e.target);
+    } else if (e.target.name === 'expiryDate') {
+      formatExpiryDate(e.target);
+    } else if (e.target.name === 'cvv') {
+      formatCVV(e.target);
+    }
   });
 }
 
@@ -311,26 +329,26 @@ function generatePaymentForm(methodConfig) {
   let isInRow = false;
   
   methodConfig.fields.forEach((field, index) => {
-      if (field.class === 'half') {
-          if (!isInRow) {
-              formHTML += '<div class="form-row">';
-              isInRow = true;
-          }
-          formHTML += generateFormField(field);
-          
-          // Fermer la row si c'est le dernier champ ou si le prochain n'est pas half
-          const nextField = methodConfig.fields[index + 1];
-          if (!nextField || nextField.class !== 'half') {
-              formHTML += '</div>';
-              isInRow = false;
-          }
-      } else {
-          if (isInRow) {
-              formHTML += '</div>';
-              isInRow = false;
-          }
-          formHTML += generateFormField(field);
+    if (field.class === 'half') {
+      if (!isInRow) {
+        formHTML += '<div class="form-row">';
+        isInRow = true;
       }
+      formHTML += generateFormField(field);
+      
+      // Fermer la row si c'est le dernier champ ou si le prochain n'est pas half
+      const nextField = methodConfig.fields[index + 1];
+      if (!nextField || nextField.class !== 'half') {
+        formHTML += '</div>';
+        isInRow = false;
+      }
+    } else {
+      if (isInRow) {
+        formHTML += '</div>';
+        isInRow = false;
+      }
+      formHTML += generateFormField(field);
+    }
   });
   
   if (isInRow) {
@@ -343,33 +361,33 @@ function generatePaymentForm(methodConfig) {
 // Génération d'un champ de formulaire
 function generateFormField(field) {
   if (field.type === 'select') {
-      let optionsHTML = '<option value="">Sélectionnez...</option>';
-      field.options.forEach(option => {
-          optionsHTML += `<option value="${option}">${option}</option>`;
-      });
-      
-      return `
-          <div class="form-group">
-              <label class="form-label" for="${field.name}">${field.label}</label>
-              <select name="${field.name}" id="${field.name}" class="form-input" ${field.required ? 'required' : ''}>
-                  ${optionsHTML}
-              </select>
-          </div>
-      `;
+    let optionsHTML = '<option value="">Sélectionnez...</option>';
+    field.options.forEach(option => {
+      optionsHTML += `<option value="${option}">${option}</option>`;
+    });
+    
+    return `
+      <div class="form-group">
+        <label class="form-label" for="${field.name}">${field.label}</label>
+        <select name="${field.name}" id="${field.name}" class="form-input" ${field.required ? 'required' : ''}>
+          ${optionsHTML}
+        </select>
+      </div>
+    `;
   } else {
-      return `
-          <div class="form-group">
-              <label class="form-label" for="${field.name}">${field.label}</label>
-              <input 
-                  type="${field.type}" 
-                  name="${field.name}" 
-                  id="${field.name}" 
-                  placeholder="${field.placeholder}" 
-                  class="form-input" 
-                  ${field.required ? 'required' : ''}
-              >
-          </div>
-      `;
+    return `
+      <div class="form-group">
+        <label class="form-label" for="${field.name}">${field.label}</label>
+        <input 
+          type="${field.type}" 
+          name="${field.name}" 
+          id="${field.name}" 
+          placeholder="${field.placeholder}" 
+          class="form-input" 
+          ${field.required ? 'required' : ''}
+        >
+      </div>
+    `;
   }
 }
 
@@ -406,7 +424,7 @@ function formatExpiryDate(input) {
   if (value.length > 4) value = value.substring(0, 4);
   
   if (value.length >= 2) {
-      value = value.substring(0, 2) + '/' + value.substring(2);
+    value = value.substring(0, 2) + '/' + value.substring(2);
   }
   input.value = value;
 }
@@ -424,110 +442,116 @@ function validateForm() {
   let isValid = true;
   
   requiredFields.forEach(field => {
-      field.classList.remove('error', 'success');
-      
-      if (!field.value.trim()) {
-          field.classList.add('error');
-          isValid = false;
-      } else {
-          field.classList.add('success');
-      }
+    field.classList.remove('error', 'success');
+    
+    if (!field.value.trim()) {
+      field.classList.add('error');
+      isValid = false;
+    } else {
+      field.classList.add('success');
+    }
   });
   return isValid;
 }
 
 // Traitement du paiement
 function processPayment() {
-    // Validation initiale
-    if (!selectedMethod) {
-        showNotification('Veuillez sélectionner une méthode de paiement', 'error');
-        return;
-    }
-    
-    if (!validateForm()) {
-        showNotification('Veuillez remplir tous les champs obligatoires', 'error');
-        return;
-    }
-    
-    // Animation du bouton
-    const payButton = document.querySelector('.pay-button');
-    payButton.classList.add('loading');
-    payButton.textContent = 'Traitement en cours...';
-    payButton.disabled = true;
-    
-    // Préparer les données du formulaire
-    const formData = new FormData(document.getElementById('payment-form'));
-    formData.append('payment-method', selectedMethod); // Ajouter la méthode sélectionnée
+  // Validation initiale
+  if (!selectedMethod) {
+    showNotification('Veuillez sélectionner une méthode de paiement', 'error');
+    return;
+  }
+  
+  if (!validateForm()) {
+    showNotification('Veuillez remplir tous les champs obligatoires', 'error');
+    return;
+  }
+  
+  // Animation du bouton
+  const payButton = document.querySelector('.pay-button');
+  payButton.classList.add('loading');
+  payButton.textContent = 'Traitement en cours...';
+  payButton.disabled = true;
+  
+  // Préparer les données du formulaire
+  const formData = new FormData();
+  
+  // Ajouter les informations de livraison
+  formData.append('quartier', deliveryInfo.quartier);
+  formData.append('details', deliveryInfo.details);
+  formData.append('phone', deliveryInfo.phone);
+  formData.append('jour', deliveryInfo.jour);
+  formData.append('heure', deliveryInfo.heure);
+  formData.append('shipping_cost', deliveryFee);
+  formData.append('payment-method', selectedMethod);
+  
+  // Ajouter les champs de paiement
+  const paymentFields = document.querySelectorAll('#form-content input, #form-content select');
+  paymentFields.forEach(field => {
+    formData.append(field.name, field.value);
+  });
 
-    // Envoyer la requête au backend
-    fetch('/payments/process/', {
-        method: 'POST',
-        body: formData,
-        headers: { 'X-CSRFToken': getCookie('csrftoken') }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erreur réseau ou serveur');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Réponse du serveur
-        if (data.status === 'success') {
-            showPaymentSuccess(data.transaction_id, data.total_amount); // Ajuste si besoin
-            updateProgressStep(3); // Passe à l'étape confirmation
-        } else {
-            throw new Error(data.message || 'Paiement échoué');
-        }
-    })
-    .catch(error => {
-        showNotification(error.message || 'Erreur lors du traitement du paiement.', 'error');
-    })
-    .finally(() => {
-        // Restaurer le bouton
-        payButton.classList.remove('loading');
-        payButton.textContent = 'Confirmer le paiement';
-        payButton.disabled = false;
-    });
+  // Envoyer la requête au backend
+  fetch('/payments/process/', {
+    method: 'POST',
+    body: formData,
+    headers: { 'X-CSRFToken': getCookie('csrftoken') }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erreur réseau ou serveur');
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.status === 'success') {
+      showPaymentSuccess(data.transaction_id, data.total_amount);
+      updateProgressStep(4);
+    } else {
+      throw new Error(data.message || 'Paiement échoué');
+    }
+  })
+  .catch(error => {
+    showNotification(error.message || 'Erreur lors du traitement du paiement.', 'error');
+  })
+  .finally(() => {
+    payButton.classList.remove('loading');
+    payButton.textContent = 'Confirmer le paiement';
+    payButton.disabled = false;
+  });
 }
 
-// Fonction utilitaire pour CSRF (si non présente)
+// Fonction utilitaire pour CSRF
 function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
     }
-    return cookieValue;
+  }
+  return cookieValue;
 }
 
 // Affichage du succès du paiement
-function showPaymentSuccess() {
-  const transactionRef = generateTransactionRef();
-  document.getElementById('transaction-ref').textContent = transactionRef;
-  document.getElementById('final-amount').textContent = `$${(totalAmount / 655.957).toFixed(2)}`;
+function showPaymentSuccess(transactionId, amount) {
+  document.getElementById('transaction-ref').textContent = transactionId || generateTransactionRef();
+  document.getElementById('final-amount').textContent = `${totalAmount.toLocaleString()} F CFA`;
   document.getElementById('delivery-info').textContent = `${deliveryInfo.quartier} - ${deliveryInfo.jour} à ${deliveryInfo.heure}`;
   
   const modal = document.getElementById('success-modal');
   modal.classList.remove('hidden');
   
-  // Mise à jour de l'étape de progression
   updateProgressStep(4);
 }
 
 // Téléchargement de la facture
 function downloadInvoice() {
-  // Simulation du téléchargement
   showNotification('Facture téléchargée avec succès !', 'success');
-  
-  // Dans une vraie application, vous pourriez générer un PDF
-  // ou rediriger vers une URL de téléchargement
 }
 
 // Génération d'une référence de transaction
@@ -535,7 +559,7 @@ function generateTransactionRef() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = 'TXN-';
   for (let i = 0; i < 8; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return result;
 }
@@ -546,20 +570,20 @@ function updateProgressStep(stepNumber) {
   const lines = document.querySelectorAll('.step-line');
   
   steps.forEach((step, index) => {
-      step.classList.remove('active', 'completed');
-      if (index + 1 < stepNumber) {
-          step.classList.add('completed');
-      } else if (index + 1 === stepNumber) {
-          step.classList.add('active');
-      }
+    step.classList.remove('active', 'completed');
+    if (index + 1 < stepNumber) {
+      step.classList.add('completed');
+    } else if (index + 1 === stepNumber) {
+      step.classList.add('active');
+    }
   });
   
   lines.forEach((line, index) => {
-      if (index < stepNumber - 1) {
-          line.classList.add('completed');
-      } else {
-          line.classList.remove('completed');
-      }
+    if (index < stepNumber - 1) {
+      line.classList.add('completed');
+    } else {
+      line.classList.remove('completed');
+    }
   });
 }
 
@@ -568,16 +592,14 @@ function closeModal() {
   const modal = document.getElementById('success-modal');
   modal.classList.add('hidden');
   
-  // Redirection ou réinitialisation
-  window.location.href = '/boutique'; // Ou réinitialiser le formulaire
+  window.location.href = '/boutique';
 }
 
 // Affichage des notifications
 function showNotification(message, type = 'info') {
-  // Supprimer les notifications existantes
   const existingNotification = document.querySelector('.notification');
   if (existingNotification) {
-      existingNotification.remove();
+    existingNotification.remove();
   }
   
   const notification = document.createElement('div');
@@ -616,25 +638,25 @@ function showNotification(message, type = 'info') {
 const style = document.createElement('style');
 style.textContent = `
   @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
   
   @keyframes slideOut {
-      from {
-          transform: translateX(0);
-          opacity: 1;
-      }
-      to {
-          transform: translateX(100%);
-          opacity: 0;
-      }
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
   }
 `;
 document.head.appendChild(style);
