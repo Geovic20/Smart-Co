@@ -63,6 +63,9 @@ def DetailsPC(request, pk):
     }
     return render(request, 'DetailsPC.html', context)
 
+#Liste des produits de la catégorie "Tablette"
+def ShopTablettes(request):
+    return render(request, 'ShopTablettes.html')
 
 def ShopMontres(request):
     return render(request, 'ShopMontres.html')

@@ -12,7 +12,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Playwrite+NZ:wght@100..400&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/> 
-        <!-- 🔌 Icône du site -->
         <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/icons8-gadgets-32.png' %}">
         <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/icons8-gadgets-32.png' %}">
         <meta name="theme-color" content="#007BFF">
@@ -41,6 +40,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'ShopPortables' %}">Smartphones</a></li>
+                            <li><a href="{% url 'ShopTablettes' %}">Tablettes</a></li>
                             <li><a href="{% url 'ShopPC' %}">PCs</a></li>
                             <li><a href="{% url 'ShopCasques' %}">Ecouteurs</a></li>
                             <li><a href="{% url 'ShopCasques' %}">Casques</a></li>
